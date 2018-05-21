@@ -1,9 +1,15 @@
 var employees = require('./employees.json');
+var nextEmployeeId = employees.length;
+
+const create = employee => {
+	employee.Id == nextEmployeeId++;
+	employees.push(employee);
+}
 
 const getAll = (filter, page, pageSize) => {
 	var filteredEmployees = employees;
 	if (filter) {
-		filteredEmployees = employees.filter(e => e.Name.indexOf(filter));
+		filteredEmployees = employees.filter(e => e.Name.indexOf(filter) > -1);
 	}
 
 	const offset = page * pageSize;
@@ -17,12 +23,13 @@ const getAll = (filter, page, pageSize) => {
 	return pagedList;
 };
 
-const getById = (id) => {
+const getById = id => {
 	const employee = employees.find(e => e.Id == id);
 	return employee;
 };
 
 module.exports = {
+	create,
 	getAll,
 	getById
 };
