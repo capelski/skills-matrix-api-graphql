@@ -1,4 +1,4 @@
-var express = require('express');
+const { express } = require('modena');
 var router = express.Router();
 var path = require('path');
 var employeeService = require('./services/employee-service');
