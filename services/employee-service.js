@@ -1,5 +1,11 @@
 var employees = require('./employees.json');
-var nextEmployeeId = employees.length;
+var nextEmployeeId = employees.length + 1;
+
+employees = employees.sort((a, b) => {
+	if(a.Name < b.Name) return -1;
+    if(a.Name > b.Name) return 1;
+    return 0;
+});
 
 const create = employee => {
 	employee.Id = nextEmployeeId++;
