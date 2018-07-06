@@ -20,6 +20,11 @@ const configureRouter = (middleware) => {
 		employee = employeeService.create(employee);
 		return res.json(employee);
 	}]);
+	router.put('/api/employee', [middleware.bodyParser, function (req, res, next) {
+		var employeeData = req.body;
+		var employee = employeeService.update(employeeData);
+		return res.json(employee);
+	}]);
 	router.delete('/api/employee', function (req, res, next) {
 		const id = req.query.id;
 		var employee = employeeService.deleteEmployee(id);

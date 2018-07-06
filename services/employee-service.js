@@ -41,9 +41,19 @@ const getById = id => {
 	return employee;
 };
 
+const update = employeeData => {
+	var employee = getById(employeeData.Id);
+	if (employee) {
+		employee.Name = employeeData.Name;
+		employee.Skills = employeeData.Skills;
+	}
+	return employee;
+};
+
 module.exports = {
 	create,
 	deleteEmployee,
 	getAll,
-	getById
+	getById,
+	update
 };
