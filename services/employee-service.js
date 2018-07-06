@@ -1,4 +1,4 @@
-var employees = require('./employees.json');
+var employees = require('../data/employees.json');
 var nextEmployeeId = employees.length + 1;
 
 employees = employees.sort((a, b) => {

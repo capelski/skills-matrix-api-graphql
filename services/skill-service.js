@@ -1,4 +1,4 @@
-var skills = require('./skills.json');
+var skills = require('../data/skills.json');
 var nextSkillId = skills.length + 1;
 
 skills = skills.sort((a, b) => {
