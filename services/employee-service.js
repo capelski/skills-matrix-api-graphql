@@ -2,7 +2,7 @@ var employees = require('./employees.json');
 var nextEmployeeId = employees.length;
 
 const create = employee => {
-	employee.Id == nextEmployeeId++;
+	employee.Id = nextEmployeeId++;
 	employees.push(employee);
 }
 
