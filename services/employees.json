@@ -2,486 +2,486 @@
 	{
 		"Id": 1,
 		"Name": "Adele",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 2,
 		"Name": "Laura Marling",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 3,
 		"Name": "Zayn Malik",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 4,
 		"Name": "Emily Maguire",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 5,
 		"Name": "Amy Macdonald",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 6,
 		"Name": "Kirsty MacColl",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 7,
 		"Name": "Ewan MacColl",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 8,
 		"Name": "Nick Lowe",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 9,
 		"Name": "Jez Lowe",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 10,
 		"Name": "Cher Lloyd",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 11,
 		"Name": "Dua Lipa",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 12,
 		"Name": "Leona Lewis",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 13,
 		"Name": "Al Lewis",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 14,
 		"Name": "Adam Leonardo",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 15,
 		"Name": "John Lennon",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 16,
 		"Name": "Charlie Landsborough",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 17,
 		"Name": "Steve Knightley",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 18,
 		"Name": "Beverley Knight",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 19,
 		"Name": "Hani King",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 20,
 		"Name": "Nik Kershaw",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 21,
 		"Name": "Martyn Joseph",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 22,
 		"Name": "Johnny Marr",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 23,
 		"Name": "Wizz Jones",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 24,
 		"Name": "Michael Marra",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 25,
 		"Name": "Brian May",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 26,
 		"Name": "Sam Smith",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 27,
 		"Name": "Lucie Silvas",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 28,
 		"Name": "Ed Sheeran",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 29,
 		"Name": "Emeli Sandé",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 30,
 		"Name": "Ricky Ross",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 31,
 		"Name": "Paul Poulton",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 32,
 		"Name": "Mal Pope",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 33,
 		"Name": "Karen Poole",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 34,
 		"Name": "Liam Payne",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 35,
 		"Name": "Passenger",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 36,
 		"Name": "Ozzy Osbourne",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 37,
 		"Name": "Tom Odell",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 38,
 		"Name": "John Newman",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 39,
 		"Name": "Graham Nash",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 40,
 		"Name": "James Morrison",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 41,
 		"Name": "Gary Moore",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 42,
 		"Name": "Mika",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 43,
 		"Name": "Shelagh McDonald",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 44,
 		"Name": "Paul McCartney",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 45,
 		"Name": "Conor Maynard",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 46,
 		"Name": "John Martyn",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 47,
 		"Name": "Tom Jones",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 48,
 		"Name": "Elton John",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 49,
 		"Name": "Bert Jansch",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 50,
 		"Name": "Marina Diamandis",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 51,
 		"Name": "Chris de Burgh",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 52,
 		"Name": "Alex Day",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 53,
 		"Name": "Paul Stuart Davies",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 54,
 		"Name": "Gareth Davies",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 55,
 		"Name": "Elvis Costello",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 56,
 		"Name": "Lloyd Cole",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 57,
 		"Name": "Gary Clark",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 58,
 		"Name": "Kate Bush",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 59,
 		"Name": "Melanie Brown",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 60,
 		"Name": "Andy Brown",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 61,
 		"Name": "David Bowie",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 62,
 		"Name": "James Blunt",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 63,
 		"Name": "Matt Bigland",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 64,
 		"Name": "James Bay",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 65,
 		"Name": "Rich Batsford",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 66,
 		"Name": "Gary Barlow",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 67,
 		"Name": "Kevin Ayers",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 68,
 		"Name": "Joan Armatrading",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 69,
 		"Name": "Lauren Aquilina",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 70,
 		"Name": "Lily Allen",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 71,
 		"Name": "Siobhán Donaghy",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 72,
 		"Name": "Donovan",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 73,
 		"Name": "Josh Doyle",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 74,
 		"Name": "Duffy",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 75,
 		"Name": "Jamelia",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 76,
 		"Name": "Ben Howard",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 77,
 		"Name": "Trevor Horn",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 78,
 		"Name": "Robyn Hitchcock",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 79,
 		"Name": "Boo Hewerdine",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 80,
 		"Name": "Ant Henson",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 81,
 		"Name": "Ella Henderson",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 82,
 		"Name": "Paul Heaton",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 83,
 		"Name": "Imogen Heap",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 84,
 		"Name": "Justin Hayward",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 85,
 		"Name": "Cat Stevens",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 86,
 		"Name": "PJ Harvey",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 87,
 		"Name": "Nick Harper",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 88,
 		"Name": "Malcolm Guite",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 89,
 		"Name": "David Gray",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 90,
 		"Name": "Ellie Goulding",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 91,
 		"Name": "Maurice Gibb",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 92,
 		"Name": "Andi Fraggs",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 93,
 		"Name": "Kat Flint",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 94,
 		"Name": "Newton Faulkner",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 95,
 		"Name": "Ella Eyre",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 96,
 		"Name": "George Harrison",
-		"Skills": null
+		"Skills": []
 	},
 	{
 		"Id": 97,
 		"Name": "Harry Styles",
-		"Skills": null
+		"Skills": []
 	}
 ]
