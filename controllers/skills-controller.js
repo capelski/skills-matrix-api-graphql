@@ -4,12 +4,20 @@ var skillsService = require('../services/skills-service');
 const create = (req, res, next) => {
     var skill = req.body;
     skill = skillsService.create(skill);
+
+    // Since there is no db actually, we also need to update the related employees in memory
+    _addSkillToEmployees(skill);
+
     return res.json(skill);
 };
 
 const deleteSkill = (req, res, next) => {
     const id = req.query.id;
     var skill = skillsService.deleteSkill(id);
+
+    // Since there is no db actually, we also need to update the related employees in memory
+    _removeSkillFromEmployees(skill);
+
     return res.json(skill);
 };
 

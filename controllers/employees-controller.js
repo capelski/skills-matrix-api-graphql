@@ -4,12 +4,20 @@ var skillsService = require('../services/skills-service');
 const create = (req, res, next) => {
     var employee = req.body;
     employee = employeesService.create(employee);
+
+    // Since there is no db actually, we also need to update the related skills in memory
+    _addEmployeeToSkills(employee);
+
     return res.json(employee);
 };
 
 const deleteEmployee = (req, res, next) => {
     const id = req.query.id;
     var employee = employeesService.deleteEmployee(id);
+
+    // Since there is no db actually, we also need to update the related skills in memory
+    _removeEmployeeFromSkills(employee)
+
     return res.json(employee);
 };
 
@@ -34,7 +42,7 @@ const getMostSkilled = (req, res, next) => {
 
 const update = (req, res, next) => {
     var employeeData = req.body;
-    
+
     var previousEmployee = employeesService.getById(employeeData.Id);
     var updatedEmployee = employeesService.update(employeeData);
 
