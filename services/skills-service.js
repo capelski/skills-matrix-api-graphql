@@ -1,15 +1,24 @@
+var employeesRepository = require('../repositories/employees-repository');
 var skillsRepository = require('../repositories/skills-repository');
 var nextSkillId = skillsRepository.getAll().length + 1;
 
 const create = skill => {
 	skill.Id = nextSkillId++;
 	skillsRepository.add(employee);
+
+	// Since there is no db actually, we also need to update the related employees in memory
+	_addSkillToEmployees(skill);
+	
 	return skill;
 }
 
 const deleteSkill = id => {
 	var skill = getById(id);
 	skillsRepository.remove(id);
+
+    // Since there is no db actually, we also need to update the related employees in memory
+	_removeSkillFromEmployees(skill);
+	
 	return skill;
 };
 
@@ -44,11 +53,44 @@ const getRearest = () => {
 
 const update = skillData => {
 	var skill = getById(skillData.Id);
+
+    // Since there is no db actually, we also need to update the related employees in memory
+	_removeSkillFromEmployees(skill);
+	
 	if (skill) {
 		skill.Name = skillData.Name;
 		skill.Employees = skillData.Employees;
 	}
+
+	// Since there is no db actually, we also need to update the related employees in memory
+	_addSkillToEmployees(skill);
+
 	return skill;
+};
+
+const _removeSkillFromEmployees = skill => {
+    if (skill) {
+        // Remove the skill from all the emplpoyees that had before
+        skill.Employees.forEach(employeeData => {
+            var employee = employeesRepository.getById(employeeData.Id);
+            employee.Skills = employee.Skills.filter(s => s.Id != skill.Id);
+            employeesRepository.update(employee);
+        });
+    }
+};
+
+const _addSkillToEmployees = skill => {
+    if (skill) {
+        var employees = skill.Employees;
+        skill.Employees = [];
+        // Add the skill to all the employees that currently has
+        employees.forEach(employeeData => {
+            var employee = employeesRepository.getById(employeeData.Id);
+            employee.Skills.push(skill);
+            employeesRepository.update(employee);
+        });
+        skill.Employees = employees;
+    }
 };
 
 module.exports = {
