@@ -22,7 +22,8 @@ const deleteEmployee = id => {
 const getAll = (filter, page, pageSize) => {
 	var filteredEmployees = employees;
 	if (filter) {
-		filteredEmployees = employees.filter(e => e.Name.indexOf(filter) > -1);
+		filter = filter.toLowerCase();
+		filteredEmployees = employees.filter(e => e.Name.toLowerCase().indexOf(filter) > -1);
 	}
 
 	const offset = page * pageSize;

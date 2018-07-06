@@ -15,14 +15,15 @@ const create = skill => {
 
 const deleteSkill = id => {
 	var skill = getById(id);
-	skills = skills.filter(e => e.Id != id);
+	skills = skills.filter(s => s.Id != id);
 	return skill;
 };
 
 const getAll = (filter, page, pageSize) => {
 	var filteredSkills = skills;
 	if (filter) {
-		filteredSkills = skills.filter(e => e.Name.indexOf(filter) > -1);
+		filter = filter.toLowerCase();
+		filteredSkills = skills.filter(s => s.Name.toLowerCase().indexOf(filter) > -1);
 	}
 
 	const offset = page * pageSize;
@@ -37,7 +38,7 @@ const getAll = (filter, page, pageSize) => {
 };
 
 const getById = id => {
-	const skill = skills.find(e => e.Id == id);
+	const skill = skills.find(s => s.Id == id);
 	return skill;
 };
 
