@@ -41,6 +41,15 @@ const getById = id => {
 	return employee;
 };
 
+const getMostSkilled = () => {
+	var mostSkilledEmployees = employees.concat().sort((a, b) => {
+		if(a.Skills.length < b.Skills.length) return -1;
+		if(a.Skills.length > b.Skills.length) return 1;
+		return a.Name < b.Name ? -1 : (a.Name > b.Name ? 1 : 0);
+	});
+	return mostSkilledEmployees.slice(0, 5);
+};
+
 const update = employeeData => {
 	var employee = getById(employeeData.Id);
 	if (employee) {
@@ -55,5 +64,6 @@ module.exports = {
 	deleteEmployee,
 	getAll,
 	getById,
+	getMostSkilled,
 	update
 };

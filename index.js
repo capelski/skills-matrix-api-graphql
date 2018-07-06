@@ -15,6 +15,10 @@ const configureRouter = (middleware) => {
 		const employee = employeeService.getById(id);
 		return res.json(employee);
 	});
+	router.get('/api/employee/getMostSkilled', function (req, res, next) {
+		const mostSkilledEmployees = employeeService.getMostSkilled();
+		return res.json(mostSkilledEmployees);
+	});
 	router.post('/api/employee', [middleware.bodyParser, function (req, res, next) {
 		var employee = req.body;
 		employee = employeeService.create(employee);
