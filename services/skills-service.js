@@ -1,29 +1,23 @@
-var skills = require('../data/skills.json');
-var nextSkillId = skills.length + 1;
-
-skills = skills.sort((a, b) => {
-	if(a.Name < b.Name) return -1;
-    if(a.Name > b.Name) return 1;
-    return 0;
-});
+var skillsRepository = require('../repositories/skills-repository');
+var nextSkillId = skillsRepository.getAll().length + 1;
 
 const create = skill => {
 	skill.Id = nextSkillId++;
-	skills.push(skill);
+	skillsRepository.add(employee);
 	return skill;
 }
 
 const deleteSkill = id => {
 	var skill = getById(id);
-	skills = skills.filter(s => s.Id != id);
+	skillsRepository.remove(id);
 	return skill;
 };
 
 const getAll = (filter, page, pageSize) => {
-	var filteredSkills = skills;
+	var filteredSkills = skillsRepository.getAll();
 	if (filter) {
 		filter = filter.toLowerCase();
-		filteredSkills = skills.filter(s => s.Name.toLowerCase().indexOf(filter) > -1);
+		filteredSkills = filteredSkills.filter(s => s.Name.toLowerCase().indexOf(filter) > -1);
 	}
 
 	const offset = page * pageSize;
@@ -37,13 +31,10 @@ const getAll = (filter, page, pageSize) => {
 	return pagedList;
 };
 
-const getById = id => {
-	const skill = skills.find(s => s.Id == id);
-	return skill;
-};
+const getById = id => skillsRepository.getById(id);
 
 const getRearest = () => {
-	var rearestSkills = skills.concat().sort((a, b) => {
+	var rearestSkills = skillsRepository.getAll().concat().sort((a, b) => {
 		if(a.Employees.length < b.Employees.length) return -1;
 		if(a.Employees.length > b.Employees.length) return 1;
 		return a.Name < b.Name ? -1 : (a.Name > b.Name ? 1 : 0);
