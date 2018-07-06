@@ -10,7 +10,14 @@ employees = employees.sort((a, b) => {
 const create = employee => {
 	employee.Id = nextEmployeeId++;
 	employees.push(employee);
+	return employee;
 }
+
+const deleteEmployee = id => {
+	var employee = getById(id);
+	employees = employees.filter(e => e.Id != id);
+	return employee;
+};
 
 const getAll = (filter, page, pageSize) => {
 	var filteredEmployees = employees;
@@ -36,6 +43,7 @@ const getById = id => {
 
 module.exports = {
 	create,
+	deleteEmployee,
 	getAll,
 	getById
 };

@@ -1,6 +1,5 @@
 const { express } = require('modena');
 var router = express.Router();
-var path = require('path');
 var employeeService = require('./services/employee-service');
 
 const configureRouter = (middleware) => {
@@ -18,9 +17,14 @@ const configureRouter = (middleware) => {
 	});
 	router.post('/api/employee', [middleware.bodyParser, function (req, res, next) {
 		var employee = req.body;
-		employeeService.create(employee);
+		employee = employeeService.create(employee);
 		return res.json(employee);
 	}]);
+	router.delete('/api/employee', function (req, res, next) {
+		const id = req.query.id;
+		var employee = employeeService.deleteEmployee(id);
+		return res.json(employee);
+	});
 
 	return router;
 }
