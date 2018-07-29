@@ -3,7 +3,7 @@ const { express, tracer } = require('modena');
 const router = express.Router();
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsContollerFactory = require('./controllers/skills-controller');
-const modelsDefinition = require('./models');
+const modelsDefinition = require('./database/models');
 
 const syncDatabase = () => {
 	// TODO Provide the Sequelize data from the configuration files
@@ -33,14 +33,14 @@ const instantiateControllers = dbSyncResult => {
 
 	if (dbSyncResult.isError) {
 		tracer.info('Instantiating in memory services for skills-matrix-api-node');
-		const inMemoryEmployeesService = require('./services/in-memory-employees-service');
-		const inMemorySkillsService = require('./services/in-memory-skills-service');
+		const inMemoryEmployeesService = require('./in-memory/services/employees-service');
+		const inMemorySkillsService = require('./in-memory/services/skills-service');
 		employeesController = employeesControllerFactory(inMemoryEmployeesService);
 		skillsContoller = skillsContollerFactory(inMemorySkillsService);
 	}
 	else {
-		const dbEmployeesService = require('./services/database-employees-service')(dbSyncResult.models);
-		const dbSkillsService = require('./services/database-skills-service')(dbSyncResult.models);
+		const dbEmployeesService = require('./database/services/employees-service')(dbSyncResult.models);
+		const dbSkillsService = require('./database/services/skills-service')(dbSyncResult.models);
 		employeesController = employeesControllerFactory(dbEmployeesService);
 		skillsContoller = skillsContollerFactory(dbSkillsService);
 	}
