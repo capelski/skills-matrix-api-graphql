@@ -9,17 +9,19 @@ const create = employee => {
 	// Since there is no db actually, we also need to update the related skills in memory
 	_addEmployeeToSkills(employee);
 	
-	return employee;
+	return Promise.resolve(employee);
 }
 
 const deleteEmployee = id => {
-	var employee = getById(id);
-	employeesRepository.remove(id);
+	return getById(id)
+	.then(employee => {
+		employeesRepository.remove(id);
 	
-	// Since there is no db actually, we also need to update the related skills in memory
-	_removeEmployeeFromSkills(employee);
-	
-	return employee;
+		// Since there is no db actually, we also need to update the related skills in memory
+		_removeEmployeeFromSkills(employee);
+
+		return employee;
+	});
 };
 
 const getAll = (filter, page, pageSize) => {
@@ -37,35 +39,37 @@ const getAll = (filter, page, pageSize) => {
 		TotalRecords: filteredEmployees.length
 	};
 
-	return pagedList;
+	return Promise.resolve(pagedList);
 };
 
-const getById = id => employeesRepository.getById(id);
+const getById = id => Promise.resolve(employeesRepository.getById(id));
 
 const getMostSkilled = () => {
-	var mostSkilledEmployees = employeesRepository.getAll().concat().sort((a, b) => {
+	const mostSkilledEmployees = employeesRepository.getAll().concat().sort((a, b) => {
 		if(a.Skills.length > b.Skills.length) return -1;
 		if(a.Skills.length < b.Skills.length) return 1;
 		return a.Name < b.Name ? -1 : (a.Name > b.Name ? 1 : 0);
 	});
-	return mostSkilledEmployees.slice(0, 5);
+
+	return Promise.resolve(mostSkilledEmployees.slice(0, 5));
 };
 
 const update = employeeData => {
-	var employee = getById(employeeData.Id);
+	return getById(employeeData.Id)
+	.then(employee => {
+		// Since there is no db actually, we also need to update the related skills in memory
+		_removeEmployeeFromSkills(employee);
+			
+		if (employee) {
+			employee.Name = employeeData.Name;
+			employee.Skills = employeeData.Skills;
+		}
 
-    // Since there is no db actually, we also need to update the related skills in memory
-    _removeEmployeeFromSkills(employee);
-	
-	if (employee) {
-		employee.Name = employeeData.Name;
-		employee.Skills = employeeData.Skills;
-	}
+		// Since there is no db actually, we also need to update the related skills in memory
+		_addEmployeeToSkills(employee);
 
-	// Since there is no db actually, we also need to update the related skills in memory
-	_addEmployeeToSkills(employee);
-
-	return employee;
+		return employee;
+	});
 };
 
 const _removeEmployeeFromSkills = employee => {
