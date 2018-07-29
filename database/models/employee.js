@@ -1,10 +1,11 @@
 const employeeDefinition = (dbConnection, Sequelize) =>
     dbConnection.define('employee', {
-        id: {
+        Id: {
             type: Sequelize.INTEGER,
+            autoIncrement: true,
             primaryKey: true
         },
-        name: Sequelize.TEXT
+        Name: Sequelize.TEXT
     }, {
         freezeTableName: true
     });
@@ -12,7 +13,7 @@ const employeeDefinition = (dbConnection, Sequelize) =>
 const employeeAssociations = models =>
     models.Employee.belongsToMany(models.Skill, {
         through: 'employee_skill',
-        as: 'skills',
+        as: 'Skills',
         foreignKey: 'employeeId'
     });
 
