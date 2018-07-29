@@ -4,10 +4,11 @@ const router = express.Router();
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsContollerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
+const config = require('./database/config/config.json');
 
 const syncDatabase = () => {
-	// TODO Provide the Sequelize data from the configuration files
-	const dbConnection = new Sequelize('skills_matrix_node', 'user', 'password', {
+	// TODO Modify modena to provide the config for each app
+	const dbConnection = new Sequelize(config.database, config.db_user, config.db_password, {
 		host: 'localhost',
 		dialect: 'mysql'
 	});
