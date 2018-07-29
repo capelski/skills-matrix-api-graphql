@@ -1,51 +1,78 @@
 const Sequelize = require('sequelize');
-const { express } = require('modena');
+const { express, tracer } = require('modena');
 const router = express.Router();
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsContollerFactory = require('./controllers/skills-controller');
+const modelsDefinition = require('./models');
 
-const configureRouter = (middleware) => {
+const syncDatabase = () => {
 	// TODO Provide the Sequelize data from the configuration files
-	const sequelize = new Sequelize('skills_matrix', 'user', 'password', {
+	const dbConnection = new Sequelize('skills_matrix_node', 'user', 'password', {
 		host: 'localhost',
-		dialect: 'mysql',
+		dialect: 'mysql'
 	});
 
-	let error = false;
-	// TODO Once Sequelize is setup, remove unnecessary stuff
-	return sequelize.authenticate().catch(_ => { error = true }).then(() => {
+	const models = modelsDefinition(dbConnection, Sequelize);
 
-		return sequelize.sync().catch(_ => { error = true })
-		.then(_ => {
-
-			let employeesController, skillsContoller;
-			if (error) {
-				employeesController = employeesControllerFactory(require('./services/in-memory-employees-service'));
-				skillsContoller = skillsContollerFactory(require('./services/in-memory-skills-service'));
-			}
-			else {
-				// TODO Actually implement the database services
-				employeesController = employeesControllerFactory(require('./services/database-employees-service'));
-				skillsContoller = skillsContollerFactory(require('./services/database-skills-service'));
-			}
-
-			router.get('/api/employee', employeesController.getAll);
-			router.get('/api/employee/getById', employeesController.getById);
-			router.get('/api/employee/getMostSkilled', employeesController.getMostSkilled);
-			router.post('/api/employee', [middleware.bodyParser, employeesController.create]);
-			router.put('/api/employee', [middleware.bodyParser, employeesController.update]);
-			router.delete('/api/employee', employeesController.deleteEmployee);
-
-			router.get('/api/skill', skillsContoller.getAll);
-			router.get('/api/skill/getById', skillsContoller.getById);
-			router.get('/api/skill/getRearest', skillsContoller.getRearest);
-			router.post('/api/skill', [middleware.bodyParser, skillsContoller.create]);
-			router.put('/api/skill', [middleware.bodyParser, skillsContoller.update]);
-			router.delete('/api/skill', skillsContoller.deleteSkill);
-
-			return router;	
+	return dbConnection.sync()
+		.then(() => ({
+			isError: false,
+			models
+		}))
+		.catch(error => {
+			tracer.error('An error ocurred when trying to sync the database');
+			tracer.error(error);
+			return {
+				isError: true
+			};
 		});
-	});
+};
+
+const instantiateControllers = dbSyncResult => {
+	let employeesController, skillsContoller;
+
+	if (dbSyncResult.isError) {
+		tracer.info('Instantiating in memory services for skills-matrix-api-node');
+		const inMemoryEmployeesService = require('./services/in-memory-employees-service');
+		const inMemorySkillsService = require('./services/in-memory-skills-service');
+		employeesController = employeesControllerFactory(inMemoryEmployeesService);
+		skillsContoller = skillsContollerFactory(inMemorySkillsService);
+	}
+	else {
+		const dbEmployeesService = require('./services/database-employees-service')(dbSyncResult.models);
+		const dbSkillsService = require('./services/database-skills-service')(dbSyncResult.models);
+		employeesController = employeesControllerFactory(dbEmployeesService);
+		skillsContoller = skillsContollerFactory(dbSkillsService);
+	}
+
+	return {
+		employeesController,
+		skillsContoller
+	}
+};
+
+const registerRoutes = (controllers, middleware) => {
+	router.get('/api/employee', controllers.employeesController.getAll);
+	router.get('/api/employee/getById', controllers.employeesController.getById);
+	router.get('/api/employee/getMostSkilled', controllers.employeesController.getMostSkilled);
+	router.post('/api/employee', [middleware.bodyParser, controllers.employeesController.create]);
+	router.put('/api/employee', [middleware.bodyParser, controllers.employeesController.update]);
+	router.delete('/api/employee', controllers.employeesController.deleteEmployee);
+
+	router.get('/api/skill', controllers.skillsContoller.getAll);
+	router.get('/api/skill/getById', controllers.skillsContoller.getById);
+	router.get('/api/skill/getRearest', controllers.skillsContoller.getRearest);
+	router.post('/api/skill', [middleware.bodyParser, controllers.skillsContoller.create]);
+	router.put('/api/skill', [middleware.bodyParser, controllers.skillsContoller.update]);
+	router.delete('/api/skill', controllers.skillsContoller.deleteSkill);
+
+	return router;
+};
+
+const configureRouter = middleware => {
+	return syncDatabase()
+		.then(instantiateControllers)
+		.then(controllers => registerRoutes(controllers, middleware));
 }
 
 module.exports = { configureRouter };
