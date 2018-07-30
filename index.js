@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const { express, tracer } = require('modena');
 const router = express.Router();
 const employeesControllerFactory = require('./controllers/employees-controller');
-const skillsContollerFactory = require('./controllers/skills-controller');
+const skillsControllerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
 
 const syncDatabase = appConfig => {
@@ -28,25 +28,25 @@ const syncDatabase = appConfig => {
 };
 
 const instantiateControllers = dbSyncResult => {
-	let employeesController, skillsContoller;
+	let employeesController, skillsController;
 
 	if (dbSyncResult.isError) {
 		tracer.info('Instantiating in memory services for skills-matrix-api-node');
 		const inMemoryEmployeesService = require('./in-memory/services/employees-service');
 		const inMemorySkillsService = require('./in-memory/services/skills-service');
 		employeesController = employeesControllerFactory(inMemoryEmployeesService);
-		skillsContoller = skillsContollerFactory(inMemorySkillsService);
+		skillsController = skillsControllerFactory(inMemorySkillsService);
 	}
 	else {
 		const dbEmployeesService = require('./database/services/employees-service')(dbSyncResult.models);
 		const dbSkillsService = require('./database/services/skills-service')(dbSyncResult.models);
 		employeesController = employeesControllerFactory(dbEmployeesService);
-		skillsContoller = skillsContollerFactory(dbSkillsService);
+		skillsController = skillsControllerFactory(dbSkillsService);
 	}
 
 	return {
 		employeesController,
-		skillsContoller
+		skillsController
 	}
 };
 
@@ -58,12 +58,12 @@ const registerRoutes = (controllers, middleware) => {
 	router.put('/api/employee', [middleware.bodyParser, controllers.employeesController.update]);
 	router.delete('/api/employee', controllers.employeesController.deleteEmployee);
 
-	router.get('/api/skill', controllers.skillsContoller.getAll);
-	router.get('/api/skill/getById', controllers.skillsContoller.getById);
-	router.get('/api/skill/getRearest', controllers.skillsContoller.getRearest);
-	router.post('/api/skill', [middleware.bodyParser, controllers.skillsContoller.create]);
-	router.put('/api/skill', [middleware.bodyParser, controllers.skillsContoller.update]);
-	router.delete('/api/skill', controllers.skillsContoller.deleteSkill);
+	router.get('/api/skill', controllers.skillsController.getAll);
+	router.get('/api/skill/getById', controllers.skillsController.getById);
+	router.get('/api/skill/getRearest', controllers.skillsController.getRearest);
+	router.post('/api/skill', [middleware.bodyParser, controllers.skillsController.create]);
+	router.put('/api/skill', [middleware.bodyParser, controllers.skillsController.update]);
+	router.delete('/api/skill', controllers.skillsController.deleteSkill);
 
 	return router;
 };
