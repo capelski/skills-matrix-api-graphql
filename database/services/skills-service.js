@@ -9,19 +9,31 @@ const skillsService = models => {
 	};
 
 	const getAll = (filter, page, pageSize) => {
-		// TODO Implement filtering and pagination
-		return models.Skill.findAll({
+		page = page || 0;
+		pageSize = pageSize || 10;
+		const findOptions = {
 			include: [{
 				model: models.Employee,
 				as: 'Employees'
-			}]
-		})
-		.then(skills => {
+			}],
+			limit: pageSize,
+      		offset: page * pageSize,
+		};
+		if (filter) {
+			findOptions.where = {
+				name: {
+					$like: `%${filter}%`
+				}
+			};
+		}
+
+		return models.Skill.findAndCountAll(findOptions)
+		.then(result => {
 			const pagedList = {
 				CurrentPage: page,
-				Items: skills,
-				TotalPages: Math.ceil(skills.length / pageSize),
-				TotalRecords: skills.length
+				Items: result.rows,
+				TotalPages: Math.ceil(result.count / pageSize),
+				TotalRecords: result.count
 			};
 			return pagedList;
 		});
