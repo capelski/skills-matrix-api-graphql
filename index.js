@@ -16,7 +16,8 @@ const syncDatabase = appConfig => {
 	return dbConnection.sync()
 		.then(() => ({
 			isError: false,
-			models
+			models,
+			dbConnection
 		}))
 		.catch(error => {
 			tracer.error('An error ocurred when trying to sync the database');
@@ -38,8 +39,10 @@ const instantiateControllers = dbSyncResult => {
 		skillsController = skillsControllerFactory(inMemorySkillsService);
 	}
 	else {
-		const dbEmployeesService = require('./database/services/employees-service')(dbSyncResult.models);
-		const dbSkillsService = require('./database/services/skills-service')(dbSyncResult.models);
+		const dbEmployeesService = require('./database/services/employees-service')
+			(dbSyncResult.models, dbSyncResult.dbConnection);
+		const dbSkillsService = require('./database/services/skills-service')
+			(dbSyncResult.models, dbSyncResult.dbConnection);
 		employeesController = employeesControllerFactory(dbEmployeesService);
 		skillsController = skillsControllerFactory(dbSkillsService);
 	}

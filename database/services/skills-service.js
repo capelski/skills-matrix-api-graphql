@@ -1,4 +1,4 @@
-const skillsService = models => {
+const skillsService = (models, dbConnection) => {
 
 	// TODO Set the Employees
 	const create = skillData => models.Skill.create(skillData);
@@ -46,8 +46,30 @@ const skillsService = models => {
 		}]
 	});
 
-	// TODO Implement
-	const getRearest = () => getAll().then(page => page.Items);
+	const getRearest = () => {
+		const sqlQuery = `
+			SELECT skill.Id, skill.Name, rearest.count
+			FROM skill
+			INNER JOIN
+			(
+				SELECT skillId, COUNT(skillId) as count
+				FROM employee_skill
+				GROUP BY skillId
+				ORDER BY COUNT(skillId) ASC
+				LIMIT 5
+			) as rearest ON rearest.skillId = skill.id
+			ORDER BY rearest.count ASC;
+		`;
+		return dbConnection.query(sqlQuery, { type: dbConnection.QueryTypes.SELECT})
+		.then(rows => {
+			rows.forEach(r => {
+				r.Employees = {
+					length: r.count
+				};
+			});
+			return rows;
+		});
+	};
 
 	// TODO Set the Employees
 	const update = skillData => {

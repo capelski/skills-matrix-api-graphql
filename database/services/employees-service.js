@@ -1,4 +1,4 @@
-const employeesService = models => {
+const employeesService = (models, dbConnection) => {
 
 	// TODO Set the Skills
 	const create = employeeData => models.Employee.create(employeeData);
@@ -47,8 +47,30 @@ const employeesService = models => {
 		}]
 	});
 
-	// TODO Implement
-	const getMostSkilled = () => getAll().then(page => page.Items);
+	const getMostSkilled = () => {
+		const sqlQuery = `
+			SELECT employee.Id, employee.Name, mostSkilled.count
+			FROM employee
+			INNER JOIN
+			(
+				SELECT employeeId, COUNT(employeeId) as count
+				FROM employee_skill
+				GROUP BY employeeId
+				ORDER BY COUNT(employeeId) DESC
+				LIMIT 5
+			) as mostSkilled ON mostSkilled.employeeId = employee.id
+			ORDER BY mostSkilled.count DESC;
+		`;
+		return dbConnection.query(sqlQuery, { type: dbConnection.QueryTypes.SELECT})
+		.then(rows => {
+			rows.forEach(r => {
+				r.Skills = {
+					length: r.count
+				};
+			});
+			return rows;
+		});
+	};
 
 	// TODO Set the Skills
 	const update = employeeData => {
