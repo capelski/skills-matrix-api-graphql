@@ -8,7 +8,8 @@ const modelsDefinition = require('./database/models');
 const syncDatabase = appConfig => {
 	const dbConnection = new Sequelize(appConfig.database, appConfig.db_user, appConfig.db_password, {
 		host: 'localhost',
-		dialect: 'mysql'
+		dialect: 'mysql',
+		logging: false
 	});
 
 	const models = modelsDefinition(dbConnection, Sequelize);
