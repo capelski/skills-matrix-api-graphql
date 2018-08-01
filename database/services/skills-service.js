@@ -63,9 +63,9 @@ const skillsService = (models, dbConnection) => {
 				FROM employee_skill
 				GROUP BY skillId
 				ORDER BY COUNT(skillId) ASC
-				LIMIT 5
 			) as rearest ON rearest.skillId = skill.id
-			ORDER BY rearest.count ASC;
+			ORDER BY rearest.count ASC
+			LIMIT 5;
 		`;
 		return dbConnection.query(sqlQuery, { type: dbConnection.QueryTypes.SELECT})
 		.then(rows => {

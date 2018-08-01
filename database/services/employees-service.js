@@ -63,9 +63,9 @@ const employeesService = (models, dbConnection) => {
 				FROM employee_skill
 				GROUP BY employeeId
 				ORDER BY COUNT(employeeId) DESC
-				LIMIT 5
 			) as mostSkilled ON mostSkilled.employeeId = employee.id
-			ORDER BY mostSkilled.count DESC;
+			ORDER BY mostSkilled.count DESC
+			LIMIT 5;
 		`;
 		return dbConnection.query(sqlQuery, { type: dbConnection.QueryTypes.SELECT})
 		.then(rows => {
