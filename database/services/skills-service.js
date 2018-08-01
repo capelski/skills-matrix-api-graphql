@@ -1,7 +1,14 @@
 const skillsService = (models, dbConnection) => {
 
-	// TODO Set the Employees
-	const create = skillData => models.Skill.create(skillData);
+	const create = skillData => {
+		const employeesId = skillData.Employees.map(x => x.Id);
+		skillData = {
+			Id: skillData.Id,
+			Name: skillData.Name,
+		};
+		return models.Skill.create(skillData)
+		.then(skill => skill.setEmployees(employeesId).then(_ => skill));
+	}
 
 	const deleteSkill = id => {
 		return models.Skill.findById(id)
@@ -50,7 +57,7 @@ const skillsService = (models, dbConnection) => {
 		const sqlQuery = `
 			SELECT skill.Id, skill.Name, rearest.count
 			FROM skill
-			INNER JOIN
+			LEFT JOIN
 			(
 				SELECT skillId, COUNT(skillId) as count
 				FROM employee_skill
@@ -64,14 +71,13 @@ const skillsService = (models, dbConnection) => {
 		.then(rows => {
 			rows.forEach(r => {
 				r.Employees = {
-					length: r.count
+					length: r.count || 0
 				};
 			});
 			return rows;
 		});
 	};
 
-	// TODO Set the Employees
 	const update = skillData => {
 		const skillFields = {
 			Name: skillData.Name
@@ -81,9 +87,11 @@ const skillsService = (models, dbConnection) => {
 				Id: skillData.Id
 			}
 		};
+		const employeesId = skillData.Employees.map(x => x.Id);
 
 		return models.Skill.update(skillFields, updateOptions)
-			.then(affectedRows => models.Skill.findById(skillData.Id));
+			.then(affectedRows => models.Skill.findById(skillData.Id))
+			.then(skill => skill.setEmployees(employeesId).then(_ => skill));
 	};
 
 	return {

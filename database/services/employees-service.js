@@ -1,7 +1,14 @@
 const employeesService = (models, dbConnection) => {
 
-	// TODO Set the Skills
-	const create = employeeData => models.Employee.create(employeeData);
+	const create = employeeData => {
+		const skillsId = employeeData.Skills.map(x => x.Id);
+		employeeData = {
+			Id: employeeData.Id,
+			Name: employeeData.Name,
+		};
+		return models.Employee.create(employeeData)
+		.then(employee => employee.setSkills(skillsId).then(_ => employee));
+	}
 
 	const deleteEmployee = id => {
 		return models.Employee.findById(id)
@@ -32,7 +39,6 @@ const employeesService = (models, dbConnection) => {
 			const pagedList = {
 				CurrentPage: page,
 				Items: result.rows,
-				// TODO Compute the total rows number
 				TotalPages: Math.ceil(result.count / pageSize),
 				TotalRecords: result.count
 			};
@@ -51,7 +57,7 @@ const employeesService = (models, dbConnection) => {
 		const sqlQuery = `
 			SELECT employee.Id, employee.Name, mostSkilled.count
 			FROM employee
-			INNER JOIN
+			LEFT JOIN
 			(
 				SELECT employeeId, COUNT(employeeId) as count
 				FROM employee_skill
@@ -65,14 +71,13 @@ const employeesService = (models, dbConnection) => {
 		.then(rows => {
 			rows.forEach(r => {
 				r.Skills = {
-					length: r.count
+					length: r.count || 0
 				};
 			});
 			return rows;
 		});
 	};
 
-	// TODO Set the Skills
 	const update = employeeData => {
 		const employeeFields = {
 			Name: employeeData.Name
@@ -82,9 +87,11 @@ const employeesService = (models, dbConnection) => {
 				Id: employeeData.Id
 			}
 		};
+		const skillsId = employeeData.Skills.map(x => x.Id);
 
 		return models.Employee.update(employeeFields, updateOptions)
-			.then(affectedRows => models.Employee.findById(employeeData.Id));
+			.then(affectedRows => models.Employee.findById(employeeData.Id))
+			.then(employee => employee.setSkills(skillsId).then(_ => employee));
 	};
 
 	return {
