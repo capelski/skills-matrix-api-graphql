@@ -6,7 +6,7 @@ const skillsControllerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
 
 const syncDatabase = appConfig => {
-	const dbConnection = new Sequelize(appConfig.database, appConfig.db_user, appConfig.db_password, {
+	const dbConnection = new Sequelize(appConfig.DATABASE, appConfig.DB_USER, appConfig.DB_PASSWORD, {
 		host: 'localhost',
 		dialect: 'mysql',
 		logging: false
