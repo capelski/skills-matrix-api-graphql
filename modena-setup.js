@@ -1,12 +1,11 @@
 const Sequelize = require('sequelize');
-const { express, tracer } = require('modena');
-const router = express.Router();
+const { configureEndpoints, tracer } = require('modena');
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsControllerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
 
-const syncDatabase = appConfig => {
-	const dbConnection = new Sequelize(appConfig.DATABASE, appConfig.DB_USER, appConfig.DB_PASSWORD, {
+const syncDatabase = config => {
+	const dbConnection = new Sequelize(config.DATABASE, config.DB_USER, config.DB_PASSWORD, {
 		host: 'localhost',
 		dialect: 'mysql',
 		logging: false
@@ -54,7 +53,7 @@ const instantiateControllers = dbSyncResult => {
 	}
 };
 
-const registerRoutes = (controllers, middleware) => {
+const registerRoutes = (router, controllers, middleware) => {
 	router.get('/api/employee', controllers.employeesController.getAll);
 	router.get('/api/employee/getById', controllers.employeesController.getById);
 	router.get('/api/employee/getMostSkilled', controllers.employeesController.getMostSkilled);
@@ -68,14 +67,10 @@ const registerRoutes = (controllers, middleware) => {
 	router.post('/api/skill', [middleware.bodyParser, controllers.skillsController.create]);
 	router.put('/api/skill', [middleware.bodyParser, controllers.skillsController.update]);
 	router.delete('/api/skill', controllers.skillsController.deleteSkill);
-
-	return router;
 };
 
-const configureRouter = (middleware, utils, appConfig) => {
-	return syncDatabase(appConfig)
+module.exports = configureEndpoints((router, config, middleware) => {
+	return syncDatabase(config)
 		.then(instantiateControllers)
-		.then(controllers => registerRoutes(controllers, middleware));
-}
-
-module.exports = { configureRouter };
+		.then(controllers => registerRoutes(router, controllers, middleware));
+});
