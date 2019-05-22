@@ -8,7 +8,7 @@ const employeesService = (models, dbConnection) => {
 		};
 		return models.Employee.create(employeeData)
 		.then(employee => employee.setSkills(skillsId).then(_ => employee));
-	}
+	};
 
 	const deleteEmployee = id => {
 		return models.Employee.findById(id)

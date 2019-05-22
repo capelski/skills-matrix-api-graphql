@@ -8,7 +8,7 @@ const skillsService = (models, dbConnection) => {
 		};
 		return models.Skill.create(skillData)
 		.then(skill => skill.setEmployees(employeesId).then(_ => skill));
-	}
+	};
 
 	const deleteSkill = id => {
 		return models.Skill.findById(id)
