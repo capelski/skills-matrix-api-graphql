@@ -4,9 +4,6 @@ const Sequelize = require('sequelize');
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsControllerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
-// TODO Add dependencies:
-// "mysql2": "^1.5.3",
-// "sequelize": "^4.38.0",
 
 const defaultConfig = {
 	DATABASE: "db_name_placeholder",

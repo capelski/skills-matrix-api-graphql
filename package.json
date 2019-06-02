@@ -1,0 +1,17 @@
+{
+    "name": "skills-matrix-api-node",
+    "version": "1.0.0",
+    "description": "Skills matrix application web api",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Carles Capellas <capellas.carles@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "body-parser": "^1.19.0",
+        "express": "^4.17.1",
+        "mysql2": "^1.5.3",
+        "sequelize": "^4.38.0"
+    }
+}
