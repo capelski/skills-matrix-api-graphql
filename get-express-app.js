@@ -1,29 +1,21 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const Sequelize = require('sequelize');
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsControllerFactory = require('./controllers/skills-controller');
-const modelsDefinition = require('./database/models');
-const getConfiguration = require('./configuration');
+// const getConfiguration = require('./configuration');
 
 const getExpressApp = (environmentConfig) => {
-	const config = getConfiguration(environmentConfig);
-	return syncDatabase(config)
-		.then(instantiateDbServices)
-		.catch(instantiateInMemoryServices)
-		.then(registerRoutes);
-};
+	// TODO: Eventually use the config to connect to a database
+	// const config = getConfiguration(environmentConfig);
 
-const instantiateDbServices = dbSyncResult => {
-	console.info('Instantiating database services for skills-matrix-api-node');
-	return {
-		employees: require('./database/services/employees-service')(dbSyncResult.models, dbSyncResult.dbConnection),
-		skills: require('./database/services/skills-service')(dbSyncResult.models, dbSyncResult.dbConnection)
-	};
+	return new Promise((resolve) => {
+		const services = instantiateInMemoryServices();
+		const app = registerRoutes(services);
+		resolve(app);
+	});
 };
 
 const instantiateInMemoryServices = () => {
-	console.info('Instantiating in memory services for skills-matrix-api-node');
 	return {
 		employees: require('./in-memory/services/employees-service'),
 		skills: require('./in-memory/services/skills-service')
@@ -53,33 +45,6 @@ const registerRoutes = (services) => {
 	app.delete('/api/skill', controllers.skills.deleteSkill);
 
 	return app;
-};
-
-const syncDatabase = config => {
-	const dbConnection = new Sequelize(
-		config.DATABASE,
-		config.DB_USER,
-		config.DB_PASSWORD,
-		{
-			host: 'localhost',
-			dialect: 'mysql',
-			logging: false
-		});
-
-	const models = modelsDefinition(dbConnection, Sequelize);
-
-	// We need to create a explicit Promise because sync returns a Bluebird instance
-	return new Promise((resolve, reject) => {
-		dbConnection.sync()
-			.then(_ => resolve({
-				models,
-				dbConnection
-			}))
-			.catch(error => {
-				console.error('An error ocurred when trying to sync the database:', error.message);
-				reject();
-			});
-	});
 };
 
 module.exports = getExpressApp;
