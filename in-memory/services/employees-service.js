@@ -3,7 +3,7 @@ var skillsRepository = require('../repositories/skills-repository');
 var nextEmployeeId = employeesRepository.getAll().length + 1;
 
 const create = employee => {
-	employee.Id = nextEmployeeId++;
+	employee.id = nextEmployeeId++;
 	employeesRepository.add(employee);
 
 	// Since there is no db actually, we also need to update the related skills in memory
@@ -28,13 +28,13 @@ const getAll = (filter, page, pageSize) => {
 	var filteredEmployees = employeesRepository.getAll();
 	if (filter) {
 		filter = filter.toLowerCase();
-		filteredEmployees = filteredEmployees.filter(e => e.Name.toLowerCase().indexOf(filter) > -1);
+		filteredEmployees = filteredEmployees.filter(e => e.name.toLowerCase().indexOf(filter) > -1);
 	}
 
 	const offset = page * pageSize;
 	const pagedList = {
 		CurrentPage: page,
-		Items: filteredEmployees.slice(offset, offset + pageSize + 1),
+		Items: filteredEmployees.slice(offset, offset + pageSize),
 		TotalPages: Math.ceil(filteredEmployees.length / pageSize),
 		TotalRecords: filteredEmployees.length
 	};
@@ -46,23 +46,23 @@ const getById = id => Promise.resolve(employeesRepository.getById(id));
 
 const getMostSkilled = () => {
 	const mostSkilledEmployees = employeesRepository.getAll().concat().sort((a, b) => {
-		if(a.Skills.length > b.Skills.length) return -1;
-		if(a.Skills.length < b.Skills.length) return 1;
-		return a.Name < b.Name ? -1 : (a.Name > b.Name ? 1 : 0);
+		if(a.skills.length > b.skills.length) return -1;
+		if(a.skills.length < b.skills.length) return 1;
+		return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
 	});
 
 	return Promise.resolve(mostSkilledEmployees.slice(0, 5));
 };
 
 const update = employeeData => {
-	return getById(employeeData.Id)
+	return getById(employeeData.id)
 	.then(employee => {
 		// Since there is no db actually, we also need to update the related skills in memory
 		_removeEmployeeFromSkills(employee);
 			
 		if (employee) {
-			employee.Name = employeeData.Name;
-			employee.Skills = employeeData.Skills;
+			employee.name = employeeData.name;
+			employee.skills = employeeData.skills;
 		}
 
 		// Since there is no db actually, we also need to update the related skills in memory
@@ -75,9 +75,9 @@ const update = employeeData => {
 const _removeEmployeeFromSkills = employee => {
     if (employee) {
         // Remove the employee from all the skills that had before
-        employee.Skills.forEach(skillData => {
-            var skill = skillsRepository.getById(skillData.Id);
-            skill.Employees = skill.Employees.filter(e => e.Id != employee.Id);
+        employee.skills.forEach(skillData => {
+            var skill = skillsRepository.getById(skillData.id);
+            skill.employees = skill.employees.filter(e => e.id != employee.id);
             skillsRepository.update(skill);
         });
     }
@@ -85,15 +85,15 @@ const _removeEmployeeFromSkills = employee => {
 
 const _addEmployeeToSkills = employee => {
     if (employee) {
-        var skills = employee.Skills;
-        employee.Skills = [];
+        var skills = employee.skills;
+        employee.skills = [];
         // Add the employee to all the skills that currently has
         skills.forEach(skillData => {
-            var skill = skillsRepository.getById(skillData.Id);
-            skill.Employees.push(employee);
+            var skill = skillsRepository.getById(skillData.id);
+            skill.employees.push(employee);
             skillsRepository.update(skill);
         });
-        employee.Skills = skills;
+        employee.skills = skills;
     }
 };
 

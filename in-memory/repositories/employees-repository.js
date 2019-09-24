@@ -1,8 +1,8 @@
 var employees = require('../data/employees.json');
 
 employees = employees.sort((a, b) => {
-	if(a.Name < b.Name) return -1;
-    if(a.Name > b.Name) return 1;
+	if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
     return 0;
 });
 
@@ -12,17 +12,17 @@ const add = employee => {
 
 const getAll = () => employees;
 
-const getById = id => employees.find(e => e.Id == id);
+const getById = id => employees.find(e => e.id == id);
 
 const remove = id => {
-	employees = employees.filter(e => e.Id != id);
+	employees = employees.filter(e => e.id != id);
 };
 
 const update = employeeData => {
-	var employee = getById(employeeData.Id);
+	var employee = getById(employeeData.id);
 	if (employee) {
-		employee.Name = employeeData.Name;
-		employee.Skills = employeeData.Skills;
+		employee.name = employeeData.name;
+		employee.skills = employeeData.skills;
 	}
 	return employee;
 };

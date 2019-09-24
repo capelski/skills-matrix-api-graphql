@@ -1,8 +1,8 @@
 var skills = require('../data/skills.json');
 
 skills = skills.sort((a, b) => {
-	if(a.Name < b.Name) return -1;
-    if(a.Name > b.Name) return 1;
+	if(a.name < b.name) return -1;
+    if(a.name > b.name) return 1;
     return 0;
 });
 
@@ -12,17 +12,17 @@ const add = skill => {
 
 const getAll = () => skills;
 
-const getById = id => skills.find(s => s.Id == id);
+const getById = id => skills.find(s => s.id == id);
 
 const remove = id => {
-	skills = skills.filter(s => s.Id != id);
+	skills = skills.filter(s => s.id != id);
 };
 
 const update = skillData => {
-	var skill = getById(skillData.Id);
+	var skill = getById(skillData.id);
 	if (skill) {
-		skill.Name = skillData.Name;
-		skill.Employees = skillData.Employees;
+		skill.name = skillData.name;
+		skill.employees = skillData.employees;
 	}
 	return skill;
 };
