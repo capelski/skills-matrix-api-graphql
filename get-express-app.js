@@ -4,17 +4,15 @@ const Sequelize = require('sequelize');
 const employeesControllerFactory = require('./controllers/employees-controller');
 const skillsControllerFactory = require('./controllers/skills-controller');
 const modelsDefinition = require('./database/models');
+const getConfiguration = require('./configuration');
 
-const defaultConfig = {
-	DATABASE: "db_name_placeholder",
-    DB_USER: "db_user_placeholder",
-    DB_PASSWORD: "db_password_placeholder"
+const getExpressApp = (environmentConfig) => {
+	const config = getConfiguration(environmentConfig);
+	return syncDatabase(config)
+		.then(instantiateDbServices)
+		.catch(instantiateInMemoryServices)
+		.then(registerRoutes);
 };
-
-const getExpressApp = (environmentConfig = {}) => syncDatabase(environmentConfig)
-	.then(instantiateDbServices)
-	.catch(instantiateInMemoryServices)
-	.then(registerRoutes);
 
 const instantiateDbServices = dbSyncResult => {
 	console.info('Instantiating database services for skills-matrix-api-node');
@@ -59,9 +57,9 @@ const registerRoutes = (services) => {
 
 const syncDatabase = config => {
 	const dbConnection = new Sequelize(
-		config.DATABASE || defaultConfig.DATABASE,
-		config.DB_USER || defaultConfig.DB_USER,
-		config.DB_PASSWORD || defaultConfig.DB_PASSWORD,
+		config.DATABASE,
+		config.DB_USER,
+		config.DB_PASSWORD,
 		{
 			host: 'localhost',
 			dialect: 'mysql',
