@@ -1,5 +1,5 @@
-// const employeesSkillsRepository = require('../repositories/employees-skills-repository');
-const skillsRepository = require('../repositories/skills-repository');
+// const employeesSkillsRepository = require('../repositories/in-memory/employees-skills-repository');
+const skillsRepository = require('../repositories/in-memory/skills-repository');
 
 // const create = skillData => {
 // 	return skillsRepository.add(skillData)

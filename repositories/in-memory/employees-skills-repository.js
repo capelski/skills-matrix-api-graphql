@@ -1,4 +1,4 @@
-let employees_skills = require('../data/employees-skills.json');
+let employees_skills = require('./data/employees-skills.json');
 
 const matchingEmployeeSkill = (skillId, employeeId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
 

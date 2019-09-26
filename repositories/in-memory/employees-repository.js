@@ -1,4 +1,4 @@
-let employees = require('../data/employees.json');
+let employees = require('./data/employees.json');
 const employeesSkillsRepository = require('./employees-skills-repository');
 // let nextEmployeeId = employees.length + 1;
 

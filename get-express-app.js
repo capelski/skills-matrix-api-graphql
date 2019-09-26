@@ -2,6 +2,9 @@ const express = require('express');
 const graphqlHttp = require('express-graphql');
 // const getConfiguration = require('./configuration');
 const schema = require('./schema');
+// TODO Inject the repositories to the services
+const employeesService = require('./services/employees-service');
+const skillsService = require('./services/skills-service');
 
 const getExpressApp = (environmentConfig) => {
 	// TODO: Eventually use the config to connect to a database
@@ -11,7 +14,10 @@ const getExpressApp = (environmentConfig) => {
 		const app = express();
 		app.use('/graphql', graphqlHttp({
 			context: {
-				services: instantiateInMemoryServices()
+				services: {
+					employees: employeesService,
+					skills: skillsService
+				}
 			},
 			graphiql: true,
 			schema
@@ -20,10 +26,8 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
-const instantiateInMemoryServices = () => {
-	return {
-		employees: require('./in-memory/services/employees-service'),
-		skills: require('./in-memory/services/skills-service')
-	};
-};
+// TODO: Typescript
+// TODO: prettier + lint
+// TODO: Cucumber tests
+
 module.exports = getExpressApp;
