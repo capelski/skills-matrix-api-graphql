@@ -1,6 +1,7 @@
 const express = require('express');
 const graphqlHttp = require('express-graphql');
 // const getConfiguration = require('./configuration');
+const schema = require('./schema');
 
 const getExpressApp = (environmentConfig) => {
 	// TODO: Eventually use the config to connect to a database
@@ -13,7 +14,7 @@ const getExpressApp = (environmentConfig) => {
 				services: instantiateInMemoryServices()
 			},
 			graphiql: true,
-			schema: TODO
+			schema
 		}));
 		resolve(app);
 	});
