@@ -12,42 +12,40 @@ const employeesSkillsRepository = require('./employees-skills-repository');
 
 const countAll = (filter) => {
 	return Promise.resolve(employees)
-		.then(selectedEmployees => {
-			if (filter && filter.name) {
-				const nameFilter = filter.name.toLowerCase();
-				selectedEmployees = selectedEmployees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
-			}
-			return selectedEmployees.length;
-		});
+		.then(filterEmployees(filter))
+		.then(filteredEmployees => filteredEmployees.length);
+};
+
+const filterEmployees = (filter) => (employees) => {
+	if (filter && filter.name) {
+		const nameFilter = filter.name.toLowerCase();
+		employees = employees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
+	}
+	return Promise.resolve(employees);
 };
 
 const getAll = (filter, skip = 0, first = 10, includeSkills = false, orderBy) => {
 	return Promise.resolve([...employees])
-	.then(selectedEmployees => {
-		// TODO Extract filtering operation into common
-		if (filter && filter.name) {
-			const nameFilter = filter.name.toLowerCase();
-			selectedEmployees = selectedEmployees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
-		}
-
+	.then(filterEmployees(filter))
+	.then(filteredEmployees => {
 		if (orderBy) {
 			if (orderBy.name) {
-				selectedEmployees.sort(sortByName(orderBy.name));
+				filteredEmployees.sort(sortByName(orderBy.name));
 			} else if (orderBy.skills) {
-				return Promise.all(selectedEmployees.map(loadEmployeeSkills))
-					.then(selectedEmployees => selectedEmployees.sort(sortBySkillsLength(orderBy.name)));
+				return Promise.all(filteredEmployees.map(loadEmployeeSkills))
+					.then(filteredEmployees => filteredEmployees.sort(sortBySkillsLength(orderBy.name)));
 			}
 		}
 
 		if (includeSkills) {
-			selectedEmployees = selectedEmployees.map(loadEmployeeSkills);
+			filteredEmployees = filteredEmployees.map(loadEmployeeSkills);
 		}
 
-		return selectedEmployees;
+		return filteredEmployees;
 	})
-	.then(selectedEmployees => {
-		selectedEmployees = selectedEmployees.slice(skip, skip + first);
-		return Promise.resolve(selectedEmployees);
+	.then(filteredEmployees => {
+		filteredEmployees = filteredEmployees.slice(skip, skip + first);
+		return Promise.resolve(filteredEmployees);
 	});
 };
 

@@ -12,40 +12,38 @@ const employeesSkillsRepository = require('./employees-skills-repository');
 
 const countAll = (filter) => {
 	return Promise.resolve(skills)
-		.then(selectedSkills => {
-			if (filter && filter.name) {
-				const nameFilter = filter.name.toLowerCase();
-				selectedSkills = selectedSkills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
-			}
-			return selectedSkills.length;	
-		});
+		.then(filterSkills(filter))
+		.then(filteredSkills => filteredSkills.length);
+};
+
+const filterSkills = (filter) => (skills) => {
+	if (filter && filter.name) {
+		const nameFilter = filter.name.toLowerCase();
+		skills = skills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
+	}
+	return Promise.resolve(skills);
 };
 
 const getAll = (filter, skip = 0, first = 10, includeEmployees = false, orderBy) => {
 	return Promise.resolve([...skills])
-	.then(selectedSkills => {
-		// TODO Extract filtering operation into common
-		if (filter && filter.name) {
-			const nameFilter = filter.name.toLowerCase();
-			selectedSkills = selectedSkills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
-		}
-
+	.then(filterSkills(filter))
+	.then(filteredSkills => {
 		if (orderBy) {
 			if (orderBy.name) {
-				selectedSkills.sort(sortByName(orderBy.name));
+				filteredSkills.sort(sortByName(orderBy.name));
 			} else if (orderBy.employees) {
 				// TODO Fix sorting not working for employees length
 				console.log('Sorting by employees length')
-				return Promise.all(selectedSkills.map(loadSkillEmployees))
+				return Promise.all(filteredSkills.map(loadSkillEmployees))
 					.then(selectedSkills => selectedSkills.sort(sortByEmployeesLength(orderBy.name)));
 			}
 		}
 
 		if (includeEmployees) {
-			selectedSkills = selectedSkills.map(loadSkillEmployees);
+			filteredSkills = filteredSkills.map(loadSkillEmployees);
 		}
 		
-		return selectedSkills;
+		return filteredSkills;
 	})
 	.then(selectedSkills => {
 		selectedSkills = selectedSkills.slice(skip, skip + first);
