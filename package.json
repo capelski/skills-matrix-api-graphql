@@ -1,17 +1,20 @@
 {
-    "name": "skills-matrix-api-node",
+    "name": "skills-matrix-api-graphql",
     "version": "1.0.0",
-    "description": "Skills matrix application web api",
+    "description": "Skills matrix application GraphQL web api",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "start:dev": "nodemon --exec node index.js"
     },
     "author": "Carles Capellas <capellas.carles@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "mysql2": "^1.5.3",
-        "sequelize": "^4.38.0"
+        "express-graphql": "^0.9.0",
+        "graphql": "^14.5.7"
+    },
+    "devDependencies": {
+        "nodemon": "^1.19.2"
     }
 }
