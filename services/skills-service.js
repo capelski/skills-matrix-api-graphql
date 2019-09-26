@@ -28,6 +28,7 @@ const skillsService = (skillsRepository) => {
 	// };
 
 	const getAll = (filter, skip, first, orderBy) => {
+		// TODO Include employees only if they are being requested
 		return skillsRepository.getAll(filter, skip, first, true, orderBy)
 		.then(skills => {
 			return skillsRepository.countAll(filter)

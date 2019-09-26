@@ -30,24 +30,16 @@ const getAll = (filter, skip = 0, first = 10, includeSkills = false, orderBy) =>
 	.then(filteredEmployees => {
 		if (orderBy) {
 			if (orderBy.name) {
-				filteredEmployees.sort(sortByName(orderBy.name));
+				return filteredEmployees.sort(sortByName(orderBy.name));
 			} else if (orderBy.skills) {
-				// TODO Create a loadSkillsCount method. Only include skills after the slicing
-				return Promise.all(filteredEmployees.map(loadEmployeeSkills))
+				return Promise.all(filteredEmployees.map(loadEmployeeSkillsCount))
 					.then(filteredEmployees => filteredEmployees.sort(sortBySkillsLength(orderBy.skills)));
 			}
 		}
-
-		if (includeSkills) {
-			filteredEmployees = filteredEmployees.map(loadEmployeeSkills);
-		}
-
 		return filteredEmployees;
 	})
-	.then(filteredEmployees => {
-		filteredEmployees = filteredEmployees.slice(skip, skip + first);
-		return Promise.resolve(filteredEmployees);
-	});
+	.then(filteredEmployees => filteredEmployees.slice(skip, skip + first))
+	.then(filteredEmployees => includeSkills ? filteredEmployees.map(loadEmployeeSkills) : filteredEmployees);
 };
 
 const getById = (id, includeSkills) => Promise.resolve(employees.find(e => e.id === id))
@@ -64,10 +56,16 @@ const loadEmployeeSkills = employee => employeesSkillsRepository.getByEmployeeId
 		return employee;
 	});
 
+const loadEmployeeSkillsCount = employee => employeesSkillsRepository.getByEmployeeId(employee.id)
+	.then(employeeSkills => {
+		employee.skillsCount = employeeSkills.length;
+		return employee;
+	});
+
 const sortBySkillsLength = (criteria) => (a, b) => {
-	if (a.skills.length < b.skills.length) return -criteria;
-	if (a.skills.length > b.skills.length) return criteria;
-	return sortByName(criteria)(a, b);
+	if (a.skillsCount < b.skillsCount) return -criteria;
+	if (a.skillsCount > b.skillsCount) return criteria;
+	return sortByName(1)(a, b);
 };
 
 const sortByName = (criteria) => (a, b) => {
