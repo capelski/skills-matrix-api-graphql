@@ -1,488 +1,391 @@
 [
 	{
 		"id": 1,
-		"name": "Object Rexx",
-		"employees": []
+		"name": "Object Rexx"
 	},
 	{
 		"id": 2,
-		"name": "Oberon",
-		"employees": []
+		"name": "Oberon"
 	},
 	{
 		"id": 3,
-		"name": "NXT-G",
-		"employees": []
+		"name": "NXT-G"
 	},
 	{
 		"id": 4,
-		"name": "NSIS",
-		"employees": []
+		"name": "NSIS"
 	},
 	{
 		"id": 5,
-		"name": "NQC",
-		"employees": []
+		"name": "NQC"
 	},
 	{
 		"id": 6,
-		"name": "Nemerle",
-		"employees": []
+		"name": "Nemerle"
 	},
 	{
 		"id": 7,
-		"name": "NATURAL",
-		"employees": []
+		"name": "NATURAL"
 	},
 	{
 		"id": 8,
-		"name": "MUMPS",
-		"employees": []
+		"name": "MUMPS"
 	},
 	{
 		"id": 9,
-		"name": "MS-DOS batch",
-		"employees": []
+		"name": "MS-DOS batch"
 	},
 	{
 		"id": 10,
-		"name": "Moto",
-		"employees": []
+		"name": "Moto"
 	},
 	{
 		"id": 11,
-		"name": "MOO",
-		"employees": []
+		"name": "MOO"
 	},
 	{
 		"id": 12,
-		"name": "Monkey",
-		"employees": []
+		"name": "Monkey"
 	},
 	{
 		"id": 13,
-		"name": "Modula-3",
-		"employees": []
+		"name": "Modula-3"
 	},
 	{
 		"id": 14,
-		"name": "Modula-2",
-		"employees": []
+		"name": "Modula-2"
 	},
 	{
 		"id": 15,
-		"name": "Miva",
-		"employees": []
+		"name": "Miva"
 	},
 	{
 		"id": 16,
-		"name": "Mercury",
-		"employees": []
+		"name": "Mercury"
 	},
 	{
 		"id": 17,
-		"name": "MEL",
-		"employees": []
+		"name": "MEL"
 	},
 	{
 		"id": 18,
-		"name": "MDX",
-		"employees": []
+		"name": "MDX"
 	},
 	{
 		"id": 19,
-		"name": "Max/MSP",
-		"employees": []
+		"name": "Max/MSP"
 	},
 	{
 		"id": 20,
-		"name": "MATLAB",
-		"employees": []
+		"name": "MATLAB"
 	},
 	{
 		"id": 21,
-		"name": "Occam",
-		"employees": []
+		"name": "Occam"
 	},
 	{
 		"id": 22,
-		"name": "Maple",
-		"employees": []
+		"name": "Maple"
 	},
 	{
 		"id": 23,
-		"name": "OpenCL",
-		"employees": []
+		"name": "OpenCL"
 	},
 	{
 		"id": 24,
-		"name": "PHP",
-		"employees": []
+		"name": "PHP"
 	},
 	{
 		"id": 25,
-		"name": "X10",
-		"employees": []
+		"name": "X10"
 	},
 	{
 		"id": 26,
-		"name": "Wolfram",
-		"employees": []
+		"name": "Wolfram"
 	},
 	{
 		"id": 27,
-		"name": "Whitespace",
-		"employees": []
+		"name": "Whitespace"
 	},
 	{
 		"id": 28,
-		"name": "VHDL",
-		"employees": []
+		"name": "VHDL"
 	},
 	{
 		"id": 29,
-		"name": "Verilog",
-		"employees": []
+		"name": "Verilog"
 	},
 	{
 		"id": 30,
-		"name": "VBScript",
-		"employees": []
+		"name": "VBScript"
 	},
 	{
 		"id": 31,
-		"name": "TypeScript",
-		"employees": []
+		"name": "TypeScript"
 	},
 	{
 		"id": 32,
-		"name": "Swift",
-		"employees": []
+		"name": "Swift"
 	},
 	{
 		"id": 33,
-		"name": "Squirrel",
-		"employees": []
+		"name": "Squirrel"
 	},
 	{
 		"id": 34,
-		"name": "Squeak",
-		"employees": []
+		"name": "Squeak"
 	},
 	{
 		"id": 35,
-		"name": "SPARK",
-		"employees": []
+		"name": "SPARK"
 	},
 	{
 		"id": 36,
-		"name": "Smalltalk",
-		"employees": []
+		"name": "Smalltalk"
 	},
 	{
 		"id": 37,
-		"name": "Scratch",
-		"employees": []
+		"name": "Scratch"
 	},
 	{
 		"id": 38,
-		"name": "Scala",
-		"employees": []
+		"name": "Scala"
 	},
 	{
 		"id": 39,
-		"name": "SAS",
-		"employees": []
+		"name": "SAS"
 	},
 	{
 		"id": 40,
-		"name": "Ruby",
-		"employees": []
+		"name": "Ruby"
 	},
 	{
 		"id": 41,
-		"name": "Q",
-		"employees": []
+		"name": "Q"
 	},
 	{
 		"id": 42,
-		"name": "Python",
-		"employees": []
+		"name": "Python"
 	},
 	{
 		"id": 43,
-		"name": "Prolog",
-		"employees": []
+		"name": "Prolog"
 	},
 	{
 		"id": 44,
-		"name": "PowerShell",
-		"employees": []
+		"name": "PowerShell"
 	},
 	{
 		"id": 45,
-		"name": "PL/SQL",
-		"employees": []
+		"name": "PL/SQL"
 	},
 	{
 		"id": 46,
-		"name": "Perl",
-		"employees": []
+		"name": "Perl"
 	},
 	{
 		"id": 47,
-		"name": "xBase",
-		"employees": []
+		"name": "xBase"
 	},
 	{
 		"id": 48,
-		"name": "MANTIS",
-		"employees": []
+		"name": "MANTIS"
 	},
 	{
 		"id": 49,
-		"name": "Magik",
-		"employees": []
+		"name": "Magik"
 	},
 	{
 		"id": 50,
-		"name": "Fortran",
-		"employees": []
+		"name": "Fortran"
 	},
 	{
 		"id": 51,
-		"name": "Fantom",
-		"employees": []
+		"name": "Fantom"
 	},
 	{
 		"id": 52,
-		"name": "EXEC",
-		"employees": []
+		"name": "EXEC"
 	},
 	{
 		"id": 53,
-		"name": "Etoys",
-		"employees": []
+		"name": "Etoys"
 	},
 	{
 		"id": 54,
-		"name": "Erlang",
-		"employees": []
+		"name": "Erlang"
 	},
 	{
 		"id": 55,
-		"name": "Elm",
-		"employees": []
+		"name": "Elm"
 	},
 	{
 		"id": 56,
-		"name": "Eiffel",
-		"employees": []
+		"name": "Eiffel"
 	},
 	{
 		"id": 57,
-		"name": "ECMAScript",
-		"employees": []
+		"name": "ECMAScript"
 	},
 	{
 		"id": 58,
-		"name": "Curl",
-		"employees": []
+		"name": "Curl"
 	},
 	{
 		"id": 59,
-		"name": "Common Lisp",
-		"employees": []
+		"name": "Common Lisp"
 	},
 	{
 		"id": 60,
-		"name": "COMAL",
-		"employees": []
+		"name": "COMAL"
 	},
 	{
 		"id": 61,
-		"name": "CoffeeScript",
-		"employees": []
+		"name": "CoffeeScript"
 	},
 	{
 		"id": 62,
-		"name": "COBOL",
-		"employees": []
+		"name": "COBOL"
 	},
 	{
 		"id": 63,
-		"name": "Caml",
-		"employees": []
+		"name": "Caml"
 	},
 	{
 		"id": 64,
-		"name": "C++",
-		"employees": []
+		"name": "C++"
 	},
 	{
 		"id": 65,
-		"name": "Boo",
-		"employees": []
+		"name": "Boo"
 	},
 	{
 		"id": 66,
-		"name": "Bash",
-		"employees": []
+		"name": "Bash"
 	},
 	{
 		"id": 67,
-		"name": "AutoLISP",
-		"employees": []
+		"name": "AutoLISP"
 	},
 	{
 		"id": 68,
-		"name": "Applescript",
-		"employees": []
+		"name": "Applescript"
 	},
 	{
 		"id": 69,
-		"name": "Apex",
-		"employees": []
+		"name": "Apex"
 	},
 	{
 		"id": 70,
-		"name": "Fortress",
-		"employees": []
+		"name": "Fortress"
 	},
 	{
 		"id": 71,
-		"name": "Malbolge",
-		"employees": []
+		"name": "Malbolge"
 	},
 	{
 		"id": 72,
-		"name": "Gambas",
-		"employees": []
+		"name": "Gambas"
 	},
 	{
 		"id": 73,
-		"name": "Hack",
-		"employees": []
+		"name": "Hack"
 	},
 	{
 		"id": 74,
-		"name": "Lustre",
-		"employees": []
+		"name": "Lustre"
 	},
 	{
 		"id": 75,
-		"name": "LPC",
-		"employees": []
+		"name": "LPC"
 	},
 	{
 		"id": 76,
-		"name": "LotusScript",
-		"employees": []
+		"name": "LotusScript"
 	},
 	{
 		"id": 77,
-		"name": "Lisp",
-		"employees": []
+		"name": "Lisp"
 	},
 	{
 		"id": 78,
-		"name": "Lingo",
-		"employees": []
+		"name": "Lingo"
 	},
 	{
 		"id": 79,
-		"name": "Limbo",
-		"employees": []
+		"name": "Limbo"
 	},
 	{
 		"id": 80,
-		"name": "Lasso",
-		"employees": []
+		"name": "Lasso"
 	},
 	{
 		"id": 81,
-		"name": "Ladder Logic",
-		"employees": []
+		"name": "Ladder Logic"
 	},
 	{
 		"id": 82,
-		"name": "LabVIEW",
-		"employees": []
+		"name": "LabVIEW"
 	},
 	{
 		"id": 83,
-		"name": "Kotlin",
-		"employees": []
+		"name": "Kotlin"
 	},
 	{
 		"id": 84,
-		"name": "JScript.NET",
-		"employees": []
+		"name": "JScript.NET"
 	},
 	{
 		"id": 85,
-		"name": "JScript",
-		"employees": []
+		"name": "JScript"
 	},
 	{
 		"id": 86,
-		"name": "JavaFX Script",
-		"employees": []
+		"name": "JavaFX Script"
 	},
 	{
 		"id": 87,
-		"name": "Java",
-		"employees": []
+		"name": "Java"
 	},
 	{
 		"id": 88,
-		"name": "JADE",
-		"employees": []
+		"name": "JADE"
 	},
 	{
 		"id": 89,
-		"name": "INTERCAL",
-		"employees": []
+		"name": "INTERCAL"
 	},
 	{
 		"id": 90,
-		"name": "Inform",
-		"employees": []
+		"name": "Inform"
 	},
 	{
 		"id": 91,
-		"name": "HyperTalk",
-		"employees": []
+		"name": "HyperTalk"
 	},
 	{
 		"id": 92,
-		"name": "Heron",
-		"employees": []
+		"name": "Heron"
 	},
 	{
 		"id": 93,
-		"name": "Haxe",
-		"employees": []
+		"name": "Haxe"
 	},
 	{
 		"id": 94,
-		"name": "Haskell",
-		"employees": []
+		"name": "Haskell"
 	},
 	{
 		"id": 95,
-		"name": "GNU Octave",
-		"employees": []
+		"name": "GNU Octave"
 	},
 	{
 		"id": 96,
-		"name": "XQuery",
-		"employees": []
+		"name": "XQuery"
 	},
 	{
 		"id": 97,
-		"name": "Angelscript 4",
-		"employees": []
+		"name": "Angelscript 4"
 	}
 ]
   

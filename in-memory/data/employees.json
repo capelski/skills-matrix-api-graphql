@@ -1,487 +1,390 @@
 [
 	{
 		"id": 1,
-		"name": "Adele",
-		"skills": []
+		"name": "Adele"
 	},
 	{
 		"id": 2,
-		"name": "Laura Marling",
-		"skills": []
+		"name": "Laura Marling"
 	},
 	{
 		"id": 3,
-		"name": "Zayn Malik",
-		"skills": []
+		"name": "Zayn Malik"
 	},
 	{
 		"id": 4,
-		"name": "Emily Maguire",
-		"skills": []
+		"name": "Emily Maguire"
 	},
 	{
 		"id": 5,
-		"name": "Amy Macdonald",
-		"skills": []
+		"name": "Amy Macdonald"
 	},
 	{
 		"id": 6,
-		"name": "Kirsty MacColl",
-		"skills": []
+		"name": "Kirsty MacColl"
 	},
 	{
 		"id": 7,
-		"name": "Ewan MacColl",
-		"skills": []
+		"name": "Ewan MacColl"
 	},
 	{
 		"id": 8,
-		"name": "Nick Lowe",
-		"skills": []
+		"name": "Nick Lowe"
 	},
 	{
 		"id": 9,
-		"name": "Jez Lowe",
-		"skills": []
+		"name": "Jez Lowe"
 	},
 	{
 		"id": 10,
-		"name": "Cher Lloyd",
-		"skills": []
+		"name": "Cher Lloyd"
 	},
 	{
 		"id": 11,
-		"name": "Dua Lipa",
-		"skills": []
+		"name": "Dua Lipa"
 	},
 	{
 		"id": 12,
-		"name": "Leona Lewis",
-		"skills": []
+		"name": "Leona Lewis"
 	},
 	{
 		"id": 13,
-		"name": "Al Lewis",
-		"skills": []
+		"name": "Al Lewis"
 	},
 	{
 		"id": 14,
-		"name": "Adam Leonardo",
-		"skills": []
+		"name": "Adam Leonardo"
 	},
 	{
 		"id": 15,
-		"name": "John Lennon",
-		"skills": []
+		"name": "John Lennon"
 	},
 	{
 		"id": 16,
-		"name": "Charlie Landsborough",
-		"skills": []
+		"name": "Charlie Landsborough"
 	},
 	{
 		"id": 17,
-		"name": "Steve Knightley",
-		"skills": []
+		"name": "Steve Knightley"
 	},
 	{
 		"id": 18,
-		"name": "Beverley Knight",
-		"skills": []
+		"name": "Beverley Knight"
 	},
 	{
 		"id": 19,
-		"name": "Hani King",
-		"skills": []
+		"name": "Hani King"
 	},
 	{
 		"id": 20,
-		"name": "Nik Kershaw",
-		"skills": []
+		"name": "Nik Kershaw"
 	},
 	{
 		"id": 21,
-		"name": "Martyn Joseph",
-		"skills": []
+		"name": "Martyn Joseph"
 	},
 	{
 		"id": 22,
-		"name": "Johnny Marr",
-		"skills": []
+		"name": "Johnny Marr"
 	},
 	{
 		"id": 23,
-		"name": "Wizz Jones",
-		"skills": []
+		"name": "Wizz Jones"
 	},
 	{
 		"id": 24,
-		"name": "Michael Marra",
-		"skills": []
+		"name": "Michael Marra"
 	},
 	{
 		"id": 25,
-		"name": "Brian May",
-		"skills": []
+		"name": "Brian May"
 	},
 	{
 		"id": 26,
-		"name": "Sam Smith",
-		"skills": []
+		"name": "Sam Smith"
 	},
 	{
 		"id": 27,
-		"name": "Lucie Silvas",
-		"skills": []
+		"name": "Lucie Silvas"
 	},
 	{
 		"id": 28,
-		"name": "Ed Sheeran",
-		"skills": []
+		"name": "Ed Sheeran"
 	},
 	{
 		"id": 29,
-		"name": "Emeli Sandé",
-		"skills": []
+		"name": "Emeli Sandé"
 	},
 	{
 		"id": 30,
-		"name": "Ricky Ross",
-		"skills": []
+		"name": "Ricky Ross"
 	},
 	{
 		"id": 31,
-		"name": "Paul Poulton",
-		"skills": []
+		"name": "Paul Poulton"
 	},
 	{
 		"id": 32,
-		"name": "Mal Pope",
-		"skills": []
+		"name": "Mal Pope"
 	},
 	{
 		"id": 33,
-		"name": "Karen Poole",
-		"skills": []
+		"name": "Karen Poole"
 	},
 	{
 		"id": 34,
-		"name": "Liam Payne",
-		"skills": []
+		"name": "Liam Payne"
 	},
 	{
 		"id": 35,
-		"name": "Passenger",
-		"skills": []
+		"name": "Passenger"
 	},
 	{
 		"id": 36,
-		"name": "Ozzy Osbourne",
-		"skills": []
+		"name": "Ozzy Osbourne"
 	},
 	{
 		"id": 37,
-		"name": "Tom Odell",
-		"skills": []
+		"name": "Tom Odell"
 	},
 	{
 		"id": 38,
-		"name": "John Newman",
-		"skills": []
+		"name": "John Newman"
 	},
 	{
 		"id": 39,
-		"name": "Graham Nash",
-		"skills": []
+		"name": "Graham Nash"
 	},
 	{
 		"id": 40,
-		"name": "James Morrison",
-		"skills": []
+		"name": "James Morrison"
 	},
 	{
 		"id": 41,
-		"name": "Gary Moore",
-		"skills": []
+		"name": "Gary Moore"
 	},
 	{
 		"id": 42,
-		"name": "Mika",
-		"skills": []
+		"name": "Mika"
 	},
 	{
 		"id": 43,
-		"name": "Shelagh McDonald",
-		"skills": []
+		"name": "Shelagh McDonald"
 	},
 	{
 		"id": 44,
-		"name": "Paul McCartney",
-		"skills": []
+		"name": "Paul McCartney"
 	},
 	{
 		"id": 45,
-		"name": "Conor Maynard",
-		"skills": []
+		"name": "Conor Maynard"
 	},
 	{
 		"id": 46,
-		"name": "John Martyn",
-		"skills": []
+		"name": "John Martyn"
 	},
 	{
 		"id": 47,
-		"name": "Tom Jones",
-		"skills": []
+		"name": "Tom Jones"
 	},
 	{
 		"id": 48,
-		"name": "Elton John",
-		"skills": []
+		"name": "Elton John"
 	},
 	{
 		"id": 49,
-		"name": "Bert Jansch",
-		"skills": []
+		"name": "Bert Jansch"
 	},
 	{
 		"id": 50,
-		"name": "Marina Diamandis",
-		"skills": []
+		"name": "Marina Diamandis"
 	},
 	{
 		"id": 51,
-		"name": "Chris de Burgh",
-		"skills": []
+		"name": "Chris de Burgh"
 	},
 	{
 		"id": 52,
-		"name": "Alex Day",
-		"skills": []
+		"name": "Alex Day"
 	},
 	{
 		"id": 53,
-		"name": "Paul Stuart Davies",
-		"skills": []
+		"name": "Paul Stuart Davies"
 	},
 	{
 		"id": 54,
-		"name": "Gareth Davies",
-		"skills": []
+		"name": "Gareth Davies"
 	},
 	{
 		"id": 55,
-		"name": "Elvis Costello",
-		"skills": []
+		"name": "Elvis Costello"
 	},
 	{
 		"id": 56,
-		"name": "Lloyd Cole",
-		"skills": []
+		"name": "Lloyd Cole"
 	},
 	{
 		"id": 57,
-		"name": "Gary Clark",
-		"skills": []
+		"name": "Gary Clark"
 	},
 	{
 		"id": 58,
-		"name": "Kate Bush",
-		"skills": []
+		"name": "Kate Bush"
 	},
 	{
 		"id": 59,
-		"name": "Melanie Brown",
-		"skills": []
+		"name": "Melanie Brown"
 	},
 	{
 		"id": 60,
-		"name": "Andy Brown",
-		"skills": []
+		"name": "Andy Brown"
 	},
 	{
 		"id": 61,
-		"name": "David Bowie",
-		"skills": []
+		"name": "David Bowie"
 	},
 	{
 		"id": 62,
-		"name": "James Blunt",
-		"skills": []
+		"name": "James Blunt"
 	},
 	{
 		"id": 63,
-		"name": "Matt Bigland",
-		"skills": []
+		"name": "Matt Bigland"
 	},
 	{
 		"id": 64,
-		"name": "James Bay",
-		"skills": []
+		"name": "James Bay"
 	},
 	{
 		"id": 65,
-		"name": "Rich Batsford",
-		"skills": []
+		"name": "Rich Batsford"
 	},
 	{
 		"id": 66,
-		"name": "Gary Barlow",
-		"skills": []
+		"name": "Gary Barlow"
 	},
 	{
 		"id": 67,
-		"name": "Kevin Ayers",
-		"skills": []
+		"name": "Kevin Ayers"
 	},
 	{
 		"id": 68,
-		"name": "Joan Armatrading",
-		"skills": []
+		"name": "Joan Armatrading"
 	},
 	{
 		"id": 69,
-		"name": "Lauren Aquilina",
-		"skills": []
+		"name": "Lauren Aquilina"
 	},
 	{
 		"id": 70,
-		"name": "Lily Allen",
-		"skills": []
+		"name": "Lily Allen"
 	},
 	{
 		"id": 71,
-		"name": "Siobhán Donaghy",
-		"skills": []
+		"name": "Siobhán Donaghy"
 	},
 	{
 		"id": 72,
-		"name": "Donovan",
-		"skills": []
+		"name": "Donovan"
 	},
 	{
 		"id": 73,
-		"name": "Josh Doyle",
-		"skills": []
+		"name": "Josh Doyle"
 	},
 	{
 		"id": 74,
-		"name": "Duffy",
-		"skills": []
+		"name": "Duffy"
 	},
 	{
 		"id": 75,
-		"name": "Jamelia",
-		"skills": []
+		"name": "Jamelia"
 	},
 	{
 		"id": 76,
-		"name": "Ben Howard",
-		"skills": []
+		"name": "Ben Howard"
 	},
 	{
 		"id": 77,
-		"name": "Trevor Horn",
-		"skills": []
+		"name": "Trevor Horn"
 	},
 	{
 		"id": 78,
-		"name": "Robyn Hitchcock",
-		"skills": []
+		"name": "Robyn Hitchcock"
 	},
 	{
 		"id": 79,
-		"name": "Boo Hewerdine",
-		"skills": []
+		"name": "Boo Hewerdine"
 	},
 	{
 		"id": 80,
-		"name": "Ant Henson",
-		"skills": []
+		"name": "Ant Henson"
 	},
 	{
 		"id": 81,
-		"name": "Ella Henderson",
-		"skills": []
+		"name": "Ella Henderson"
 	},
 	{
 		"id": 82,
-		"name": "Paul Heaton",
-		"skills": []
+		"name": "Paul Heaton"
 	},
 	{
 		"id": 83,
-		"name": "Imogen Heap",
-		"skills": []
+		"name": "Imogen Heap"
 	},
 	{
 		"id": 84,
-		"name": "Justin Hayward",
-		"skills": []
+		"name": "Justin Hayward"
 	},
 	{
 		"id": 85,
-		"name": "Cat Stevens",
-		"skills": []
+		"name": "Cat Stevens"
 	},
 	{
 		"id": 86,
-		"name": "PJ Harvey",
-		"skills": []
+		"name": "PJ Harvey"
 	},
 	{
 		"id": 87,
-		"name": "Nick Harper",
-		"skills": []
+		"name": "Nick Harper"
 	},
 	{
 		"id": 88,
-		"name": "Malcolm Guite",
-		"skills": []
+		"name": "Malcolm Guite"
 	},
 	{
 		"id": 89,
-		"name": "David Gray",
-		"skills": []
+		"name": "David Gray"
 	},
 	{
 		"id": 90,
-		"name": "Ellie Goulding",
-		"skills": []
+		"name": "Ellie Goulding"
 	},
 	{
 		"id": 91,
-		"name": "Maurice Gibb",
-		"skills": []
+		"name": "Maurice Gibb"
 	},
 	{
 		"id": 92,
-		"name": "Andi Fraggs",
-		"skills": []
+		"name": "Andi Fraggs"
 	},
 	{
 		"id": 93,
-		"name": "Kat Flint",
-		"skills": []
+		"name": "Kat Flint"
 	},
 	{
 		"id": 94,
-		"name": "Newton Faulkner",
-		"skills": []
+		"name": "Newton Faulkner"
 	},
 	{
 		"id": 95,
-		"name": "Ella Eyre",
-		"skills": []
+		"name": "Ella Eyre"
 	},
 	{
 		"id": 96,
-		"name": "George Harrison",
-		"skills": []
+		"name": "George Harrison"
 	},
 	{
 		"id": 97,
-		"name": "Harry Styles",
-		"skills": []
+		"name": "Harry Styles"
 	}
 ]
