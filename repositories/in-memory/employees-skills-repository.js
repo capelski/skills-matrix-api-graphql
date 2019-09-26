@@ -14,10 +14,10 @@ const add = ({ employeeId, skillId }) => {
 	return Promise.resolve(employee_skill);
 };
 
-// TODO Provide filter, first, skip arguments
+// TODO Provide filter, first, skip arguments (after Connection types implementations)
 const getByEmployeeId = employeeId => Promise.resolve(employees_skills.filter(e_s => e_s.employeeId === employeeId));
 
-// TODO Provide filter, first, skip arguments
+// TODO Provide filter, first, skip arguments (after Connection types implementations)
 const getBySkillId = skillId => Promise.resolve(employees_skills.filter(e_s => e_s.skillId === skillId));
 
 const remove = ({ employeeId, skillId }) => {

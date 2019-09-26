@@ -32,8 +32,9 @@ const getAll = (filter, skip = 0, first = 10, includeSkills = false, orderBy) =>
 			if (orderBy.name) {
 				filteredEmployees.sort(sortByName(orderBy.name));
 			} else if (orderBy.skills) {
+				// TODO Create a loadSkillsCount method. Only include skills after the slicing
 				return Promise.all(filteredEmployees.map(loadEmployeeSkills))
-					.then(filteredEmployees => filteredEmployees.sort(sortBySkillsLength(orderBy.name)));
+					.then(filteredEmployees => filteredEmployees.sort(sortBySkillsLength(orderBy.skills)));
 			}
 		}
 
@@ -66,7 +67,7 @@ const loadEmployeeSkills = employee => employeesSkillsRepository.getByEmployeeId
 const sortBySkillsLength = (criteria) => (a, b) => {
 	if (a.skills.length < b.skills.length) return -criteria;
 	if (a.skills.length > b.skills.length) return criteria;
-	return 0;
+	return sortByName(criteria)(a, b);
 };
 
 const sortByName = (criteria) => (a, b) => {

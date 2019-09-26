@@ -32,10 +32,9 @@ const getAll = (filter, skip = 0, first = 10, includeEmployees = false, orderBy)
 			if (orderBy.name) {
 				filteredSkills.sort(sortByName(orderBy.name));
 			} else if (orderBy.employees) {
-				// TODO Fix sorting not working for employees length
-				console.log('Sorting by employees length')
+				// TODO Create a loadEmployeesCount method. Only include employees after the slicing
 				return Promise.all(filteredSkills.map(loadSkillEmployees))
-					.then(selectedSkills => selectedSkills.sort(sortByEmployeesLength(orderBy.name)));
+					.then(filteredSkills => filteredSkills.sort(sortByEmployeesLength(orderBy.employees)));
 			}
 		}
 
@@ -45,9 +44,9 @@ const getAll = (filter, skip = 0, first = 10, includeEmployees = false, orderBy)
 		
 		return filteredSkills;
 	})
-	.then(selectedSkills => {
-		selectedSkills = selectedSkills.slice(skip, skip + first);
-		return Promise.resolve(selectedSkills);
+	.then(filteredSkills => {
+		filteredSkills = filteredSkills.slice(skip, skip + first);
+		return Promise.resolve(filteredSkills);
 	});
 };
 
@@ -68,7 +67,7 @@ const loadSkillEmployees = skill => employeesSkillsRepository.getBySkillId(skill
 const sortByEmployeesLength = (criteria) => (a, b) => {
 	if (a.employees.length < b.employees.length) return -criteria;
 	if (a.employees.length > b.employees.length) return criteria;
-	return 0;
+	return sortByName(criteria)(a, b);
 };
 
 const sortByName = (criteria) => (a, b) => {
