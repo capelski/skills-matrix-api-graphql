@@ -2,10 +2,10 @@ const express = require('express');
 const graphqlHttp = require('express-graphql');
 // const getConfiguration = require('./configuration');
 const schema = require('./schema');
-const employeesRepository = require('./repositories/in-memory/employees-repository');
-const skillsRepository = require('./repositories/in-memory/skills-repository');
-const employeesService = require('./services/employees-service')(employeesRepository);
-const skillsService = require('./services/skills-service')(skillsRepository);
+
+const repositories = require('./repositories/in-memory');
+const employeesService = require('./services/employees-service')(repositories.employees);
+const skillsService = require('./services/skills-service')(repositories.skills);
 
 const getExpressApp = (environmentConfig) => {
 	// TODO: Eventually use the config to connect to a database
