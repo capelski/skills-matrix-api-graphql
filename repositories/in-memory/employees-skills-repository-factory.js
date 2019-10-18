@@ -21,7 +21,10 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 		return Promise.resolve(employees_skills.filter(e_s => e_s.employeeId === employeeId))
 			.then(employeeSkills => Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId))))
 			.then(skills => {
-				// TODO Filter
+				if (filter && filter.name) {
+					const nameFilter = filter.name.toLowerCase();
+					skills = skills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
+				}
 				return skills.length;
 			});
 	};
@@ -30,17 +33,22 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 		return Promise.resolve(employees_skills.filter(e_s => e_s.skillId === skillId))
 			.then(skillEmployees => Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId))))
 			.then(employees => {
-				// TODO Filter
+				if (filter && filter.name) {
+					const nameFilter = filter.name.toLowerCase();
+					employees = employees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
+				}
 				return employees.length;
 			});
 	};
 
 	const getByEmployeeId = (employeeId, skip = 0, first = 10, filter, orderBy) => {
-		// TODO Use the filter, skip, first and orderBy parameters
 		return Promise.resolve(employees_skills.filter(e_s => e_s.employeeId === employeeId))
 			.then(employeeSkills => Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId))))
 			.then(skills => {
-				// TODO Filter
+				if (filter && filter.name) {
+					const nameFilter = filter.name.toLowerCase();
+					skills = skills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
+				}
 				return skills;
 			})
 			.then(filteredSkills => {
@@ -54,11 +62,13 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 	};
 
 	const getBySkillId = (skillId, skip = 0, first = 10, filter, orderBy) => {
-		// TODO Use the filter, skip, first and orderBy parameters
 		return Promise.resolve(employees_skills.filter(e_s => e_s.skillId === skillId))
 			.then(skillEmployees => Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId))))
 			.then(employees => {
-				// TODO Filter
+				if (filter && filter.name) {
+					const nameFilter = filter.name.toLowerCase();
+					employees = employees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
+				}
 				return employees;
 			})
 			.then(filteredEmployees => {

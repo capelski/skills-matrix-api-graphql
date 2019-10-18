@@ -15,9 +15,9 @@ const skillType = new GraphQLObjectType({
             // TODO Define as the type in employee.js
             employees: {
                 type: definePagedListType(employeeType, 'SkillEmployeesPagedList'),
-                // TODO Provide types for filtering and orderBy
+                // TODO Provide type for orderBy
                 args: {
-                    // filter: { type: employeeFilterType },
+                    filter: { type: nestedEmployeeFilterType },
                     first: { type: GraphQLInt },
                     skip: { type: GraphQLInt },
                     // orderBy: { type: employeeOrderByType }
@@ -42,6 +42,15 @@ const skillFilterType = new GraphQLInputObjectType({
         id: {
             type: GraphQLInt
         },
+        name: {
+            type: GraphQLString
+        }
+    }
+});
+
+const nestedEmployeeFilterType = new GraphQLInputObjectType({
+    name: 'SkillEmployeeFilter',
+    fields: {
         name: {
             type: GraphQLString
         }
