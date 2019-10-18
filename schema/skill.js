@@ -1,20 +1,30 @@
 const {
     GraphQLInputObjectType,
     GraphQLInt,
-    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString
 } = require('graphql');
-const definePagedListType = require('./pagedList');
+const definePagedListType = require('./paged-list');
 
 const skillType = new GraphQLObjectType({
     name: 'Skill',
     fields: () => {
         const { employeeType } = require('./employee');
         return {
+            // TODO Define as the type in employee.js
             employees: {
-                type: new GraphQLList(employeeType)
+                type: definePagedListType(employeeType, 'SkillEmployeesPagedList'),
+                // TODO Provide types for filtering and orderBy
+                args: {
+                    // filter: { type: employeeFilterType },
+                    first: { type: GraphQLInt },
+                    skip: { type: GraphQLInt },
+                    // orderBy: { type: employeeOrderByType }
+                },
+                resolve: (object, args, context) => {
+                    return context.services.skills.getSkillEmployees(object.id, args.filter, args.skip, args.first, args.orderBy);
+                }
             },
             id: {
                 type: GraphQLInt,
@@ -66,7 +76,7 @@ const skillField = {
                 totalCount: 1,
             }));
         } else {
-            return context.services.skills.getAll(args.filter, args.skip, args.first, args.orderBy);
+            return context.services.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
     }
 }

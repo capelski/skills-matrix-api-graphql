@@ -4,8 +4,8 @@ const {
     GraphQLObjectType,
 } = require('graphql');
 
-const definePagedListType = (itemType) => new GraphQLObjectType({
-    name: `${itemType}PagedList`,
+const definePagedListType = (itemType, typeName) => new GraphQLObjectType({
+    name: typeName || `${itemType}PagedList`,
     fields: () => {
         return {
             items: {

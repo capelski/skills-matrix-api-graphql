@@ -24,7 +24,7 @@ const skillsRepositoryFactory = (repositories) => {
 		return Promise.resolve(skills);
 	};
 
-	const getAll = (filter, skip = 0, first = 10, includeEmployees = false, orderBy) => {
+	const getAll = (skip = 0, first = 10, filter, orderBy) => {
 		return Promise.resolve([...skills])
 		.then(filterSkills(filter))
 		.then(filteredSkills => {
@@ -38,23 +38,14 @@ const skillsRepositoryFactory = (repositories) => {
 			}
 			return filteredSkills;
 		})
-		.then(filteredSkills => filteredSkills.slice(skip, skip + first))
-		.then(filteredSkills => includeEmployees ? filteredSkills.map(loadSkillEmployees) : filteredSkills);
+		.then(filteredSkills => filteredSkills.slice(skip, skip + first));
 	};
 
-	const getById = (id, includeEmployees) => Promise.resolve(skills.find(s => s.id === id))
-		.then(skill => includeEmployees ? loadSkillEmployees(skill) : skill);
+	const getById = id => Promise.resolve(skills.find(s => s.id === id));
 
-	const loadSkillEmployees = skill => repositories.employeesSkills.getBySkillId(skill.id)
-		.then(skillEmployees => Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId))))
-		.then(employees => {
-			skill.employees = employees;
-			return skill;
-		});
-
-	const loadSkillEmployeesCount = skill => repositories.employeesSkills.getBySkillId(skill.id)
-		.then(skillEmployees => {
-			skill.employeesCount = skillEmployees.length;
+	const loadSkillEmployeesCount = skill => repositories.employeesSkills.countBySkillId(skill.id)
+		.then(skillEmployeesCount => {
+			skill.employeesCount = skillEmployeesCount;
 			return skill;
 		});
 

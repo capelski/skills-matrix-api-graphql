@@ -1,6 +1,6 @@
-const employeesService = (employeesRepository) => {
+const employeesService = (repositories) => {
 	// const create = employeeData => {
-	// 	return employeesRepository.add(employeeData)
+	// 	return repositories.employees.add(employeeData)
 	// 	.then(employee => {
 	// 		return Promise.all(
 	// 			employeeData.skills.map(skillData =>
@@ -17,7 +17,7 @@ const employeesService = (employeesRepository) => {
 	// 	.then(employee => {
 	// 		if (employee) {
 	// 			return Promise.all([
-	// 				employeesRepository.remove(id),
+	// 				repositories.employees.remove(id),
 	// 				// TODO Take care of this operation inside the employees-skills-repository
 	// 				employeesSkillsRepository.removeByEmployeeId(id)
 	// 			])
@@ -27,11 +27,10 @@ const employeesService = (employeesRepository) => {
 	// 	});
 	// };
 
-	const getAll = (filter, skip, first, orderBy) => {
-		// TODO Include skills only if they are being requested
-		return employeesRepository.getAll(filter, skip, first, true, orderBy)
+	const getAll = (skip, first, filter, orderBy) => {
+		return repositories.employees.getAll(skip, first, filter, orderBy)
 		.then(employees => {
-			return employeesRepository.countAll(filter)
+			return repositories.employees.countAll(filter)
 			.then(totalCount => ({
 				items: employees,
 				totalCount
@@ -40,14 +39,25 @@ const employeesService = (employeesRepository) => {
 	};
 
 	const getById = id => {
-		return employeesRepository.getById(id, true);
+		return repositories.employees.getById(id);
+	};
+
+	const getEmployeeSkills = (employeeId, filter, skip, first, orderBy) => {
+		return repositories.employeesSkills.getByEmployeeId(employeeId, skip, first, filter, orderBy)
+			.then(skills => {
+				return repositories.employeesSkills.countByEmployeeId(employeeId, filter)
+					.then(totalCount => ({
+						items: skills,
+						totalCount
+					}))
+			});
 	};
 
 	// const update = employeeData => {
 	// 	return getById(employeeData.id)
 	// 	.then(employee => {
 	// 		if (employee) {
-	// 			// TODO Update this to call the employeesRepository.update
+	// 			// TODO Update this to call the repositories.employees.update
 	// 			employee.name = employeeData.name;
 	// 			// TODO Take care of these operations inside the employees-skills-repository
 	// 			employeesSkillsRepository.removeByEmployeeId(employeeData.id);
@@ -64,6 +74,7 @@ const employeesService = (employeesRepository) => {
 		// deleteEmployee,
 		getAll,
 		getById,
+		getEmployeeSkills,
 		// update
 	};
 };

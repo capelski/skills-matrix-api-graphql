@@ -1,6 +1,6 @@
-const skillsService = (skillsRepository) => {
+const skillsService = (repositories) => {
 	// const create = skillData => {
-	// 	return skillsRepository.add(skillData)
+	// 	return repositories.skills.add(skillData)
 	// 	.then(skill => {
 	// 		return Promise.all(
 	// 			skillData.employees.map(employeeData =>
@@ -17,7 +17,7 @@ const skillsService = (skillsRepository) => {
 	// 	.then(skill => {
 	// 		if (skill) {
 	// 			return Promise.all([
-	// 				skillsRepository.remove(id),
+	// 				repositories.skills.remove(id),
 	// 				// TODO Take care of this operation inside the employees-skills-repository
 	// 				employeesSkillsRepository.removeBySkillId(id)
 	// 			])
@@ -28,10 +28,9 @@ const skillsService = (skillsRepository) => {
 	// };
 
 	const getAll = (filter, skip, first, orderBy) => {
-		// TODO Include employees only if they are being requested
-		return skillsRepository.getAll(filter, skip, first, true, orderBy)
+		return repositories.skills.getAll(skip, first, filter, orderBy)
 		.then(skills => {
-			return skillsRepository.countAll(filter)
+			return repositories.skills.countAll(filter)
 			.then(totalCount => ({
 				items: skills,
 				totalCount
@@ -40,14 +39,25 @@ const skillsService = (skillsRepository) => {
 	};
 
 	const getById = id => {
-		return skillsRepository.getById(id, true);
+		return repositories.skills.getById(id);
+	};
+
+	const getSkillEmployees = (skillId, filter, skip, first, orderBy) => {
+		return repositories.employeesSkills.getBySkillId(skillId, skip, first, filter, orderBy)
+			.then(employees => {
+				return repositories.employeesSkills.countBySkillId(skillId, filter)
+				.then(totalCount => ({
+					items: employees,
+					totalCount
+				}));
+			});
 	};
 
 	// const update = skillData => {
 	// 	return getById(skillData.id)
 	// 	.then(skill => {		
 	// 		if (skill) {
-	// 			// TODO Update this to call the skillsRepository.update
+	// 			// TODO Update this to call the repositories.skills.update
 	// 			skill.name = skillData.name;
 	// 			// TODO Take care of these operations inside the employees-skills-repository
 	// 			employeesSkillsRepository.removeBySkillId(skillData.id);
@@ -64,6 +74,7 @@ const skillsService = (skillsRepository) => {
 		// deleteSkill,
 		getAll,
 		getById,
+		getSkillEmployees,
 		// update
 	};
 };

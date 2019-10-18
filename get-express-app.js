@@ -4,8 +4,8 @@ const graphqlHttp = require('express-graphql');
 const schema = require('./schema');
 
 const repositories = require('./repositories/in-memory');
-const employeesService = require('./services/employees-service')(repositories.employees);
-const skillsService = require('./services/skills-service')(repositories.skills);
+const employeesService = require('./services/employees-service')(repositories);
+const skillsService = require('./services/skills-service')(repositories);
 
 const getExpressApp = (environmentConfig) => {
 	// TODO: Eventually use the config to connect to a database
@@ -28,8 +28,9 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
-// TODO: Typescript
-// TODO: prettier + lint
-// TODO: Cucumber tests
+// TODO Mutations
+// TODO Typescript
+// TODO prettier + lint
+// TODO Cucumber tests
 
 module.exports = getExpressApp;
