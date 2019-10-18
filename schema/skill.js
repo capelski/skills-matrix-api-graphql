@@ -22,7 +22,7 @@ const skillType = new GraphQLObjectType({
                     orderBy: { type: skillEmployeeOrderByType }
                 },
                 resolve: (object, args, context) => {
-                    return context.services.skills.getSkillEmployees(object.id, args.filter, args.skip, args.first, args.orderBy);
+                    return context.skills.getSkillEmployees(object.id, args.filter, args.skip, args.first, args.orderBy);
                 }
             },
             id: {
@@ -89,12 +89,12 @@ const skillField = {
     },
     resolve: (object, args, context) => {
         if (args.filter && args.filter.id) {
-            return context.services.skills.getById(args.filter.id).then(skill => ({
+            return context.skills.getById(args.filter.id).then(skill => ({
                 items: [skill],
                 totalCount: 1,
             }));
         } else {
-            return context.services.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
+            return context.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
     }
 }
