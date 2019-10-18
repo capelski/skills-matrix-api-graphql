@@ -4,6 +4,19 @@ let employees_skills = require('./data/employees-skills.json');
 
 const matchingEmployeeSkill = (skillId, employeeId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
 
+// TODO Extract into commons
+const sortByName = (criteria) => (a, b) => {
+	if (a.name < b.name) return -criteria;
+	if (a.name > b.name) return criteria;
+	return 0;
+};
+
+const sortById = (a, b) => {
+	if (a.id < b.id) return -1;
+	if (a.id > b.id) return 1;
+	return 0;
+};
+
 const employeesSkillsRepositoryFactory = (repositories) => {
 	const add = ({ employeeId, skillId }) => {
 		const employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
@@ -52,11 +65,10 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 				return skills;
 			})
 			.then(filteredSkills => {
-				// TODO Sort by Id
 				if (orderBy && orderBy.name) {
 					return filteredSkills.sort(sortByName(orderBy.name));
 				}
-				return filteredSkills;
+				return filteredSkills.sort(sortById);
 			})
 			.then(filteredSkills => filteredSkills.slice(skip, skip + first));
 	};
@@ -72,11 +84,10 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 				return employees;
 			})
 			.then(filteredEmployees => {
-				// TODO Sort by Id
 				if (orderBy && orderBy.name) {
 					return filteredEmployees.sort(sortByName(orderBy.name));
 				}
-				return filteredEmployees;
+				return filteredEmployees.sort(sortById);
 			})
 			.then(filteredEmployees => filteredEmployees.slice(skip, skip + first));
 	};
