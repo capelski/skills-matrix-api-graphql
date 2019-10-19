@@ -27,7 +27,7 @@ const skillsService = (repositories) => {
 	// 	});
 	// };
 
-	const getAll = (filter, skip, first, orderBy) => {
+	const getAll = (skip, first, filter, orderBy) => {
 		return repositories.skills.getAll(skip, first, filter, orderBy)
 		.then(skills => {
 			return repositories.skills.countAll(filter)
