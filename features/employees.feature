@@ -55,4 +55,66 @@ Feature: Employees API
         And I should get 1 employees
         And the name of the employee 1 in the response should be equal to the name of the employee 48 in employees.json
 
-# TODO Test skip and first
+    Scenario: Employees ordering by name ascending
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(orderBy: { name: 1 }) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the name of the employee 1 in the response should be equal to the name of the employee 14 in employees.json
+
+    Scenario: Employees ordering by name descending
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(orderBy: { name: -1 }) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the name of the employee 1 in the response should be equal to the name of the employee 3 in employees.json
+
+    Scenario: Employees ordering by skills length ascending
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(orderBy: { skills: 1 }) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the name of the employee 1 in the response should be equal to the name of the employee 14 in employees.json
+
+    Scenario: Employees ordering by skills length descending
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(orderBy: { skills: -1 }) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the name of the employee 1 in the response should be equal to the name of the employee 1 in employees.json
+
+# TODO Test skip
+# TODO Test first
+# TODO Mixed arguments
