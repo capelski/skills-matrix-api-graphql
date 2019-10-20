@@ -17,7 +17,7 @@ Feature: Skills API
             """
         Then I should get a total count of 97 skills
         And I should get 10 skills
-        And the name of the skill 1 in the response should be equal to the name of the skill 1 in skills.json
+        And the skill 1 in the response should be "Object Rexx"
 
     Scenario: Skills filtering by name
         Given the defined GraphQL schema
@@ -35,7 +35,7 @@ Feature: Skills API
             """
         Then I should get a total count of 4 skills
         And I should get 4 skills
-        And the name of the skill 3 in the response should be equal to the name of the skill 66 in skills.json
+        And the skill 3 in the response should be "Bash"
 
     Scenario: Skills filtering by id
         Given the defined GraphQL schema
@@ -53,7 +53,7 @@ Feature: Skills API
             """
         Then I should get a total count of 1 skills
         And I should get 1 skills
-        And the name of the skill 1 in the response should be equal to the name of the skill 13 in skills.json
+        And the skill 1 in the response should be "Modula-3"
 
     Scenario: Skills ordering by name ascending
         Given the defined GraphQL schema
@@ -68,7 +68,7 @@ Feature: Skills API
             }
             }
             """
-        Then the name of the skill 1 in the response should be equal to the name of the skill 97 in skills.json
+        Then the skill 1 in the response should be "Angelscript 4"
 
     Scenario: Skills ordering by name descending
         Given the defined GraphQL schema
@@ -83,7 +83,7 @@ Feature: Skills API
             }
             }
             """
-        Then the name of the skill 1 in the response should be equal to the name of the skill 47 in skills.json
+        Then the skill 1 in the response should be "xBase"
 
     Scenario: Skills ordering by employees length ascending
         Given the defined GraphQL schema
@@ -98,7 +98,7 @@ Feature: Skills API
             }
             }
             """
-        Then the name of the skill 1 in the response should be equal to the name of the skill 97 in skills.json
+        Then the skill 1 in the response should be "Angelscript 4"
 
     Scenario: Skills ordering by employees length descending
         Given the defined GraphQL schema
@@ -113,7 +113,7 @@ Feature: Skills API
             }
             }
             """
-        Then the name of the skill 1 in the response should be equal to the name of the skill 1 in skills.json
+        Then the skill 1 in the response should be "Object Rexx"
 
 # TODO Test skip
 # TODO Test first

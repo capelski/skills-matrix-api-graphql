@@ -17,7 +17,7 @@ Feature: Employees API
             """
         Then I should get a total count of 97 employees
         And I should get 10 employees
-        And the name of the employee 1 in the response should be equal to the name of the employee 1 in employees.json
+        And the employee 1 in the response should be "Adele"
 
     Scenario: Employees filtering by name
         Given the defined GraphQL schema
@@ -35,7 +35,7 @@ Feature: Employees API
             """
         Then I should get a total count of 3 employees
         And I should get 3 employees
-        And the name of the employee 2 in the response should be equal to the name of the employee 14 in employees.json
+        And the employee 2 in the response should be "Adam Leonardo"
 
     Scenario: Employees filtering by id
         Given the defined GraphQL schema
@@ -53,7 +53,7 @@ Feature: Employees API
             """
         Then I should get a total count of 1 employees
         And I should get 1 employees
-        And the name of the employee 1 in the response should be equal to the name of the employee 48 in employees.json
+        Then the employee 1 in the response should be "Elton John"
 
     Scenario: Employees ordering by name ascending
         Given the defined GraphQL schema
@@ -68,7 +68,7 @@ Feature: Employees API
             }
             }
             """
-        Then the name of the employee 1 in the response should be equal to the name of the employee 14 in employees.json
+        Then the employee 1 in the response should be "Adam Leonardo"
 
     Scenario: Employees ordering by name descending
         Given the defined GraphQL schema
@@ -83,7 +83,7 @@ Feature: Employees API
             }
             }
             """
-        Then the name of the employee 1 in the response should be equal to the name of the employee 3 in employees.json
+        Then the employee 1 in the response should be "Zayn Malik"
 
     Scenario: Employees ordering by skills length ascending
         Given the defined GraphQL schema
@@ -98,7 +98,7 @@ Feature: Employees API
             }
             }
             """
-        Then the name of the employee 1 in the response should be equal to the name of the employee 14 in employees.json
+        Then the employee 1 in the response should be "Adam Leonardo"
 
     Scenario: Employees ordering by skills length descending
         Given the defined GraphQL schema
@@ -113,7 +113,7 @@ Feature: Employees API
             }
             }
             """
-        Then the name of the employee 1 in the response should be equal to the name of the employee 1 in employees.json
+        Then the employee 1 in the response should be "Adele"
 
 # TODO Test skip
 # TODO Test first

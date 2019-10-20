@@ -35,16 +35,12 @@ Then('I should get {int} skills', (result) => {
     expect(queryResult.data.skill.items.length).to.equal(result);
 });
 
-Then('the name of the employee {int} in the response should be equal to the name of the employee {int} in employees.json', (responseNumber, employeeNumber) => {
-    const employees = require('../../repositories/in-memory/data/employees.json');
-    const expectedEmployee = employees[employeeNumber - 1];
-    const actualEmployee = queryResult.data.employee.items[responseNumber - 1];
-    expect(actualEmployee.name).to.equal(expectedEmployee.name);
+Then('the employee {int} in the response should be {string}', (employeeNumber, employeeName) => {
+    const employee = queryResult.data.employee.items[employeeNumber - 1];
+    expect(employee.name).to.equal(employeeName);
 });
 
-Then('the name of the skill {int} in the response should be equal to the name of the skill {int} in skills.json', (responseNumber, skillNumber) => {
-    const skills = require('../../repositories/in-memory/data/skills.json');
-    const expectedSkill = skills[skillNumber - 1];
-    const actualSkill = queryResult.data.skill.items[responseNumber - 1];
-    expect(actualSkill.name).to.equal(expectedSkill.name);
+Then('the skill {int} in the response should be {string}', (skillNumber, skillName) => {
+    const skill = queryResult.data.skill.items[skillNumber - 1];
+    expect(skill.name).to.equal(skillName);
 });
