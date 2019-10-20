@@ -115,6 +115,20 @@ Feature: Employees API
             """
         Then the employee 1 in the response should be "Adele"
 
-# TODO Test skip
+    Scenario: Employees support skip argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(skip: 10) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the employee 1 in the response should be "Dua Lipa"
+
 # TODO Test first
 # TODO Mixed arguments

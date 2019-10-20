@@ -115,6 +115,20 @@ Feature: Skills API
             """
         Then the skill 1 in the response should be "Object Rexx"
 
-# TODO Test skip
+    Scenario: Skills support skip argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(skip: 10) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then the skill 1 in the response should be "MOO"
+
 # TODO Test first
 # TODO Mixed arguments
