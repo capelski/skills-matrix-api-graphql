@@ -130,5 +130,33 @@ Feature: Skills API
             """
         Then the skill 1 in the response should be "MOO"
 
-# TODO Test first
-# TODO Mixed arguments
+    Scenario: Skills support first argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(first: 2) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then I should get 2 skills
+
+    Scenario: Skills support pagination
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(first: 5, skip: 20) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then I should get 5 skills
+        And the skill 1 in the response should be "Occam"

@@ -130,5 +130,33 @@ Feature: Employees API
             """
         Then the employee 1 in the response should be "Dua Lipa"
 
-# TODO Test first
-# TODO Mixed arguments
+    Scenario: Employees support first argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(first: 2) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then I should get 2 employees
+
+    Scenario: Employees support pagination
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(first: 5, skip: 20) {
+            items {
+            name
+            }
+            }
+            }
+            """
+        Then I should get 5 employees
+        And the employee 1 in the response should be "Martyn Joseph"
