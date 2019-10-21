@@ -1,8 +1,6 @@
 let employees = require('./data/employees.json');
 // let nextEmployeeId = employees.length + 1;
 
-// TODO All operations should return a copy of the object to reflect the database nature
-
 const employeesRepositoryFactory = (repositories) => {
 	// const add = ({ name }) => {
 	// 	const employee = { id: nextEmployeeId++, name };

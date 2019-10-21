@@ -1,7 +1,5 @@
 let employees_skills = require('./data/employees-skills.json');
 
-// TODO All operations should return a copy of the object to reflect the database nature
-
 const matchingEmployeeSkill = (skillId, employeeId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
 
 // TODO Extract into commons

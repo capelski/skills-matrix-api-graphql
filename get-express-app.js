@@ -23,8 +23,9 @@ const getExpressApp = (environmentConfig) => {
 };
 
 // TODO Mutations
+// TODO repository operations should return copies of the objects to reflect the database nature
 // TODO Typescript
 // TODO prettier + lint
-// TODO Cucumber tests
+// TODO Cucumber tests for nested collections
 
 module.exports = getExpressApp;

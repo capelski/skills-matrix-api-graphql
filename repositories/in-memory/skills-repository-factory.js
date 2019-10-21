@@ -1,8 +1,6 @@
 let skills = require('./data/skills.json');
 // let nextSkillId = skills.length + 1;
 
-// TODO All operations should return a copy of the object to reflect the database nature
-
 const skillsRepositoryFactory = (repositories) => {	
 	// const add = ({ name }) => {
 	// 	const skill = { id: nextSkillId++, name };
