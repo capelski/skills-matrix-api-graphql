@@ -40,3 +40,13 @@ Then('the removed employee name is {string}', (employeeName) => {
     const employee = shared.queryResult.data.removeEmployee;
     expect(employee.name).to.equal(employeeName);
 });
+
+Then('the updated employee name is {string}', (employeeName) => {
+    const employee = shared.queryResult.data.updateEmployee;
+    expect(employee.name).to.equal(employeeName);
+});
+
+Then('the updated employee has {int} skills', (skillsLength) => {
+    const employee = shared.queryResult.data.updateEmployee;
+    expect(employee.skills.items.length).to.equal(skillsLength);
+});

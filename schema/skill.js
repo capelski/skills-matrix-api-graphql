@@ -100,8 +100,8 @@ const skillQueryField = {
     }
 };
 
-const skillInputType = new GraphQLInputObjectType({
-    name: 'SkillInput',
+const addSkillInputType = new GraphQLInputObjectType({
+    name: 'AddSkillInput',
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         employeesId: { type: new GraphQLList(GraphQLInt) }
@@ -111,7 +111,7 @@ const skillInputType = new GraphQLInputObjectType({
 const addSkill = {
     type: skillType,
     args: {
-        input: { type: skillInputType }
+        input: { type: addSkillInputType }
     },
     resolve: function (object, args, context) {
         return context.skills.create(args.input);
@@ -128,10 +128,30 @@ const removeSkill = {
     }
 };
 
+const updateSkillInputType = new GraphQLInputObjectType({
+    name: 'updateSkillInput',
+    fields: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: GraphQLString },
+        employeesId: { type: new GraphQLList(GraphQLInt) }
+    }
+});
+
+const updateSkill = {
+    type: skillType,
+    args: {
+        input: { type: updateSkillInputType }
+    },
+    resolve: function (object, args, context) {
+        return context.skills.update(args.input);
+    }
+};
+
 module.exports = {
     skillMutations: {
         add: addSkill,
-        remove: removeSkill
+        remove: removeSkill,
+        update: updateSkill
     },
     skillQueryField,
     skillType

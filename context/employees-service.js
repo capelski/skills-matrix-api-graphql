@@ -51,20 +51,25 @@ const employeesService = (repositories) => {
 		});
 	};
 
-	// const update = employeeData => {
-	// 	return getById(employeeData.id)
-	// 	.then(employee => {
-	// 		if (employee) {
-	// 			// TODO Update this to call the repositories.employees.update
-	// 			employee.name = employeeData.name;
-	// 			repositories.employeesSkills.removeByEmployeeId(employeeData.id);
-	// 			employeeData.skills.forEach(skillData => {
-	// 				repositories.employeesSkills.add({skillId: skillData.id, employeeId: employeeData.id})
-	// 			});
-	// 		}
-	// 		return employee;
-	// 	});
-	// };
+	const update = employeeData => {
+		return getById(employeeData.id)
+		.then(employee => {
+			if (employee && employeeData.name) {
+				return repositories.employees.update(employee.id, employeeData.name);
+			}
+			return employee;
+		})
+		.then(employee => {
+			if (employee && employeeData.skillsId) {
+				return repositories.employeesSkills.removeByEmployeeId(employee.id)
+					.then(() => {
+						const promises = employeeData.skillsId.map(skillId => repositories.employeesSkills.add({skillId, employeeId: employee.id}));
+						return Promise.all(promises).then(() => employee);
+					});
+			}
+			return employee;
+		});
+	};
 
 	return {
 		create,
@@ -72,7 +77,7 @@ const employeesService = (repositories) => {
 		getById,
 		getEmployeeSkills,
 		remove,
-		// update
+		update
 	};
 };
 

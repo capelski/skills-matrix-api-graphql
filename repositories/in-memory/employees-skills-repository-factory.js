@@ -1,4 +1,4 @@
-const matchingEmployeeSkill = (skillId, employeeId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
+const matchingEmployeeSkill = (employeeId, skillId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
 
 // TODO Extract into commons
 const sortByName = (criteria) => (a, b) => {

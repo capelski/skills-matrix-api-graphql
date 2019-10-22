@@ -51,20 +51,25 @@ const skillsService = (repositories) => {
 		});
 	};
 
-	// const update = skillData => {
-	// 	return getById(skillData.id)
-	// 	.then(skill => {		
-	// 		if (skill) {
-	// 			// TODO Update this to call the repositories.skills.update
-	// 			skill.name = skillData.name;
-	// 			repositories.employeesSkills.removeBySkillId(skillData.id);
-	// 			skillData.employees.forEach(employeeData => {
-	// 				repositories.employeesSkills.add({skillId: skillData.id, employeeId: employeeData.id})
-	// 			});
-	// 		}
-	// 		return skill;
-	// 	});
-	// };
+	const update = skillData => {
+		return getById(skillData.id)
+		.then(skill => {
+			if (skill && skillData.name) {
+				return repositories.skills.update(skill.id, skillData.name);
+			}
+			return skill;
+		})
+		.then(skill => {		
+			if (skill && skillData.employeesId) {
+				return repositories.employeesSkills.removeBySkillId(skill.id)
+					.then(() => {
+						const promises = skillData.employeesId.map(employeeId => repositories.employeesSkills.add({skillId: skill.id, employeeId}));
+						return Promise.all(promises).then(() => skill);
+					});
+			}
+			return skill;
+		});
+	};
 
 	return {
 		create,
@@ -72,7 +77,7 @@ const skillsService = (repositories) => {
 		getById,
 		getSkillEmployees,
 		remove,
-		// update
+		update
 	};
 };
 

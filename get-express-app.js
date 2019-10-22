@@ -22,8 +22,7 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
-// TODO Mutations
-// TODO repository operations should return copies of the objects to reflect the database nature
+// TODO repository operations should return copies of the objects to reflect the database nature. Comment it on the code
 // TODO Typescript
 // TODO prettier + lint
 // TODO Cucumber tests for nested collections

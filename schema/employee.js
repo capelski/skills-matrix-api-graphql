@@ -99,8 +99,8 @@ const employeeQueryField = {
     }
 };
 
-const employeeInputType = new GraphQLInputObjectType({
-    name: 'EmployeeInput',
+const addEmployeeInputType = new GraphQLInputObjectType({
+    name: 'AddEmployeeInput',
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         skillsId: { type: new GraphQLList(GraphQLInt) }
@@ -110,7 +110,7 @@ const employeeInputType = new GraphQLInputObjectType({
 const addEmployee = {
     type: employeeType,
     args: {
-        input: { type: employeeInputType }
+        input: { type: addEmployeeInputType }
     },
     resolve: function (object, args, context) {
         return context.employees.create(args.input);
@@ -127,10 +127,30 @@ const removeEmployee = {
     }
 };
 
+const updateEmployeeInputType = new GraphQLInputObjectType({
+    name: 'UpdateEmployeeInput',
+    fields: {
+        id: { type: new GraphQLNonNull(GraphQLInt) },
+        name: { type: GraphQLString },
+        skillsId: { type: new GraphQLList(GraphQLInt) }
+    }
+});
+
+const updateEmployee = {
+    type: employeeType,
+    args: {
+        input: { type: updateEmployeeInputType }
+    },
+    resolve: function (object, args, context) {
+        return context.employees.update(args.input);
+    }
+};
+
 module.exports = {
     employeeMutations: {
         add: addEmployee,
-        remove: removeEmployee
+        remove: removeEmployee,
+        update: updateEmployee
     },
     employeeQueryField,
     employeeType

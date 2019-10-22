@@ -1,5 +1,5 @@
 const employeesRepositoryFactory = (repositories) => {
-	let employees = [...require('./data/employees.json')];
+	let employees = require('./data/employees.json').map(e => ({...e}));
 	let nextEmployeeId = employees.length + 1;
 	
 	const add = (name) => {
@@ -64,13 +64,15 @@ const employeesRepositoryFactory = (repositories) => {
 		return Promise.resolve();
 	};
 
-	// const update = employeeData => {
-	// 	const employee = getById(employeeData.id);
-	// 	if (employee) {
-	// 		employee.name = employeeData.name;
-	// 	}
-	// 	return Promise.resolve(employee);
-	// };
+	const update = (id, name) => {
+		return getById(id)
+			.then(employee => {
+				if (employee) {
+					employee.name = name;
+				}
+				return { ...employee };
+			});
+	};
 
 	return {
 		add,
@@ -78,7 +80,7 @@ const employeesRepositoryFactory = (repositories) => {
 		getAll,
 		getById,
 		remove,
-		// update
+		update
 	};
 };
 

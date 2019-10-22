@@ -1,5 +1,5 @@
 const skillsRepositoryFactory = (repositories) => {	
-	let skills = [...require('./data/skills.json')];
+	let skills = require('./data/skills.json').map(s => ({...s}));
 	let nextSkillId = skills.length + 1;
 
 	const add = (name) => {
@@ -64,13 +64,15 @@ const skillsRepositoryFactory = (repositories) => {
 		return Promise.resolve();
 	};
 
-	// const update = skillData => {
-	// 	const skill = getById(skillData.id);
-	// 	if (skill) {
-	// 		skill.name = skillData.name;
-	// 	}
-	// 	return Promise.resolve(skill);
-	// };
+	const update = (id, name) => {
+		return getById(id)
+			.then(skill => {
+				if (skill) {
+					skill.name = name;
+				}
+				return { ...skill };
+			});
+	};
 
 	return {
 		add,
@@ -78,7 +80,7 @@ const skillsRepositoryFactory = (repositories) => {
 		getAll,
 		getById,
 		remove,
-		// update
+		update
 	};
 };
 

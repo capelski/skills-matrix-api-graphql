@@ -36,3 +36,22 @@ Feature: Skills mutations
             """
         Then the total number of skills in the system is 96
         And the removed skill name is "Object Rexx"
+
+    Scenario: Skills update
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            mutation {
+            updateSkill(input: { id: 1, name: "React", employeesId: [1, 2]}) {
+            name
+            employees {
+            items {
+            name
+            }
+            }
+            }
+            }
+            """
+        Then the updated skill name is "React"
+        And the updated skill has 2 employees
