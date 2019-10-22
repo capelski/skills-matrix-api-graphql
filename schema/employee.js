@@ -117,9 +117,20 @@ const addEmployee = {
     }
 };
 
+const removeEmployee = {
+    type: employeeType,
+    args: {
+        input: { type: new GraphQLNonNull(GraphQLInt) }
+    },
+    resolve: function (object, args, context) {
+        return context.employees.remove(args.input);
+    }
+};
+
 module.exports = {
     employeeMutations: {
-        add: addEmployee
+        add: addEmployee,
+        remove: removeEmployee
     },
     employeeQueryField,
     employeeType

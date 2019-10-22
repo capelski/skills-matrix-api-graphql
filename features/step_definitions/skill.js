@@ -35,3 +35,8 @@ Then('the added skill has {int} employees', (employeesLength) => {
     const skill = shared.queryResult.data.addSkill;
     expect(skill.employees.items.length).to.equal(employeesLength);
 });
+
+Then('the removed skill name is {string}', (skillName) => {
+    const skill = shared.queryResult.data.removeSkill;
+    expect(skill.name).to.equal(skillName);
+});

@@ -11,20 +11,6 @@ const skillsService = (repositories) => {
 		});
 	}
 
-	// const deleteSkill = id => {
-	// 	return getById(id)
-	// 	.then(skill => {
-	// 		if (skill) {
-	// 			return Promise.all([
-	// 				repositories.skills.remove(id),
-	// 				repositories.employeesSkills.removeBySkillId(id)
-	// 			])
-	// 			.then(() => skill);
-	// 		}
-	// 		return undefined;
-	// 	});
-	// };
-
 	const getAll = (skip, first, filter, orderBy) => {
 		return repositories.skills.getAll(skip, first, filter, orderBy)
 		.then(skills => {
@@ -51,6 +37,20 @@ const skillsService = (repositories) => {
 			});
 	};
 
+	const remove = id => {
+		return getById(id)
+		.then(skill => {
+			if (skill) {
+				return Promise.all([
+					repositories.skills.remove(id),
+					repositories.employeesSkills.removeBySkillId(id)
+				])
+				.then(() => skill);
+			}
+			return undefined;
+		});
+	};
+
 	// const update = skillData => {
 	// 	return getById(skillData.id)
 	// 	.then(skill => {		
@@ -68,10 +68,10 @@ const skillsService = (repositories) => {
 
 	return {
 		create,
-		// deleteSkill,
 		getAll,
 		getById,
 		getSkillEmployees,
+		remove,
 		// update
 	};
 };

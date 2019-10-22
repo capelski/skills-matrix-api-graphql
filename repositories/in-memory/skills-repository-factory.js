@@ -59,10 +59,10 @@ const skillsRepositoryFactory = (repositories) => {
 		return 0;
 	};
 
-	// const remove = id => {
-	// 	skills = skills.filter(s => s.id !== id);
-	// 	return Promise.resolve();
-	// };
+	const remove = id => {
+		skills = skills.filter(s => s.id !== id);
+		return Promise.resolve();
+	};
 
 	// const update = skillData => {
 	// 	const skill = getById(skillData.id);
@@ -76,8 +76,8 @@ const skillsRepositoryFactory = (repositories) => {
 		add,
 		countAll,
 		getAll,
-		getById
-		// remove,
+		getById,
+		remove,
 		// update
 	};
 };

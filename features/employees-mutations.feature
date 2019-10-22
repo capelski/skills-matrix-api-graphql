@@ -22,3 +22,17 @@ Feature: Employees mutations
         And the added employee name is "Macklemore"
         And the added employee id is 98
         And the added employee has 3 skills
+
+    Scenario: Employees deletion
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            mutation {
+            removeEmployee(input: 1) {
+            name
+            }
+            }
+            """
+        Then the total number of employees in the system is 96
+        And the removed employee name is "Adele"

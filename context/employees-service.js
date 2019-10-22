@@ -11,20 +11,6 @@ const employeesService = (repositories) => {
 		});
 	}
 
-	// const deleteEmployee = id => {
-	// 	return getById(id)
-	// 	.then(employee => {
-	// 		if (employee) {
-	// 			return Promise.all([
-	// 				repositories.employees.remove(id),
-	// 				repositories.employeesSkills.removeByEmployeeId(id)
-	// 			])
-	// 			.then(() => employee);
-	// 		}
-	// 		return undefined;
-	// 	});
-	// };
-
 	const getAll = (skip, first, filter, orderBy) => {
 		return repositories.employees.getAll(skip, first, filter, orderBy)
 		.then(employees => {
@@ -51,6 +37,20 @@ const employeesService = (repositories) => {
 			});
 	};
 
+	const remove = id => {
+		return getById(id)
+		.then(employee => {
+			if (employee) {
+				return Promise.all([
+					repositories.employees.remove(id),
+					repositories.employeesSkills.removeByEmployeeId(id)
+				])
+				.then(() => employee);
+			}
+			return undefined;
+		});
+	};
+
 	// const update = employeeData => {
 	// 	return getById(employeeData.id)
 	// 	.then(employee => {
@@ -68,10 +68,10 @@ const employeesService = (repositories) => {
 
 	return {
 		create,
-		// deleteEmployee,
 		getAll,
 		getById,
 		getEmployeeSkills,
+		remove,
 		// update
 	};
 };

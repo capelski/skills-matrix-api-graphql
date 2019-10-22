@@ -19,7 +19,9 @@ const rootMutationType = new GraphQLObjectType({
     name: 'RootMutation',
     fields: {
         addEmployee: employeeMutations.add,
-        addSkill: skillMutations.add
+        addSkill: skillMutations.add,
+        removeEmployee: employeeMutations.remove,
+        removeSkill: skillMutations.remove
     }
 });
 

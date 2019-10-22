@@ -59,10 +59,10 @@ const employeesRepositoryFactory = (repositories) => {
 		return 0;
 	};
 		
-	// const remove = id => {
-	// 	employees = employees.filter(e => e.id !== id);
-	// 	return Promise.resolve();
-	// };
+	const remove = id => {
+		employees = employees.filter(e => e.id !== id);
+		return Promise.resolve();
+	};
 
 	// const update = employeeData => {
 	// 	const employee = getById(employeeData.id);
@@ -76,8 +76,8 @@ const employeesRepositoryFactory = (repositories) => {
 		add,
 		countAll,
 		getAll,
-		getById
-		// remove,
+		getById,
+		remove,
 		// update
 	};
 };

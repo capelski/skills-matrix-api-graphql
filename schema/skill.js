@@ -118,9 +118,20 @@ const addSkill = {
     }
 };
 
+const removeSkill = {
+    type: skillType,
+    args: {
+        input: { type: new GraphQLNonNull(GraphQLInt) }
+    },
+    resolve: function (object, args, context) {
+        return context.skills.remove(args.input);
+    }
+};
+
 module.exports = {
     skillMutations: {
-        add: addSkill
+        add: addSkill,
+        remove: removeSkill
     },
     skillQueryField,
     skillType
