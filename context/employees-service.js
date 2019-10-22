@@ -1,16 +1,15 @@
 const employeesService = (repositories) => {
-	// const create = employeeData => {
-	// 	return repositories.employees.add(employeeData)
-	// 	.then(employee => {
-	// 		return Promise.all(
-	// 			employeeData.skills.map(skillData =>
-	// 				// TODO Take care of this operation inside the employees-skills-repository
-	// 				employeesSkillsRepository.add({skillId: skillData.id, employeeId: employee.id})
-	// 			)
-	// 		)
-	// 		.then(() => employee);
-	// 	});
-	// }
+	const create = employeeData => {
+		return repositories.employees.add(employeeData.name)
+		.then(employee => {
+			return Promise.all(
+				employeeData.skillsId.map(skillId =>
+					repositories.employeesSkills.add({skillId: skillId, employeeId: employee.id})
+				)
+			)
+			.then(() => employee);
+		});
+	}
 
 	// const deleteEmployee = id => {
 	// 	return getById(id)
@@ -18,8 +17,7 @@ const employeesService = (repositories) => {
 	// 		if (employee) {
 	// 			return Promise.all([
 	// 				repositories.employees.remove(id),
-	// 				// TODO Take care of this operation inside the employees-skills-repository
-	// 				employeesSkillsRepository.removeByEmployeeId(id)
+	// 				repositories.employeesSkills.removeByEmployeeId(id)
 	// 			])
 	// 			.then(() => employee);
 	// 		}
@@ -59,10 +57,9 @@ const employeesService = (repositories) => {
 	// 		if (employee) {
 	// 			// TODO Update this to call the repositories.employees.update
 	// 			employee.name = employeeData.name;
-	// 			// TODO Take care of these operations inside the employees-skills-repository
-	// 			employeesSkillsRepository.removeByEmployeeId(employeeData.id);
+	// 			repositories.employeesSkills.removeByEmployeeId(employeeData.id);
 	// 			employeeData.skills.forEach(skillData => {
-	// 				employeesSkillsRepository.add({skillId: skillData.id, employeeId: employeeData.id})
+	// 				repositories.employeesSkills.add({skillId: skillData.id, employeeId: employeeData.id})
 	// 			});
 	// 		}
 	// 		return employee;
@@ -70,7 +67,7 @@ const employeesService = (repositories) => {
 	// };
 
 	return {
-		// create,
+		create,
 		// deleteEmployee,
 		getAll,
 		getById,

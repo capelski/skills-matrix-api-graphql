@@ -1,12 +1,12 @@
-let skills = require('./data/skills.json');
-// let nextSkillId = skills.length + 1;
-
 const skillsRepositoryFactory = (repositories) => {	
-	// const add = ({ name }) => {
-	// 	const skill = { id: nextSkillId++, name };
-	// 	skills.push(skill);
-	// 	return Promise.resolve(skill);
-	// };
+	let skills = [...require('./data/skills.json')];
+	let nextSkillId = skills.length + 1;
+
+	const add = (name) => {
+		const skill = { id: nextSkillId++, name };
+		skills.push(skill);
+		return Promise.resolve({...skill});
+	};
 
 	const countAll = (filter) => {
 		return Promise.resolve(skills)
@@ -73,7 +73,7 @@ const skillsRepositoryFactory = (repositories) => {
 	// };
 
 	return {
-		// add,
+		add,
 		countAll,
 		getAll,
 		getById

@@ -1,12 +1,12 @@
-let employees = require('./data/employees.json');
-// let nextEmployeeId = employees.length + 1;
-
 const employeesRepositoryFactory = (repositories) => {
-	// const add = ({ name }) => {
-	// 	const employee = { id: nextEmployeeId++, name };
-	// 	employees.push(employee);
-	// 	return Promise.resolve(employee);
-	// };
+	let employees = [...require('./data/employees.json')];
+	let nextEmployeeId = employees.length + 1;
+	
+	const add = (name) => {
+		const employee = { id: nextEmployeeId++, name };
+		employees.push(employee);
+		return Promise.resolve({...employee});
+	};
 
 	const countAll = (filter) => {
 		return Promise.resolve(employees)
@@ -73,7 +73,7 @@ const employeesRepositoryFactory = (repositories) => {
 	// };
 
 	return {
-		// add,
+		add,
 		countAll,
 		getAll,
 		getById

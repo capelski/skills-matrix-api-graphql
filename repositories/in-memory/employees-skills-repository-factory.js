@@ -1,5 +1,3 @@
-let employees_skills = require('./data/employees-skills.json');
-
 const matchingEmployeeSkill = (skillId, employeeId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
 
 // TODO Extract into commons
@@ -16,8 +14,10 @@ const sortById = (a, b) => {
 };
 
 const employeesSkillsRepositoryFactory = (repositories) => {
+	let employees_skills = [...require('./data/employees-skills.json')];
+
 	const add = ({ employeeId, skillId }) => {
-		const employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
+		let employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
 		if (!employee_skill) {
 			employee_skill = {
 				employeeId,

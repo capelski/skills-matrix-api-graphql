@@ -1,6 +1,7 @@
 const {
     GraphQLInputObjectType,
     GraphQLInt,
+    GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
     GraphQLString
@@ -78,7 +79,7 @@ const skillEmployeeOrderByType = new GraphQLInputObjectType({
     }
 });
 
-const skillField = {
+const skillQueryField = {
     type: definePagedListType(skillType),
     description: 'Skills',
     args: {
@@ -97,9 +98,30 @@ const skillField = {
             return context.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
     }
-}
+};
+
+const skillInputType = new GraphQLInputObjectType({
+    name: 'SkillInput',
+    fields: {
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        employeesId: { type: new GraphQLList(GraphQLInt) }
+    }
+});
+
+const addSkill = {
+    type: skillType,
+    args: {
+        input: { type: skillInputType }
+    },
+    resolve: function (object, args, context) {
+        return context.skills.create(args.input);
+    }
+};
 
 module.exports = {
-    skillField,
+    skillMutations: {
+        add: addSkill
+    },
+    skillQueryField,
     skillType
 };

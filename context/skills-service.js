@@ -1,16 +1,15 @@
 const skillsService = (repositories) => {
-	// const create = skillData => {
-	// 	return repositories.skills.add(skillData)
-	// 	.then(skill => {
-	// 		return Promise.all(
-	// 			skillData.employees.map(employeeData =>
-	// 				// TODO Take care of this operation inside the employees-skills-repository
-	// 				employeesSkillsRepository.add({skillId: skill.id, employeeId: employeeData.id})
-	// 			)
-	// 		)
-	// 		.then(() => skill);
-	// 	});
-	// }
+	const create = skillData => {
+		return repositories.skills.add(skillData.name)
+		.then(skill => {
+			return Promise.all(
+				skillData.employeesId.map(employeeId =>
+					repositories.employeesSkills.add({skillId: skill.id, employeeId: employeeId})
+				)
+			)
+			.then(() => skill);
+		});
+	}
 
 	// const deleteSkill = id => {
 	// 	return getById(id)
@@ -18,8 +17,7 @@ const skillsService = (repositories) => {
 	// 		if (skill) {
 	// 			return Promise.all([
 	// 				repositories.skills.remove(id),
-	// 				// TODO Take care of this operation inside the employees-skills-repository
-	// 				employeesSkillsRepository.removeBySkillId(id)
+	// 				repositories.employeesSkills.removeBySkillId(id)
 	// 			])
 	// 			.then(() => skill);
 	// 		}
@@ -59,10 +57,9 @@ const skillsService = (repositories) => {
 	// 		if (skill) {
 	// 			// TODO Update this to call the repositories.skills.update
 	// 			skill.name = skillData.name;
-	// 			// TODO Take care of these operations inside the employees-skills-repository
-	// 			employeesSkillsRepository.removeBySkillId(skillData.id);
+	// 			repositories.employeesSkills.removeBySkillId(skillData.id);
 	// 			skillData.employees.forEach(employeeData => {
-	// 				employeesSkillsRepository.add({skillId: skillData.id, employeeId: employeeData.id})
+	// 				repositories.employeesSkills.add({skillId: skillData.id, employeeId: employeeData.id})
 	// 			});
 	// 		}
 	// 		return skill;
@@ -70,7 +67,7 @@ const skillsService = (repositories) => {
 	// };
 
 	return {
-		// create,
+		create,
 		// deleteSkill,
 		getAll,
 		getById,

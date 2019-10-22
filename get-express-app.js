@@ -3,7 +3,7 @@ const graphqlHttp = require('express-graphql');
 // const getConfiguration = require('./configuration');
 const schema = require('./schema');
 
-const repositories = require('./repositories/in-memory');
+const repositories = require('./repositories/in-memory')();
 const context = require('./context')(repositories);
 
 const getExpressApp = (environmentConfig) => {
