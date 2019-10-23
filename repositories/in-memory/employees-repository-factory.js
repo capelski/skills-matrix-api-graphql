@@ -1,15 +1,18 @@
 const employeesRepositoryFactory = (repositories) => {
-	let employees = require('./data/employees.json').map(e => ({...e}));
-	let nextEmployeeId = employees.length + 1;
+	const source = require('./data/employees.json').map(e => ({...e}));
+	let nextEmployeeId = source.length + 1;
 	
 	const add = (name) => {
-		const employee = { id: nextEmployeeId++, name };
-		employees.push(employee);
-		return Promise.resolve({...employee});
+		return Promise.resolve(source)
+			.then(employees => {
+				const employee = { id: nextEmployeeId++, name };
+				employees.push(employee);
+				return { ...employee };
+			});
 	};
 
 	const countAll = (filter) => {
-		return Promise.resolve(employees)
+		return Promise.resolve(source)
 			.then(filterEmployees(filter))
 			.then(filteredEmployees => filteredEmployees.length);
 	};
@@ -19,11 +22,11 @@ const employeesRepositoryFactory = (repositories) => {
 			const nameFilter = filter.name.toLowerCase();
 			employees = employees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
 		}
-		return Promise.resolve(employees);
+		return employees;
 	};
 
 	const getAll = (skip = 0, first = 10, filter, orderBy) => {
-		return Promise.resolve([...employees])
+		return Promise.resolve(source)
 		.then(filterEmployees(filter))
 		.then(filteredEmployees => {
 			if (orderBy) {
@@ -36,10 +39,17 @@ const employeesRepositoryFactory = (repositories) => {
 			}
 			return filteredEmployees;
 		})
-		.then(filteredEmployees => filteredEmployees.slice(skip, skip + first));
+		.then(filteredEmployees => filteredEmployees.slice(skip, skip + first))
+		.then(selectedEmployees => selectedEmployees.map(e => ({ ...e })));
 	};
 
-	const getById = id => Promise.resolve(employees.find(e => e.id === id));
+	const getById = id => Promise.resolve(source)
+		.then(employees => employees.find(e => e.id === id))
+		.then(employee => {
+			if (employee) {
+				return { ...employee };
+			}
+		});
 
 	const loadEmployeeSkillsCount = employee => repositories.employeesSkills.countByEmployeeId(employee.id)
 		.then(employeeSkillsCount => {
@@ -60,17 +70,23 @@ const employeesRepositoryFactory = (repositories) => {
 	};
 		
 	const remove = id => {
-		employees = employees.filter(e => e.id !== id);
-		return Promise.resolve();
+		return Promise.resolve(source)
+			.then(employees => {
+				const employeeIndex = employees.findIndex(e => e.id === id);
+				if (employeeIndex > -1) {
+					return employees.splice(employeeIndex, 1)[0];
+				}
+			});
 	};
 
 	const update = (id, name) => {
-		return getById(id)
+		return Promise.resolve(source)
+			.then(employees => employees.find(e => e.id === id))
 			.then(employee => {
 				if (employee) {
 					employee.name = name;
+					return { ...employee };
 				}
-				return { ...employee };
 			});
 	};
 

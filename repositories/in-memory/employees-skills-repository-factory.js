@@ -14,22 +14,26 @@ const sortById = (a, b) => {
 };
 
 const employeesSkillsRepositoryFactory = (repositories) => {
-	let employees_skills = [...require('./data/employees-skills.json')];
+	const source = [...require('./data/employees-skills.json')];
 
 	const add = ({ employeeId, skillId }) => {
-		let employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
-		if (!employee_skill) {
-			employee_skill = {
-				employeeId,
-				skillId
-			};
-			employees_skills.push(employee_skill);
-		}
-		return Promise.resolve(employee_skill);
+		return Promise.resolve(source)
+			.then(employees_skills => {
+				let employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
+				if (!employee_skill) {
+					employee_skill = {
+						employeeId,
+						skillId
+					};
+					employees_skills.push(employee_skill);
+				}
+				return employee_skill;
+			});
 	};
 
 	const countByEmployeeId = (employeeId, filter) => {
-		return Promise.resolve(employees_skills.filter(e_s => e_s.employeeId === employeeId))
+		return Promise.resolve(source)
+			.then(employees_skills => employees_skills.filter(e_s => e_s.employeeId === employeeId))
 			.then(employeeSkills => Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId))))
 			.then(skills => {
 				if (filter && filter.name) {
@@ -41,7 +45,8 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 	};
 
 	const countBySkillId = (skillId, filter) => {
-		return Promise.resolve(employees_skills.filter(e_s => e_s.skillId === skillId))
+		return Promise.resolve(source)
+			.then(employees_skills => employees_skills.filter(e_s => e_s.skillId === skillId))
 			.then(skillEmployees => Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId))))
 			.then(employees => {
 				if (filter && filter.name) {
@@ -53,7 +58,8 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 	};
 
 	const getByEmployeeId = (employeeId, skip = 0, first = 10, filter, orderBy) => {
-		return Promise.resolve(employees_skills.filter(e_s => e_s.employeeId === employeeId))
+		return Promise.resolve(source)
+			.then(employees_skills => employees_skills.filter(e_s => e_s.employeeId === employeeId))
 			.then(employeeSkills => Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId))))
 			.then(skills => {
 				if (filter && filter.name) {
@@ -72,7 +78,8 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 	};
 
 	const getBySkillId = (skillId, skip = 0, first = 10, filter, orderBy) => {
-		return Promise.resolve(employees_skills.filter(e_s => e_s.skillId === skillId))
+		return Promise.resolve(source)
+			.then(employees_skills => employees_skills.filter(e_s => e_s.skillId === skillId))
 			.then(skillEmployees => Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId))))
 			.then(employees => {
 				if (filter && filter.name) {
@@ -91,21 +98,29 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 	};
 
 	const remove = ({ employeeId, skillId }) => {
-		const employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
-		if (employee_skill) {
-			employees_skills = employees_skills.filter(e_s => !matchingEmployeeSkill(employeeId, skillId)(e_s));
-		}
-		return Promise.resolve(employee_skill);
+		return Promise.resolve(source)
+			.then(employees_skills => {
+				const employeeSkillIndex = employees_skills.findIndex(matchingEmployeeSkill(employeeId, skillId));
+				if (employeeSkillIndex > -1) {
+					return employees_skills.splice(employeeSkillIndex, 1)[0];
+				}
+			});
 	};
 
 	const removeByEmployeeId = employeeId => {
-		employees_skills = employees_skills.filter(e_s => e_s.employeeId !== employeeId);
-		return Promise.resolve();
+		return Promise.resolve(source)
+			.then(employees_skills => {
+				const relations = employees_skills.filter(e_s => e_s.employeeId === employeeId);
+				return Promise.all(relations.map(remove));
+			});
 	};
 
 	const removeBySkillId = skillId => {
-		employees_skills = employees_skills.filter(e_s => e_s.skillId !== skillId);
-		return Promise.resolve();
+		return Promise.resolve(source)
+			.then(employees_skills => {
+				const relations = employees_skills.filter(e_s => e_s.skillId === skillId);
+				return Promise.all(relations.map(remove));
+			});
 	};
 
 	return {

@@ -1,15 +1,18 @@
 const skillsRepositoryFactory = (repositories) => {	
-	let skills = require('./data/skills.json').map(s => ({...s}));
-	let nextSkillId = skills.length + 1;
+	const source = require('./data/skills.json').map(s => ({...s}));
+	let nextSkillId = source.length + 1;
 
 	const add = (name) => {
-		const skill = { id: nextSkillId++, name };
-		skills.push(skill);
-		return Promise.resolve({...skill});
+		return Promise.resolve(source)
+			.then(skills => {
+				const skill = { id: nextSkillId++, name };
+				skills.push(skill);
+				return { ...skill };
+			});
 	};
 
 	const countAll = (filter) => {
-		return Promise.resolve(skills)
+		return Promise.resolve(source)
 			.then(filterSkills(filter))
 			.then(filteredSkills => filteredSkills.length);
 	};
@@ -19,11 +22,11 @@ const skillsRepositoryFactory = (repositories) => {
 			const nameFilter = filter.name.toLowerCase();
 			skills = skills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
 		}
-		return Promise.resolve(skills);
+		return skills;
 	};
 
 	const getAll = (skip = 0, first = 10, filter, orderBy) => {
-		return Promise.resolve([...skills])
+		return Promise.resolve(source)
 		.then(filterSkills(filter))
 		.then(filteredSkills => {
 			if (orderBy) {
@@ -36,10 +39,17 @@ const skillsRepositoryFactory = (repositories) => {
 			}
 			return filteredSkills;
 		})
-		.then(filteredSkills => filteredSkills.slice(skip, skip + first));
+		.then(filteredSkills => filteredSkills.slice(skip, skip + first))
+		.then(selectedSkills => selectedSkills.map(s => ({ ...s })));
 	};
 
-	const getById = id => Promise.resolve(skills.find(s => s.id === id));
+	const getById = id => Promise.resolve(source)
+		.then(skills => skills.find(s => s.id === id))
+		.then(skill => {
+			if (skill) {
+				return { ...skill };
+			}
+		});
 
 	const loadSkillEmployeesCount = skill => repositories.employeesSkills.countBySkillId(skill.id)
 		.then(skillEmployeesCount => {
@@ -60,17 +70,23 @@ const skillsRepositoryFactory = (repositories) => {
 	};
 
 	const remove = id => {
-		skills = skills.filter(s => s.id !== id);
-		return Promise.resolve();
+		return Promise.resolve(source)
+			.then(skills => {
+				const skillIndex = skills.findIndex(e => e.id === id);
+				if (skillIndex > -1) {
+					return skills.splice(skillIndex, 1)[0];
+				}
+			});
 	};
 
 	const update = (id, name) => {
-		return getById(id)
+		return Promise.resolve(source)
+			.then(skills => skills.find(s => s.id === id))
 			.then(skill => {
 				if (skill) {
 					skill.name = name;
+					return { ...skill };
 				}
-				return { ...skill };
 			});
 	};
 

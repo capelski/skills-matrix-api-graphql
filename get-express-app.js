@@ -22,9 +22,9 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
-// TODO repository operations should return copies of the objects to reflect the database nature. Comment it on the code
 // TODO Typescript
 // TODO prettier + lint
 // TODO Cucumber tests for nested collections
+	// e.g. check the total count on a filtered subcollection
 
 module.exports = getExpressApp;

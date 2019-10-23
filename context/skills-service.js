@@ -22,9 +22,7 @@ const skillsService = (repositories) => {
 		});
 	};
 
-	const getById = id => {
-		return repositories.skills.getById(id);
-	};
+	const getById = id => repositories.skills.getById(id);
 
 	const getSkillEmployees = (skillId, filter, skip, first, orderBy) => {
 		return repositories.employeesSkills.getBySkillId(skillId, skip, first, filter, orderBy)
