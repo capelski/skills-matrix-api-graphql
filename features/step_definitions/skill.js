@@ -2,31 +2,31 @@ const { expect } = require('chai');
 const { Then } = require('cucumber');
 const shared = require('./shared');
 
-Then('I should get a total count of {int} skills', (result) => {
+Then('I get a total count of {int} skills', (result) => {
     expect(shared.queryResult.data.skill.totalCount).to.equal(result);
 });
 
-Then('I should get {int} skills', (result) => {
+Then('I get {int} skills', (result) => {
     expect(shared.queryResult.data.skill.items.length).to.equal(result);
 });
 
-Then('the skill {int} in the response should be {string}', (skillNumber, skillName) => {
+Then('the skill {int} in the response is {string}', (skillNumber, skillName) => {
     const skill = shared.queryResult.data.skill.items[skillNumber - 1];
     expect(skill.name).to.equal(skillName);
 });
 
-Then('the employees total count of the skill {int} in the response should be {int}', (skillNumber, employeesTotalCount) => {
+Then('the employees total count of the skill {int} in the response is {int}', (skillNumber, employeesTotalCount) => {
     const skill = shared.queryResult.data.skill.items[skillNumber - 1];
     const employeesCount = skill.employees.totalCount;
     expect(employeesCount).to.equal(employeesTotalCount);
 });
 
-Then('the skill {int} in the response should have {int} employees', (skillNumber, employeesLength) => {
+Then('the skill {int} in the response has {int} employees', (skillNumber, employeesLength) => {
     const skill = shared.queryResult.data.skill.items[skillNumber - 1];
     expect(skill.employees.items.length).to.equal(employeesLength);
 });
 
-Then('the employee {int} of the skill {int} in the response should be {string}', (employeeNumber, skillNumber, employeeName) => {
+Then('the employee {int} of the skill {int} in the response is {string}', (employeeNumber, skillNumber, employeeName) => {
     const skill = shared.queryResult.data.skill.items[skillNumber - 1];
     const employee = skill.employees.items[employeeNumber - 1];
     expect(employee.name).to.equal(employeeName);

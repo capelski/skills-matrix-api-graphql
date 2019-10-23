@@ -22,7 +22,6 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
-// TODO Remove should from Cucumber sentences
 // TODO Typescript
 // TODO prettier + lint
 

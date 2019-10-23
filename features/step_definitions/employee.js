@@ -2,31 +2,31 @@ const { expect } = require('chai');
 const { Then } = require('cucumber');
 const shared = require('./shared');
 
-Then('I should get a total count of {int} employees', (result) => {
+Then('I get a total count of {int} employees', (result) => {
     expect(shared.queryResult.data.employee.totalCount).to.equal(result);
 });
 
-Then('I should get {int} employees', (result) => {
+Then('I get {int} employees', (result) => {
     expect(shared.queryResult.data.employee.items.length).to.equal(result);
 });
 
-Then('the employee {int} in the response should be {string}', (employeeNumber, employeeName) => {
+Then('the employee {int} in the response is {string}', (employeeNumber, employeeName) => {
     const employee = shared.queryResult.data.employee.items[employeeNumber - 1];
     expect(employee.name).to.equal(employeeName);
 });
 
-Then('the skills total count of the employee {int} in the response should be {int}', (employeeNumber, skillsTotalCount) => {
+Then('the skills total count of the employee {int} in the response is {int}', (employeeNumber, skillsTotalCount) => {
     const employee = shared.queryResult.data.employee.items[employeeNumber - 1];
     const skillsCount = employee.skills.totalCount;
     expect(skillsCount).to.equal(skillsTotalCount);
 });
 
-Then('the employee {int} in the response should have {int} skills', (employeeNumber, skillsLength) => {
+Then('the employee {int} in the response has {int} skills', (employeeNumber, skillsLength) => {
     const employee = shared.queryResult.data.employee.items[employeeNumber - 1];
     expect(employee.skills.items.length).to.equal(skillsLength);
 });
 
-Then('the skill {int} of the employee {int} in the response should be {string}', (skillNumber, employeeNumber, skillName) => {
+Then('the skill {int} of the employee {int} in the response is {string}', (skillNumber, employeeNumber, skillName) => {
     const employee = shared.queryResult.data.employee.items[employeeNumber - 1];
     const skill = employee.skills.items[skillNumber - 1];
     expect(skill.name).to.equal(skillName);

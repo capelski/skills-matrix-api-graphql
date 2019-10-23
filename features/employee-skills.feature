@@ -19,9 +19,9 @@ Feature: Employee skills
             }
             }
             """
-        Then the skills total count of the employee 1 in the response should be 5
-        And the employee 1 in the response should have 5 skills
-        And the skill 1 of the employee 1 in the response should be "Object Rexx"
+        Then the skills total count of the employee 1 in the response is 5
+        And the employee 1 in the response has 5 skills
+        And the skill 1 of the employee 1 in the response is "Object Rexx"
 
     Scenario: Employee skills filtering by name
         Given the defined GraphQL schema
@@ -41,9 +41,9 @@ Feature: Employee skills
             }
             }
             """
-        Then the skills total count of the employee 1 in the response should be 4
-        And the employee 1 in the response should have 4 skills
-        And the skill 4 of the employee 1 in the response should be "NQC"
+        Then the skills total count of the employee 1 in the response is 4
+        And the employee 1 in the response has 4 skills
+        And the skill 4 of the employee 1 in the response is "NQC"
 
     Scenario: Employee skills ordering by name ascending
         Given the defined GraphQL schema
@@ -62,8 +62,8 @@ Feature: Employee skills
             }
             }
             """
-        Then the employee 1 in the response should have 5 skills
-        And the skill 1 of the employee 1 in the response should be "NQC"
+        Then the employee 1 in the response has 5 skills
+        And the skill 1 of the employee 1 in the response is "NQC"
 
     Scenario: Employee skills ordering by name descending
         Given the defined GraphQL schema
@@ -82,8 +82,8 @@ Feature: Employee skills
             }
             }
             """
-        Then the employee 1 in the response should have 5 skills
-        And the skill 1 of the employee 1 in the response should be "Object Rexx"
+        Then the employee 1 in the response has 5 skills
+        And the skill 1 of the employee 1 in the response is "Object Rexx"
 
     Scenario: Employee skills support skip argument
         Given the defined GraphQL schema
@@ -103,9 +103,9 @@ Feature: Employee skills
             }
             }
             """
-        Then the skills total count of the employee 1 in the response should be 5
-        And the employee 1 in the response should have 3 skills
-        And the skill 1 of the employee 1 in the response should be "NXT-G"
+        Then the skills total count of the employee 1 in the response is 5
+        And the employee 1 in the response has 3 skills
+        And the skill 1 of the employee 1 in the response is "NXT-G"
 
     Scenario: Employee skills support first argument
         Given the defined GraphQL schema
@@ -125,9 +125,9 @@ Feature: Employee skills
             }
             }
             """
-        Then the skills total count of the employee 1 in the response should be 5
-        And the employee 1 in the response should have 2 skills
-        And the skill 1 of the employee 1 in the response should be "Object Rexx"
+        Then the skills total count of the employee 1 in the response is 5
+        And the employee 1 in the response has 2 skills
+        And the skill 1 of the employee 1 in the response is "Object Rexx"
 
     Scenario: Employee skills support pagination
         Given the defined GraphQL schema
@@ -147,6 +147,6 @@ Feature: Employee skills
             }
             }
             """
-        Then the skills total count of the employee 1 in the response should be 5
-        And the employee 1 in the response should have 2 skills
-        And the skill 1 of the employee 1 in the response should be "NSIS"
+        Then the skills total count of the employee 1 in the response is 5
+        And the employee 1 in the response has 2 skills
+        And the skill 1 of the employee 1 in the response is "NSIS"

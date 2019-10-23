@@ -15,9 +15,9 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 97 employees
-        And I should get 10 employees
-        And the employee 1 in the response should be "Adele"
+        Then I get a total count of 97 employees
+        And I get 10 employees
+        And the employee 1 in the response is "Adele"
 
     Scenario: Employees filtering by name
         Given the defined GraphQL schema
@@ -33,9 +33,9 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 3 employees
-        And I should get 3 employees
-        And the employee 2 in the response should be "Adam Leonardo"
+        Then I get a total count of 3 employees
+        And I get 3 employees
+        And the employee 2 in the response is "Adam Leonardo"
 
     Scenario: Employees filtering by id
         Given the defined GraphQL schema
@@ -51,9 +51,9 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 1 employees
-        And I should get 1 employees
-        Then the employee 1 in the response should be "Elton John"
+        Then I get a total count of 1 employees
+        And I get 1 employees
+        Then the employee 1 in the response is "Elton John"
 
     Scenario: Employees ordering by name ascending
         Given the defined GraphQL schema
@@ -68,7 +68,7 @@ Feature: Employees API
             }
             }
             """
-        Then the employee 1 in the response should be "Adam Leonardo"
+        Then the employee 1 in the response is "Adam Leonardo"
 
     Scenario: Employees ordering by name descending
         Given the defined GraphQL schema
@@ -83,7 +83,7 @@ Feature: Employees API
             }
             }
             """
-        Then the employee 1 in the response should be "Zayn Malik"
+        Then the employee 1 in the response is "Zayn Malik"
 
     Scenario: Employees ordering by skills length ascending
         Given the defined GraphQL schema
@@ -98,7 +98,7 @@ Feature: Employees API
             }
             }
             """
-        Then the employee 1 in the response should be "Adam Leonardo"
+        Then the employee 1 in the response is "Adam Leonardo"
 
     Scenario: Employees ordering by skills length descending
         Given the defined GraphQL schema
@@ -113,7 +113,7 @@ Feature: Employees API
             }
             }
             """
-        Then the employee 1 in the response should be "Adele"
+        Then the employee 1 in the response is "Adele"
 
     Scenario: Employees support skip argument
         Given the defined GraphQL schema
@@ -129,8 +129,8 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 97 employees
-        And the employee 1 in the response should be "Dua Lipa"
+        Then I get a total count of 97 employees
+        And the employee 1 in the response is "Dua Lipa"
 
     Scenario: Employees support first argument
         Given the defined GraphQL schema
@@ -146,8 +146,8 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 97 employees
-        And I should get 2 employees
+        Then I get a total count of 97 employees
+        And I get 2 employees
 
     Scenario: Employees support pagination
         Given the defined GraphQL schema
@@ -163,6 +163,6 @@ Feature: Employees API
             }
             }
             """
-        Then I should get a total count of 97 employees
-        And I should get 5 employees
-        And the employee 1 in the response should be "Martyn Joseph"
+        Then I get a total count of 97 employees
+        And I get 5 employees
+        And the employee 1 in the response is "Martyn Joseph"
