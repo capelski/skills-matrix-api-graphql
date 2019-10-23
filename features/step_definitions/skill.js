@@ -15,6 +15,23 @@ Then('the skill {int} in the response should be {string}', (skillNumber, skillNa
     expect(skill.name).to.equal(skillName);
 });
 
+Then('the employees total count of the skill {int} in the response should be {int}', (skillNumber, employeesTotalCount) => {
+    const skill = shared.queryResult.data.skill.items[skillNumber - 1];
+    const employeesCount = skill.employees.totalCount;
+    expect(employeesCount).to.equal(employeesTotalCount);
+});
+
+Then('the skill {int} in the response should have {int} employees', (skillNumber, employeesLength) => {
+    const skill = shared.queryResult.data.skill.items[skillNumber - 1];
+    expect(skill.employees.items.length).to.equal(employeesLength);
+});
+
+Then('the employee {int} of the skill {int} in the response should be {string}', (employeeNumber, skillNumber, employeeName) => {
+    const skill = shared.queryResult.data.skill.items[skillNumber - 1];
+    const employee = skill.employees.items[employeeNumber - 1];
+    expect(employee.name).to.equal(employeeName);
+});
+
 Then('the total number of skills in the system is {int}', (result) => {
     shared.context.skills.getAll().then(skills => {
         expect(skills.totalCount).to.equal(result);
