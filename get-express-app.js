@@ -22,9 +22,8 @@ const getExpressApp = (environmentConfig) => {
 	});
 };
 
+// TODO Remove should from Cucumber sentences
 // TODO Typescript
 // TODO prettier + lint
-// TODO Cucumber tests for nested collections
-	// e.g. check the total count on a filtered subcollection
 
 module.exports = getExpressApp;

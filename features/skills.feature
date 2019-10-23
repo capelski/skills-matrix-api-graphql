@@ -122,13 +122,15 @@ Feature: Skills API
             """
             {
             skill(skip: 10) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then the skill 1 in the response should be "MOO"
+        Then I should get a total count of 97 skills
+        And the skill 1 in the response should be "MOO"
 
     Scenario: Skills support first argument
         Given the defined GraphQL schema
@@ -137,13 +139,15 @@ Feature: Skills API
             """
             {
             skill(first: 2) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then I should get 2 skills
+        Then I should get a total count of 97 skills
+        And I should get 2 skills
 
     Scenario: Skills support pagination
         Given the defined GraphQL schema
@@ -152,11 +156,13 @@ Feature: Skills API
             """
             {
             skill(first: 5, skip: 20) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then I should get 5 skills
+        Then I should get a total count of 97 skills
+        And I should get 5 skills
         And the skill 1 in the response should be "Occam"

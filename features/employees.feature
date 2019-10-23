@@ -122,13 +122,15 @@ Feature: Employees API
             """
             {
             employee(skip: 10) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then the employee 1 in the response should be "Dua Lipa"
+        Then I should get a total count of 97 employees
+        And the employee 1 in the response should be "Dua Lipa"
 
     Scenario: Employees support first argument
         Given the defined GraphQL schema
@@ -137,13 +139,15 @@ Feature: Employees API
             """
             {
             employee(first: 2) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then I should get 2 employees
+        Then I should get a total count of 97 employees
+        And I should get 2 employees
 
     Scenario: Employees support pagination
         Given the defined GraphQL schema
@@ -152,11 +156,13 @@ Feature: Employees API
             """
             {
             employee(first: 5, skip: 20) {
+            totalCount
             items {
             name
             }
             }
             }
             """
-        Then I should get 5 employees
+        Then I should get a total count of 97 employees
+        And I should get 5 employees
         And the employee 1 in the response should be "Martyn Joseph"

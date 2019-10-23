@@ -84,3 +84,69 @@ Feature: Skill employees
             """
         Then the skill 1 in the response should have 5 employees
         And the employee 1 of the skill 1 in the response should be "Zayn Malik"
+
+    Scenario: Skill employees support skip argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(filter: { id: 1 }) {
+            items {
+            employees(skip: 2) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the employees total count of the skill 1 in the response should be 5
+        And the skill 1 in the response should have 3 employees
+        And the employee 1 of the skill 1 in the response should be "Zayn Malik"
+
+    Scenario: Skill employees support first argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(filter: { id: 1 }) {
+            items {
+            employees(first: 2) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the employees total count of the skill 1 in the response should be 5
+        And the skill 1 in the response should have 2 employees
+        And the employee 1 of the skill 1 in the response should be "Adele"
+
+    Scenario: Skill employees support pagination
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            skill(filter: { id: 1 }) {
+            items {
+            employees(first: 2, skip: 3) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the employees total count of the skill 1 in the response should be 5
+        And the skill 1 in the response should have 2 employees
+        And the employee 1 of the skill 1 in the response should be "Emily Maguire"

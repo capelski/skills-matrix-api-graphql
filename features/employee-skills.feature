@@ -84,3 +84,69 @@ Feature: Employee skills
             """
         Then the employee 1 in the response should have 5 skills
         And the skill 1 of the employee 1 in the response should be "Object Rexx"
+
+    Scenario: Employee skills support skip argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(filter: { id: 1 }) {
+            items {
+            skills(skip: 2) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the skills total count of the employee 1 in the response should be 5
+        And the employee 1 in the response should have 3 skills
+        And the skill 1 of the employee 1 in the response should be "NXT-G"
+
+    Scenario: Employee skills support first argument
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(filter: { id: 1 }) {
+            items {
+            skills(first: 2) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the skills total count of the employee 1 in the response should be 5
+        And the employee 1 in the response should have 2 skills
+        And the skill 1 of the employee 1 in the response should be "Object Rexx"
+
+    Scenario: Employee skills support pagination
+        Given the defined GraphQL schema
+        And the in-memory repositories
+        When I perform the query
+            """
+            {
+            employee(filter: { id: 1 }) {
+            items {
+            skills(first: 2, skip: 3) {
+            totalCount
+            items {
+            name
+            }
+            }
+            }
+            }
+            }
+            """
+        Then the skills total count of the employee 1 in the response should be 5
+        And the employee 1 in the response should have 2 skills
+        And the skill 1 of the employee 1 in the response should be "NSIS"
