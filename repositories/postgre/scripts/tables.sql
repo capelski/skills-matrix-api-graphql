@@ -28,14 +28,14 @@ TABLESPACE pg_default;
 
 CREATE TABLE public.employee_skill
 (
-    "employeeId" integer NOT NULL,
-    "skillId" integer NOT NULL,
-    CONSTRAINT employee_skill_pkey PRIMARY KEY ("employee_id", "skill_id"),
-    CONSTRAINT employee_fk FOREIGN KEY ("employee_id")
+    employee_id integer NOT NULL,
+    skill_id integer NOT NULL,
+    CONSTRAINT employee_skill_pkey PRIMARY KEY (employee_id, skill_id),
+    CONSTRAINT employee_fk FOREIGN KEY (employee_id)
         REFERENCES public.employee (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
-    CONSTRAINT skill_fk FOREIGN KEY ("skill_id")
+    CONSTRAINT skill_fk FOREIGN KEY (skill_id)
         REFERENCES public.skill (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
