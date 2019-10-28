@@ -5,7 +5,7 @@ const getConfiguration = require('./configuration');
 const schema = require('./schema');
 
 const inMemoryRepositories = require('./repositories/in-memory');
-// const postgreRepositories = require('./repositories/postgre');
+const postgreRepositories = require('./repositories/postgre');
 const context = require('./context');
 
 const getExpressApp = (environmentConfig) => {
@@ -20,8 +20,8 @@ const getExpressApp = (environmentConfig) => {
 
 	return postgreClient.connect()
 		.then(() => {
-			// return postgreRepositories(postgreClient);
-			return inMemoryRepositories();
+			console.log('Successfully connected to database');
+			return postgreRepositories(postgreClient);
 		})
 		.catch(error => {
 			console.error(error);
