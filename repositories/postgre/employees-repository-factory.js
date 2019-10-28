@@ -12,7 +12,7 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 		let query = 'SELECT COUNT(*) FROM employee';
 		const parameters = [];
 		if (filter && filter.name) {
-			query = query + ` WHERE lower(name) LIKE $1`;
+			query = query + ` WHERE lower(employee.name) LIKE $1`;
 			parameters.push(`%${filter.name.toLowerCase()}%`);
 		}
 		return postgreClient.query(query, parameters)
@@ -20,25 +20,25 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 	};
 
 	const getAll = (skip = 0, first = 10, filter, orderBy) => {
-		let query = 'SELECT id, name FROM employee';
+		let query = 'SELECT employee.id, employee.name FROM employee';
 		const parameters = [];
 		if (orderBy && orderBy.skills) {
-			query = query + ` LEFT JOIN employee_skill ON id = employee_id`;
+			query = query + ` LEFT JOIN employee_skill ON employee.id = employee_skill.employee_id`;
 		}
 		if (filter && filter.name) {
 			parameters.push(`%${filter.name.toLowerCase()}%`);
-			query = query + ` WHERE lower(name) LIKE $${parameters.length}`;
+			query = query + ` WHERE lower(employee.name) LIKE $${parameters.length}`;
 		}
 		if (orderBy && (orderBy.name || orderBy.skills)) {
 			if (orderBy.name) {
-				query = query + ` ORDER BY name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
+				query = query + ` ORDER BY employee.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
 			}
 			if (orderBy.skills) {
-				query = query + ` GROUP BY id, name ORDER BY COUNT(skill_id) ${orderBy.skills > 0 ? 'ASC' : 'DESC'}`;
+				query = query + ` GROUP BY employee.id, employee.name ORDER BY COUNT(employee_skill.skill_id) ${orderBy.skills > 0 ? 'ASC' : 'DESC'}, employee.name`;
 			}
 		}
 		else {
-			query = query + ` ORDER BY id ASC`;			
+			query = query + ` ORDER BY employee.id ASC`;			
 		}
 		parameters.push(first, skip);
 		query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
@@ -48,7 +48,7 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 	};
 
 	const getById = id => {
-		let query = `SELECT id, name FROM employee WHERE id = $1`;
+		let query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
 		return postgreClient.query(query, [id])
 			.then(result => result.rows[0]);
 	}

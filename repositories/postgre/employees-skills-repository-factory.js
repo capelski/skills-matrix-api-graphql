@@ -16,12 +16,12 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 
 	const countByEmployeeId = (employeeId, filter) => {
 		let query = `SELECT COUNT(*) FROM skill
-		INNER JOIN employee_skill ON id = skill_id
-		WHERE employee_id = $1`;
+		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
+		WHERE employee_skill.employee_id = $1`;
 		const parameters = [employeeId];
 		if (filter && filter.name) {
 			parameters.push(`%${filter.name.toLowerCase()}%`);
-			query = query + ` AND lower(name) LIKE $2`;
+			query = query + ` AND lower(skill.name) LIKE $2`;
 		}
 
 		return postgreClient.query(query, parameters)
@@ -30,12 +30,12 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 
 	const countBySkillId = (skillId, filter) => {
 		let query = `SELECT COUNT(*) FROM employee
-		INNER JOIN employee_skill ON id = employee_id
-		WHERE skill_id = $1`;
+		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
+		WHERE employee_skill.skill_id = $1`;
 		const parameters = [skillId];
 		if (filter && filter.name) {
 			parameters.push(`%${filter.name.toLowerCase()}%`);
-			query = query + ` AND lower(name) LIKE $2`;
+			query = query + ` AND lower(employee.name) LIKE $2`;
 		}
 
 		return postgreClient.query(query, parameters)
@@ -43,19 +43,19 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 	};
 
 	const getByEmployeeId = (employeeId, skip = 0, first = 10, filter, orderBy) => {
-		let query = `SELECT id, name FROM skill
-		INNER JOIN employee_skill ON id = skill_id
-		WHERE employee_id = $1`;
+		let query = `SELECT skill.id, skill.name FROM skill
+		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
+		WHERE employee_skill.employee_id = $1`;
 		const parameters = [employeeId];
 		if (filter && filter.name) {
 			parameters.push(`%${filter.name.toLowerCase()}%`);
-			query = query + ` AND lower(name) LIKE $${parameters.length}`;
+			query = query + ` AND lower(skill.name) LIKE $${parameters.length}`;
 		}
 		if (orderBy && orderBy.name) {
-			query = query + ` ORDER BY name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
+			query = query + ` ORDER BY skill.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
 		}
 		else {
-			query = query + ` ORDER BY id ASC`;			
+			query = query + ` ORDER BY skill.id ASC`;			
 		}
 		parameters.push(first, skip);
 		query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
@@ -65,19 +65,19 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 	};
 
 	const getBySkillId = (skillId, skip = 0, first = 10, filter, orderBy) => {
-		let query = `SELECT id, name FROM employee
-		INNER JOIN employee_skill ON id = employee_id
-		WHERE skill_id = $1`;
+		let query = `SELECT employee.id, employee.name FROM employee
+		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
+		WHERE employee_skill.skill_id = $1`;
 		const parameters = [skillId];
 		if (filter && filter.name) {
 			parameters.push(`%${filter.name.toLowerCase()}%`);
-			query = query + ` AND lower(name) LIKE $${parameters.length}`;
+			query = query + ` AND lower(employee.name) LIKE $${parameters.length}`;
 		}
 		if (orderBy && orderBy.name) {
-			query = query + ` ORDER BY name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
+			query = query + ` ORDER BY employee.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
 		}
 		else {
-			query = query + ` ORDER BY id ASC`;			
+			query = query + ` ORDER BY employee.id ASC`;			
 		}
 		parameters.push(first, skip);
 		query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
