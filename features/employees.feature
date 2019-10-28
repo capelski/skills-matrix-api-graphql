@@ -3,7 +3,7 @@ Feature: Employees API
 
     Scenario: Employees retrival and total count
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -21,7 +21,7 @@ Feature: Employees API
 
     Scenario: Employees filtering by name
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -39,7 +39,7 @@ Feature: Employees API
 
     Scenario: Employees filtering by id
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -57,7 +57,7 @@ Feature: Employees API
 
     Scenario: Employees ordering by name ascending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -72,7 +72,7 @@ Feature: Employees API
 
     Scenario: Employees ordering by name descending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -87,7 +87,7 @@ Feature: Employees API
 
     Scenario: Employees ordering by skills length ascending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -102,7 +102,7 @@ Feature: Employees API
 
     Scenario: Employees ordering by skills length descending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -117,7 +117,7 @@ Feature: Employees API
 
     Scenario: Employees support skip argument
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -134,7 +134,7 @@ Feature: Employees API
 
     Scenario: Employees support first argument
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -151,7 +151,7 @@ Feature: Employees API
 
     Scenario: Employees support pagination
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {

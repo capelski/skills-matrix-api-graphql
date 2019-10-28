@@ -3,7 +3,7 @@ Feature: Employee skills
 
     Scenario: Employee skills retrieval and count
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -25,7 +25,7 @@ Feature: Employee skills
 
     Scenario: Employee skills filtering by name
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -47,7 +47,7 @@ Feature: Employee skills
 
     Scenario: Employee skills ordering by name ascending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -67,7 +67,7 @@ Feature: Employee skills
 
     Scenario: Employee skills ordering by name descending
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -87,7 +87,7 @@ Feature: Employee skills
 
     Scenario: Employee skills support skip argument
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -109,7 +109,7 @@ Feature: Employee skills
 
     Scenario: Employee skills support first argument
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
@@ -131,7 +131,7 @@ Feature: Employee skills
 
     Scenario: Employee skills support pagination
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             {
