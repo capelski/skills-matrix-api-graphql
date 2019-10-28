@@ -3,6 +3,10 @@ const { graphql } = require('graphql');
 const shared = require('./shared');
 const alasql = require('alasql');
 
+const employees = require('../../repositories/postgre/alasql/employees.json');
+const skills = require('../../repositories/postgre/alasql/skills.json');
+const employees_skills = require('../../repositories/postgre/alasql/employees-skills.json');
+
 Given('the defined GraphQL schema', () => {
     shared.schema = require('../../schema');
 });
@@ -15,43 +19,57 @@ Given('the in-memory repositories', () => {
 Given('the postgre repositories', () => {
     const alasqlClient = {
         query: (sql, parameters) => {
-            // Alasql doesn't support parametrized queries; we need to replace the values
-            sql = parameters.reduce((reduced, next, index) => {
-                return reduced.replace(`$${index + 1}`, typeof next === 'string' ? `'${next}'` : next);
-            }, sql);
+            return alasql.promise(`
+CREATE TABLE IF NOT EXISTS employee (
+    id INT UNIQUE NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS skill (
+    id INT UNIQUE NOT NULL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS employee_skill (
+    employee_id INT PRIMARY KEY REFERENCES employee(id),
+    skill_id INT PRIMARY KEY REFERENCES skill(id)
+);`)
+            .then(() => {
+                alasql.tables.employee.data = employees.map(e => ({...e}));
+                alasql.tables.skill.data = skills.map(e => ({...e}));
+                alasql.tables.employee_skill.data = employees_skills.map(e_s => ({...e_s}));
 
-            // We replace the actual database tables with json files
-            sql = sql.replace('JOIN employee_skill', 'JOIN json("./repositories/postgre/alasql/employees-skills") as employee_skill')
-                .replace('FROM skill', 'FROM json("./repositories/postgre/alasql/skills") as skill')
-                .replace('FROM employee', 'FROM json("./repositories/postgre/alasql/employees") as employee');
+                // Alasql doesn't support parametrized queries. We need to replace the values
+                sql = parameters.reduce((reduced, next, index) => {
+                    return reduced.replace(`$${index + 1}`, typeof next === 'string' ? `'${next}'` : next);
+                }, sql);
 
-            // Alasql returns an incorrect data set when ordering by a COUNT() if the COUNT()
-            // is not selected
-            const hasOrderByCount = sql.match(/ORDER BY COUNT\((.*)\)/);
-            if (hasOrderByCount) {
-                sql = sql.replace(/SELECT (.*) FROM/, `SELECT $1, COUNT(${hasOrderByCount[1]}) FROM`);
-            }
+                // Alasql returns an incorrect data set when ordering by a COUNT() if
+                // the COUNT() is not selected
+                const hasOrderByCount = sql.match(/ORDER BY COUNT\((.*)\)/);
+                if (hasOrderByCount) {
+                    sql = sql.replace(/SELECT (.*) FROM/, `SELECT $1, COUNT(${hasOrderByCount[1]}) FROM`);
+                }
 
-            return alasql.promise(sql)
-                .then(rows => {
-                    // console.log(sql);
-                    // console.log(rows);
-                    if (rows[0] && rows[0]['COUNT(*)']) {
+                return alasql.promise(sql)
+                    .then(rows => {
+                        // console.log(sql);
+                        // console.log(rows);
+                        if (rows[0] && rows[0]['COUNT(*)']) {
+                            return {
+                                rows: [{
+                                    count: rows[0]['COUNT(*)']
+                                }]
+                            };
+                        }
                         return {
-                            rows: [{
-                                count: rows[0]['COUNT(*)']
-                            }]
+                            rows
                         };
-                    }
-                    return {
-                        rows
-                    };
-                })
-                .catch((error) => {
-                    console.log(sql);
-                    console.error(error);
-                    throw error;
-                });
+                    })
+                    .catch((error) => {
+                        console.log(sql);
+                        console.error(error);
+                        throw error;
+                    });
+            });
         }
     };
     const repositories = require('../../repositories/postgre')(alasqlClient);
