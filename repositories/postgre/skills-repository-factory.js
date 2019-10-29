@@ -71,16 +71,18 @@ const skillsRepositoryFactory = (postgreClient) => {
 			});
 	};
 
-	// const update = (id, name) => {
-	// 	return Promise.resolve(source)
-	// 		.then(skills => skills.find(s => s.id === id))
-	// 		.then(skill => {
-	// 			if (skill) {
-	// 				skill.name = name;
-	// 				return { ...skill };
-	// 			}
-	// 		});
-	// };
+	const update = (id, name) => {
+		const updateQuery = 'UPDATE skill SET name = $1 WHERE id = $2';
+		const updateParameters = [name, id];
+		
+		return postgreClient.query(updateQuery, updateParameters)
+			.then(() => {
+				const selectQuery = 'SELECT skill.id, skill.name FROM skill WHERE skill.id = $1';
+				const selectParameters = [id];
+				return postgreClient.query(selectQuery, selectParameters);
+			})
+			.then(result => result.rows[0]);
+	};
 
 	return {
 		add,
@@ -88,7 +90,7 @@ const skillsRepositoryFactory = (postgreClient) => {
 		getAll,
 		getById,
 		remove,
-		// update
+		update
 	};
 };
 

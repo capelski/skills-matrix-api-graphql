@@ -39,7 +39,7 @@ Feature: Employees mutations
 
     Scenario: Employees update
         Given the defined GraphQL schema
-        And the in-memory repositories
+        And the postgre repositories
         When I perform the query
             """
             mutation {

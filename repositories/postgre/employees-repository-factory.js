@@ -71,16 +71,18 @@ const employeesRepositoryFactory = (postgreClient) => {
 			});
 	};
 
-	// const update = (id, name) => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees => employees.find(e => e.id === id))
-	// 		.then(employee => {
-	// 			if (employee) {
-	// 				employee.name = name;
-	// 				return { ...employee };
-	// 			}
-	// 		});
-	// };
+	const update = (id, name) => {
+		const updateQuery = 'UPDATE employee SET name = $1 WHERE id = $2';
+		const updateParameters = [name, id];
+		
+		return postgreClient.query(updateQuery, updateParameters)
+			.then(() => {
+				const selectQuery = 'SELECT employee.id, employee.name FROM employee WHERE employee.id = $1';
+				const selectParameters = [id];
+				return postgreClient.query(selectQuery, selectParameters);
+			})
+			.then(result => result.rows[0]);
+	};
 
 	return {
 		add,
@@ -88,7 +90,7 @@ const employeesRepositoryFactory = (postgreClient) => {
 		getAll,
 		getById,
 		remove,
-		// update
+		update
 	};
 };
 

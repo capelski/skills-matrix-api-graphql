@@ -39,10 +39,9 @@ const getExpressApp = (environmentConfig) => {
 		});
 };
 
-// TODO Test with AlaSQL
 // TODO Auth and permissions
-// TODO Multiple orderBy is not supported
 // TODO Typescript
 // TODO prettier + lint
+// TODO Multiple orderBy is not supported
 
 module.exports = getExpressApp;
