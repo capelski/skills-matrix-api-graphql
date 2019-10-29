@@ -1,12 +1,15 @@
 const employeesRepositoryFactory = (postgreClient, repositories) => {
-	// const add = (name) => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees => {
-	// 			const employee = { id: nextEmployeeId++, name };
-	// 			employees.push(employee);
-	// 			return { ...employee };
-	// 		});
-	// };
+	const add = (name) => {
+		const insertQuery = `INSERT INTO employee(id, name) VALUES (nextval('employee_id_sequence'), $1)`;
+		const insertParameters = [name];
+		
+		return postgreClient.query(insertQuery, insertParameters)
+			.then(() => {
+				const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = currval('employee_id_sequence')`;
+				return postgreClient.query(selectQuery);
+			})
+			.then(result => result.rows[0]);
+	};
 
 	const countAll = (filter) => {
 		let query = 'SELECT COUNT(*) FROM employee';
@@ -75,7 +78,7 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 	// };
 
 	return {
-		// add,
+		add,
 		countAll,
 		getAll,
 		getById,

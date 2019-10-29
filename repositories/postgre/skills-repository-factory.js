@@ -1,12 +1,16 @@
+// TODO Remove repositories dependency
 const skillsRepositoryFactory = (postgreClient, repositories) => {	
-	// const add = (name) => {
-	// 	return Promise.resolve(source)
-	// 		.then(skills => {
-	// 			const skill = { id: nextSkillId++, name };
-	// 			skills.push(skill);
-	// 			return { ...skill };
-	// 		});
-	// };
+	const add = (name) => {
+		const insertQuery = `INSERT INTO skill(id, name) VALUES (nextval('skill_id_sequence'), $1)`;
+		const insertParameters = [name];
+		
+		return postgreClient.query(insertQuery, insertParameters)
+			.then(() => {
+				const selectQuery = `SELECT skill.id, skill.name FROM skill WHERE skill.id = currval('skill_id_sequence')`;
+				return postgreClient.query(selectQuery);
+			})
+			.then(result => result.rows[0]);
+	};
 
 	const countAll = (filter) => {
 		let query = 'SELECT COUNT(*) FROM skill';
@@ -75,7 +79,7 @@ const skillsRepositoryFactory = (postgreClient, repositories) => {
 	// };
 
 	return {
-		// add,
+		add,
 		countAll,
 		getAll,
 		getById,

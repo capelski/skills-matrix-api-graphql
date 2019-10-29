@@ -1,18 +1,16 @@
 const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
-	// const add = ({ employeeId, skillId }) => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees_skills => {
-	// 			let employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
-	// 			if (!employee_skill) {
-	// 				employee_skill = {
-	// 					employeeId,
-	// 					skillId
-	// 				};
-	// 				employees_skills.push(employee_skill);
-	// 			}
-	// 			return employee_skill;
-	// 		});
-	// };
+	const add = ({ employeeId, skillId }) => {
+		const insertQuery = 'INSERT INTO employee_skill(employee_id, skill_id) VALUES ($1, $2)';
+		const parameters = [employeeId, skillId];
+		
+		return postgreClient.query(insertQuery, parameters)
+			.then(() => {
+				const selectQuery = 'SELECT employee_id, skill_id FROM employee_skill WHERE employee_id = $1 AND skill_id = $2';
+				return postgreClient.query(selectQuery, parameters);
+			})
+			.then(result => result.rows[0]);
+	};
+
 
 	const countByEmployeeId = (employeeId, filter) => {
 		let query = `SELECT COUNT(*) FROM skill
@@ -113,12 +111,11 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 	// };
 
 	return {
-		// add,
+		add,
 		countByEmployeeId,
 		countBySkillId,
 		getByEmployeeId,
 		getBySkillId,
-		// remove,
 		// removeByEmployeeId,
 		// removeBySkillId
 	};

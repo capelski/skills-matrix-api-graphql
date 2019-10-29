@@ -44,3 +44,11 @@ WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
+
+CREATE SEQUENCE employee_id_sequence
+    start 98
+    increment 1;
+
+CREATE SEQUENCE skill_id_sequence
+    start 98
+    increment 1;
