@@ -1,11 +1,5 @@
+const { sortByName } = require('./shared');
 const matchingEmployeeSkill = (employeeId, skillId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
-
-// TODO Extract into commons
-const sortByName = (criteria) => (a, b) => {
-	if (a.name < b.name) return -criteria;
-	if (a.name > b.name) return criteria;
-	return 0;
-};
 
 const sortById = (a, b) => {
 	if (a.id < b.id) return -1;

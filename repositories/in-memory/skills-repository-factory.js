@@ -1,3 +1,5 @@
+const { sortByName } = require('./shared');
+
 const skillsRepositoryFactory = (repositories) => {	
 	const source = require('./data/skills.json').map(s => ({...s}));
 	let nextSkillId = source.length + 1;
@@ -61,12 +63,6 @@ const skillsRepositoryFactory = (repositories) => {
 		if (a.employeesCount < b.employeesCount) return -criteria;
 		if (a.employeesCount > b.employeesCount) return criteria;
 		return sortByName(1)(a, b);
-	};
-
-	const sortByName = (criteria) => (a, b) => {
-		if (a.name < b.name) return -criteria;
-		if (a.name > b.name) return criteria;
-		return 0;
 	};
 
 	const remove = id => {
