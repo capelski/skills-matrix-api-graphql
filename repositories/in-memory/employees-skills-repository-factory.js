@@ -1,11 +1,5 @@
-const { sortByName } = require('./shared');
+const { sortByProperty } = require('./shared');
 const matchingEmployeeSkill = (employeeId, skillId) => e_s  => e_s.skillId === skillId && e_s.employeeId === employeeId;
-
-const sortById = (a, b) => {
-	if (a.id < b.id) return -1;
-	if (a.id > b.id) return 1;
-	return 0;
-};
 
 const employeesSkillsRepositoryFactory = (repositories) => {
 	const source = [...require('./data/employees-skills.json')];
@@ -64,9 +58,9 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 			})
 			.then(filteredSkills => {
 				if (orderBy && orderBy.name) {
-					return filteredSkills.sort(sortByName(orderBy.name));
+					return filteredSkills.sort(sortByProperty(orderBy.name, 'name'));
 				}
-				return filteredSkills.sort(sortById);
+				return filteredSkills.sort(sortByProperty(1, 'id'));
 			})
 			.then(filteredSkills => filteredSkills.slice(skip, skip + first));
 	};
@@ -84,9 +78,9 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 			})
 			.then(filteredEmployees => {
 				if (orderBy && orderBy.name) {
-					return filteredEmployees.sort(sortByName(orderBy.name));
+					return filteredEmployees.sort(sortByProperty(orderBy.name, 'name'));
 				}
-				return filteredEmployees.sort(sortById);
+				return filteredEmployees.sort(sortByProperty(1, 'id'));
 			})
 			.then(filteredEmployees => filteredEmployees.slice(skip, skip + first));
 	};

@@ -1,4 +1,4 @@
-const { filterItemsByName, sortByName } = require('./shared');
+const { filterItemsByName, sortByProperty } = require('./shared');
 
 const skillsRepositoryFactory = (repositories) => {	
 	const source = require('./data/skills.json').map(s => ({...s}));
@@ -25,10 +25,10 @@ const skillsRepositoryFactory = (repositories) => {
 		.then(filteredSkills => {
 			if (orderBy) {
 				if (orderBy.name) {
-					return filteredSkills.sort(sortByName(orderBy.name));
+					return filteredSkills.sort(sortByProperty(orderBy.name, 'name'));
 				} else if (orderBy.employees) {
 					return Promise.all(filteredSkills.map(loadSkillEmployeesCount))
-						.then(filteredSkills => filteredSkills.sort(sortByEmployeesLength(orderBy.employees)));
+						.then(filteredSkills => filteredSkills.sort(sortByProperty(orderBy.employees, 'employeesCount', sortByProperty(orderBy.name, 'name'))));
 				}
 			}
 			return filteredSkills;
@@ -50,12 +50,6 @@ const skillsRepositoryFactory = (repositories) => {
 			skill.employeesCount = skillEmployeesCount;
 			return skill;
 		});
-
-	const sortByEmployeesLength = (criteria) => (a, b) => {
-		if (a.employeesCount < b.employeesCount) return -criteria;
-		if (a.employeesCount > b.employeesCount) return criteria;
-		return sortByName(1)(a, b);
-	};
 
 	const remove = id => {
 		return Promise.resolve(source)

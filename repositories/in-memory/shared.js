@@ -6,13 +6,13 @@ const filterItemsByName = (name) => (items) => {
     return items;
 };
 
-const sortByName = (criteria) => (a, b) => {
-	if (a.name < b.name) return -criteria;
-	if (a.name > b.name) return criteria;
-	return 0;
+const sortByProperty = (criteria, property, callback) => (a, b) => {
+    if (a[property] < b[property]) return -criteria;
+    if (a[property] > b[property]) return criteria;
+    return callback ? callback(a, b) : 0;
 };
 
 module.exports = {
     filterItemsByName,
-    sortByName
+    sortByProperty
 };
