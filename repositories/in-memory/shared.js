@@ -6,9 +6,9 @@ const filterItemsByName = (name) => (items) => {
     return items;
 };
 
-const sortByProperty = (criteria, property, callback) => (a, b) => {
-    if (a[property] < b[property]) return -criteria;
-    if (a[property] > b[property]) return criteria;
+const sortByProperty = (propertyName, criteria, callback) => (a, b) => {
+    if (a[propertyName] < b[propertyName]) return -criteria;
+    if (a[propertyName] > b[propertyName]) return criteria;
     return callback ? callback(a, b) : 0;
 };
 

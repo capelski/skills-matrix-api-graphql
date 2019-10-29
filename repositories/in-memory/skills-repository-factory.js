@@ -25,10 +25,10 @@ const skillsRepositoryFactory = (repositories) => {
 		.then(filteredSkills => {
 			if (orderBy) {
 				if (orderBy.name) {
-					return filteredSkills.sort(sortByProperty(orderBy.name, 'name'));
+					return filteredSkills.sort(sortByProperty('name', orderBy.name));
 				} else if (orderBy.employees) {
 					return Promise.all(filteredSkills.map(loadSkillEmployeesCount))
-						.then(filteredSkills => filteredSkills.sort(sortByProperty(orderBy.employees, 'employeesCount', sortByProperty(orderBy.name, 'name'))));
+						.then(filteredSkills => filteredSkills.sort(sortByProperty('employeesCount', orderBy.employees, sortByProperty('name', orderBy.name))));
 				}
 			}
 			return filteredSkills;

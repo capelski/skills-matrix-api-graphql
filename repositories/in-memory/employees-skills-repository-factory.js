@@ -58,9 +58,9 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 			})
 			.then(filteredSkills => {
 				if (orderBy && orderBy.name) {
-					return filteredSkills.sort(sortByProperty(orderBy.name, 'name'));
+					return filteredSkills.sort(sortByProperty('name', orderBy.name));
 				}
-				return filteredSkills.sort(sortByProperty(1, 'id'));
+				return filteredSkills.sort(sortByProperty('id', 1));
 			})
 			.then(filteredSkills => filteredSkills.slice(skip, skip + first));
 	};
@@ -78,9 +78,9 @@ const employeesSkillsRepositoryFactory = (repositories) => {
 			})
 			.then(filteredEmployees => {
 				if (orderBy && orderBy.name) {
-					return filteredEmployees.sort(sortByProperty(orderBy.name, 'name'));
+					return filteredEmployees.sort(sortByProperty('name', orderBy.name));
 				}
-				return filteredEmployees.sort(sortByProperty(1, 'id'));
+				return filteredEmployees.sort(sortByProperty('id', 1));
 			})
 			.then(filteredEmployees => filteredEmployees.slice(skip, skip + first));
 	};
