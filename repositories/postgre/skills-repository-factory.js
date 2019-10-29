@@ -57,15 +57,20 @@ const skillsRepositoryFactory = (postgreClient, repositories) => {
 			.then(result => result.rows[0]);
 	}
 
-	// const remove = id => {
-	// 	return Promise.resolve(source)
-	// 		.then(skills => {
-	// 			const skillIndex = skills.findIndex(e => e.id === id);
-	// 			if (skillIndex > -1) {
-	// 				return skills.splice(skillIndex, 1)[0];
-	// 			}
-	// 		});
-	// };
+	const remove = (id) => {
+		const selectQuery = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
+		const parameters = [id];
+		
+		return postgreClient.query(selectQuery, parameters)
+			.then(result => {
+				const skill = result.rows[0];
+				if (skill) {
+					const deleteQuery = `DELETE FROM skill WHERE id = $1`;
+					return postgreClient.query(deleteQuery, parameters)
+						.then(() => skill);
+				}
+			});
+	};
 
 	// const update = (id, name) => {
 	// 	return Promise.resolve(source)
@@ -83,7 +88,7 @@ const skillsRepositoryFactory = (postgreClient, repositories) => {
 		countAll,
 		getAll,
 		getById,
-		// remove,
+		remove,
 		// update
 	};
 };

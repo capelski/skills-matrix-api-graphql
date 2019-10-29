@@ -7,14 +7,14 @@ const employees = require('../../repositories/postgre/alasql/employees.json');
 const skills = require('../../repositories/postgre/alasql/skills.json');
 const employees_skills = require('../../repositories/postgre/alasql/employees-skills.json');
 
-// TODO Fix the alasql foreign key issue
+// TODO alasql raises exceptions when using UNIQUE, PRIMARY KEY and REFERENCES
 const createTables = () => alasql.promise(`
 CREATE TABLE IF NOT EXISTS employee (
-    id INT UNIQUE NOT NULL PRIMARY KEY,
+    id INT NOT NULL, -- UNIQUE PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS skill (
-    id INT UNIQUE NOT NULL PRIMARY KEY,
+    id INT NOT NULL, -- UNIQUE PRIMARY KEY,
     name VARCHAR(50) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS employee_skill (

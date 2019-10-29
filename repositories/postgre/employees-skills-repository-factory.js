@@ -84,31 +84,35 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 			.then(result => result.rows);
 	};
 
-	// const remove = ({ employeeId, skillId }) => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees_skills => {
-	// 			const employeeSkillIndex = employees_skills.findIndex(matchingEmployeeSkill(employeeId, skillId));
-	// 			if (employeeSkillIndex > -1) {
-	// 				return employees_skills.splice(employeeSkillIndex, 1)[0];
-	// 			}
-	// 		});
-	// };
+	const removeByEmployeeId = employeeId => {
+		const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.employee_id = $1`;
+		const parameters = [employeeId];
+		
+		return postgreClient.query(selectQuery, parameters)
+			.then(result => {
+				const { rows } = result;
+				if (rows.length > 0) {
+					const deleteQuery = `DELETE FROM employee_skill WHERE employee_id = $1`;
+					return postgreClient.query(deleteQuery, parameters)
+						.then(() => rows);
+				}
+			});
+	};
 
-	// const removeByEmployeeId = employeeId => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees_skills => {
-	// 			const relations = employees_skills.filter(e_s => e_s.employeeId === employeeId);
-	// 			return Promise.all(relations.map(remove));
-	// 		});
-	// };
-
-	// const removeBySkillId = skillId => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees_skills => {
-	// 			const relations = employees_skills.filter(e_s => e_s.skillId === skillId);
-	// 			return Promise.all(relations.map(remove));
-	// 		});
-	// };
+	const removeBySkillId = skillId => {
+		const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.skill_id = $1`;
+		const parameters = [skillId];
+		
+		return postgreClient.query(selectQuery, parameters)
+			.then(result => {
+				const { rows } = result;
+				if (rows.length > 0) {
+					const deleteQuery = `DELETE FROM employee_skill WHERE skill_id = $1`;
+					return postgreClient.query(deleteQuery, parameters)
+						.then(() => rows);
+				}
+			});
+	};
 
 	return {
 		add,
@@ -116,8 +120,8 @@ const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
 		countBySkillId,
 		getByEmployeeId,
 		getBySkillId,
-		// removeByEmployeeId,
-		// removeBySkillId
+		removeByEmployeeId,
+		removeBySkillId
 	};
 };
 

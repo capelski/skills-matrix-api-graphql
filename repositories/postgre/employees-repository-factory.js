@@ -56,15 +56,20 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 			.then(result => result.rows[0]);
 	}
 		
-	// const remove = id => {
-	// 	return Promise.resolve(source)
-	// 		.then(employees => {
-	// 			const employeeIndex = employees.findIndex(e => e.id === id);
-	// 			if (employeeIndex > -1) {
-	// 				return employees.splice(employeeIndex, 1)[0];
-	// 			}
-	// 		});
-	// };
+	const remove = (id) => {
+		const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
+		const parameters = [id];
+		
+		return postgreClient.query(selectQuery, parameters)
+			.then(result => {
+				const employee = result.rows[0];
+				if (employee) {
+					const deleteQuery = `DELETE FROM employee WHERE id = $1`;
+					return postgreClient.query(deleteQuery, parameters)
+						.then(() => employee);
+				}
+			});
+	};
 
 	// const update = (id, name) => {
 	// 	return Promise.resolve(source)
@@ -82,7 +87,7 @@ const employeesRepositoryFactory = (postgreClient, repositories) => {
 		countAll,
 		getAll,
 		getById,
-		// remove,
+		remove,
 		// update
 	};
 };
