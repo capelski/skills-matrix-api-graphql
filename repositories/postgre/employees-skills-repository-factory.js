@@ -1,4 +1,4 @@
-const employeesSkillsRepositoryFactory = (postgreClient, repositories) => {
+const employeesSkillsRepositoryFactory = (postgreClient) => {
 	const add = ({ employeeId, skillId }) => {
 		const insertQuery = 'INSERT INTO employee_skill(employee_id, skill_id) VALUES ($1, $2)';
 		const parameters = [employeeId, skillId];

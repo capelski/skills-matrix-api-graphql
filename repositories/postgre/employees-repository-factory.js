@@ -1,4 +1,4 @@
-const employeesRepositoryFactory = (postgreClient, repositories) => {
+const employeesRepositoryFactory = (postgreClient) => {
 	const add = (name) => {
 		const insertQuery = `INSERT INTO employee(id, name) VALUES (nextval('employee_id_sequence'), $1)`;
 		const insertParameters = [name];

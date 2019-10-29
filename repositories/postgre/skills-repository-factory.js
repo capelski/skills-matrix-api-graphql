@@ -1,5 +1,4 @@
-// TODO Remove repositories dependency
-const skillsRepositoryFactory = (postgreClient, repositories) => {	
+const skillsRepositoryFactory = (postgreClient) => {	
 	const add = (name) => {
 		const insertQuery = `INSERT INTO skill(id, name) VALUES (nextval('skill_id_sequence'), $1)`;
 		const insertParameters = [name];
