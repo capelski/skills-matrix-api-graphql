@@ -39,11 +39,9 @@ const skillsService = (repositories) => {
 		return getById(id)
 		.then(skill => {
 			if (skill) {
-				return Promise.all([
-					repositories.skills.remove(id),
-					repositories.employeesSkills.removeBySkillId(id)
-				])
-				.then(() => skill);
+				return repositories.employeesSkills.removeBySkillId(id)
+					.then(() => repositories.skills.remove(id))
+					.then(() => skill);
 			}
 			return undefined;
 		});

@@ -39,11 +39,9 @@ const employeesService = (repositories) => {
 		return getById(id)
 		.then(employee => {
 			if (employee) {
-				return Promise.all([
-					repositories.employees.remove(id),
-					repositories.employeesSkills.removeByEmployeeId(id)
-				])
-				.then(() => employee);
+				return repositories.employeesSkills.removeByEmployeeId(id)
+					.then(() => repositories.employees.remove(id))
+					.then(() => employee);
 			}
 			return undefined;
 		});
