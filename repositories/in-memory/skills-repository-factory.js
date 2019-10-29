@@ -1,4 +1,4 @@
-const { sortByName } = require('./shared');
+const { filterItemsByName, sortByName } = require('./shared');
 
 const skillsRepositoryFactory = (repositories) => {	
 	const source = require('./data/skills.json').map(s => ({...s}));
@@ -15,21 +15,13 @@ const skillsRepositoryFactory = (repositories) => {
 
 	const countAll = (filter) => {
 		return Promise.resolve(source)
-			.then(filterSkills(filter))
+			.then(filterItemsByName(filter && filter.name))
 			.then(filteredSkills => filteredSkills.length);
-	};
-
-	const filterSkills = (filter) => (skills) => {
-		if (filter && filter.name) {
-			const nameFilter = filter.name.toLowerCase();
-			skills = skills.filter(s => s.name.toLowerCase().indexOf(nameFilter) > -1);
-		}
-		return skills;
 	};
 
 	const getAll = (skip = 0, first = 10, filter, orderBy) => {
 		return Promise.resolve(source)
-		.then(filterSkills(filter))
+		.then(filterItemsByName(filter && filter.name))
 		.then(filteredSkills => {
 			if (orderBy) {
 				if (orderBy.name) {

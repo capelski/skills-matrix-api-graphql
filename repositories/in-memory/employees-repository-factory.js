@@ -1,4 +1,4 @@
-const { sortByName } = require('./shared');
+const { filterItemsByName, sortByName } = require('./shared');
 
 const employeesRepositoryFactory = (repositories) => {
 	const source = require('./data/employees.json').map(e => ({...e}));
@@ -15,21 +15,13 @@ const employeesRepositoryFactory = (repositories) => {
 
 	const countAll = (filter) => {
 		return Promise.resolve(source)
-			.then(filterEmployees(filter))
+			.then(filterItemsByName(filter && filter.name))
 			.then(filteredEmployees => filteredEmployees.length);
-	};
-
-	const filterEmployees = (filter) => (employees) => {
-		if (filter && filter.name) {
-			const nameFilter = filter.name.toLowerCase();
-			employees = employees.filter(e => e.name.toLowerCase().indexOf(nameFilter) > -1);
-		}
-		return employees;
 	};
 
 	const getAll = (skip = 0, first = 10, filter, orderBy) => {
 		return Promise.resolve(source)
-		.then(filterEmployees(filter))
+		.then(filterItemsByName(filter && filter.name))
 		.then(filteredEmployees => {
 			if (orderBy) {
 				if (orderBy.name) {
