@@ -28,6 +28,7 @@ const employeeType = new GraphQLObjectType({
                     orderBy: { type: employeeSkillOrderByType }
                 },
                 resolve: (object, args, context) => {
+                    context.ensurePermission(context.user, 'employee:read');
                     return context.employees.getEmployeeSkills(object.id, args.filter, args.skip, args.first, args.orderBy);
                 }
             }
@@ -88,11 +89,13 @@ const employeeQueryField = {
     },
     resolve: (object, args, context) => {
         if (args.filter && args.filter.id) {
+            context.ensurePermission(context.user, 'employee:read');
             return context.employees.getById(args.filter.id).then(employee => ({
                 items: [employee],
                 totalCount: 1
             }));
         } else {
+            context.ensurePermission(context.user, 'employees:read');
             return context.employees.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
     }
@@ -112,6 +115,7 @@ const addEmployee = {
         input: { type: addEmployeeInputType }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'employees:create');
         return context.employees.create(args.input);
     }
 };
@@ -122,6 +126,7 @@ const removeEmployee = {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'employees:delete');
         return context.employees.remove(args.input);
     }
 };
@@ -141,6 +146,7 @@ const updateEmployee = {
         input: { type: updateEmployeeInputType }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'employees:update');
         return context.employees.update(args.input);
     }
 };

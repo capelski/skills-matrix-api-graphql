@@ -43,28 +43,45 @@ const getExpressApp = (environmentConfig) => {
 		})
 		.then(repositories => {
 			const app = express();
+			const contextInstance = context(repositories);
 			const getGraphQLContext = (user) => ({
-				context: context(repositories),
+				context: {
+					...contextInstance,
+					user
+				},
 				graphiql: true,
 				schema,
-				user
 			});
+			const employeePermissions = ['employees:read', 'employees:create', 'employees:delete', 'employees:update'];
+			const skillPermissions = ['skills:read', 'skills:create', 'skills:delete', 'skills:update'];
 
-			app.use('/let-me-in', (request, response, next) => {
-				// Here we would implement proper user authentication
-				// Instead, we create a token for a hard coded user
+			app.use('/graphql', graphqlHttp((request, response) => {
+				// Bypassing authorization for demo purposes
+				return getGraphQLContext({
+					id: 'admin',
+					permissions: employeePermissions.concat(skillPermissions),
+				});	
+			}));
+
+			const credentialsMiddleware = (userId, permissionsSets) => (request, response, next) => {
 				const user = {
-					id: 'admin'
-					// TODO Add permissions
+					id: userId,
+					permissions: permissionsSets
 				};
 				const token = jsonwebtoken.sign(user, config.JWT_SECRET, { expiresIn: '3h' });
-				response.json({
+				return response.json({
 					message: 'Authentication successful!',
 					token
 				});
-			});
+			};
 
-			app.use('/graphql', graphqlHttp((request, response) => {
+			// Instead of this endpoint, we would have a single /login endpoint performing real authentication
+			app.use('/nobody-token', credentialsMiddleware('nobody', []));
+			app.use('/employees-token', credentialsMiddleware('employee', employeePermissions));
+			app.use('/skills-token', credentialsMiddleware('skill', skillPermissions));
+			app.use('/admin-token', credentialsMiddleware('admin', employeePermissions.concat(skillPermissions)));
+
+			app.use('/graphql-auth', graphqlHttp((request, response) => {
 				// Allow access to graphiql
 				if (request.method === 'GET') {
 					return getGraphQLContext();
@@ -78,10 +95,12 @@ const getExpressApp = (environmentConfig) => {
 					return decodeJsonWebToken(authorizationToken, config.JWT_SECRET)
 						.then(token => getGraphQLContext({
 							id: token.id,
+							permissions: token.permissions,
 						}))
 						.catch(() => response.status(401).send({errorMessage: 'Invalid authorization token'}));	
 				}
 			}));
+
 			return app;
 		});
 };

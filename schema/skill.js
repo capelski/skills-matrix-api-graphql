@@ -22,6 +22,7 @@ const skillType = new GraphQLObjectType({
                     orderBy: { type: skillEmployeeOrderByType }
                 },
                 resolve: (object, args, context) => {
+                    context.ensurePermission(context.user, 'skills:read');
                     return context.skills.getSkillEmployees(object.id, args.filter, args.skip, args.first, args.orderBy);
                 }
             },
@@ -89,11 +90,13 @@ const skillQueryField = {
     },
     resolve: (object, args, context) => {
         if (args.filter && args.filter.id) {
+            context.ensurePermission(context.user, 'skills:read');
             return context.skills.getById(args.filter.id).then(skill => ({
                 items: [skill],
                 totalCount: 1,
             }));
         } else {
+            context.ensurePermission(context.user, 'skills:read');
             return context.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
     }
@@ -113,6 +116,7 @@ const addSkill = {
         input: { type: addSkillInputType }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'skills:create');
         return context.skills.create(args.input);
     }
 };
@@ -123,6 +127,7 @@ const removeSkill = {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'skills:delete');
         return context.skills.remove(args.input);
     }
 };
@@ -142,6 +147,7 @@ const updateSkill = {
         input: { type: updateSkillInputType }
     },
     resolve: function (object, args, context) {
+        context.ensurePermission(context.user, 'skills:update');
         return context.skills.update(args.input);
     }
 };
