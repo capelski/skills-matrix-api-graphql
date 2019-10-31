@@ -4,6 +4,7 @@ const defaultConfig = {
     DB_PASSWORD: 'admin',
     DB_PORT: 5432,
     DB_USER: 'postgres',
+    JWT_SECRET: 'In 1889 at age 44, he suffered a collapse and afterward a complete loss of his mental faculties',
 };
 
 const getConfiguration = (environmentConfig = {}) => ({
@@ -12,6 +13,7 @@ const getConfiguration = (environmentConfig = {}) => ({
     DB_PASSWORD: environmentConfig.DB_PASSWORD !== undefined ? environmentConfig.DB_PASSWORD : defaultConfig.DB_PASSWORD,
     DB_PORT: environmentConfig.DB_PORT !== undefined ? environmentConfig.DB_PORT : defaultConfig.DB_PORT,
     DB_USER: environmentConfig.DB_USER !== undefined ? environmentConfig.DB_USER : defaultConfig.DB_USER,
+    JWT_SECRET: environmentConfig.JWT_SECRET !== undefined ? environmentConfig.JWT_SECRET : defaultConfig.JWT_SECRET,
 });
 
 module.exports = getConfiguration;

@@ -1,5 +1,6 @@
 const express = require('express');
 const graphqlHttp = require('express-graphql');
+const jsonwebtoken = require('jsonwebtoken');
 const { Client } = require('pg');
 const getConfiguration = require('./configuration');
 const schema = require('./schema');
@@ -7,6 +8,18 @@ const schema = require('./schema');
 const inMemoryRepositories = require('./repositories/in-memory');
 const postgreRepositories = require('./repositories/postgre');
 const context = require('./context');
+
+const decodeJsonWebToken = (encodedToken, secret, options) => {
+	return new Promise((resolve, reject) => {
+		jsonwebtoken.verify(encodedToken, secret, options, (error, decodedToken) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve(decodedToken);
+			}
+		});
+	});
+};
 
 const getExpressApp = (environmentConfig) => {
 	const config = getConfiguration(environmentConfig);
@@ -30,16 +43,49 @@ const getExpressApp = (environmentConfig) => {
 		})
 		.then(repositories => {
 			const app = express();
-			app.use('/graphql', graphqlHttp({
+			const getGraphQLContext = (user) => ({
 				context: context(repositories),
 				graphiql: true,
-				schema
+				schema,
+				user
+			});
+
+			app.use('/let-me-in', (request, response, next) => {
+				// Here we would implement proper user authentication
+				// Instead, we create a token for a hard coded user
+				const user = {
+					id: 'admin'
+					// TODO Add permissions
+				};
+				const token = jsonwebtoken.sign(user, config.JWT_SECRET, { expiresIn: '3h' });
+				response.json({
+					message: 'Authentication successful!',
+					token
+				});
+			});
+
+			app.use('/graphql', graphqlHttp((request, response) => {
+				// Allow access to graphiql
+				if (request.method === 'GET') {
+					return getGraphQLContext();
+				}
+				else {
+					const authorizationToken = request.headers['authorization'];
+					if (!authorizationToken) {
+						return response.status(401).json({errorMessage: 'Authorization token required'});
+					}
+	
+					return decodeJsonWebToken(authorizationToken, config.JWT_SECRET)
+						.then(token => getGraphQLContext({
+							id: token.id,
+						}))
+						.catch(() => response.status(401).send({errorMessage: 'Invalid authorization token'}));	
+				}
 			}));
 			return app;
 		});
 };
 
-// TODO Auth and permissions
 // TODO Typescript
 // TODO prettier + lint
 // TODO Multiple orderBy is not supported

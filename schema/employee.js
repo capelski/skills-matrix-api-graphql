@@ -19,7 +19,6 @@ const employeeType = new GraphQLObjectType({
             name: {
                 type: new GraphQLNonNull(GraphQLString),
             },
-            // TODO Define as the type in skill.js
             skills: {
                 type: definePagedListType(skillType, 'EmployeeSkillsPagedList'),
                 args: {

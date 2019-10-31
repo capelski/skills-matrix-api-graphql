@@ -13,7 +13,6 @@ const skillType = new GraphQLObjectType({
     fields: () => {
         const { employeeType } = require('./employee');
         return {
-            // TODO Define as the type in employee.js
             employees: {
                 type: definePagedListType(employeeType, 'SkillEmployeesPagedList'),
                 args: {
