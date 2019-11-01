@@ -55,7 +55,7 @@ const getExpressApp = (environmentConfig) => {
 			const employeePermissions = ['employees:read', 'employees:create', 'employees:delete', 'employees:update'];
 			const skillPermissions = ['skills:read', 'skills:create', 'skills:delete', 'skills:update'];
 
-			app.use('/graphql', graphqlHttp((request, response) => {
+			app.use('/', graphqlHttp((request, response) => {
 				// Bypassing authorization for demo purposes
 				return getGraphQLContext({
 					id: 'admin',
@@ -81,7 +81,7 @@ const getExpressApp = (environmentConfig) => {
 			app.use('/skills-token', credentialsMiddleware('skill', skillPermissions));
 			app.use('/admin-token', credentialsMiddleware('admin', employeePermissions.concat(skillPermissions)));
 
-			app.use('/graphql-auth', graphqlHttp((request, response) => {
+			app.use('/auth', graphqlHttp((request, response) => {
 				// Allow access to graphiql
 				if (request.method === 'GET') {
 					return getGraphQLContext();
