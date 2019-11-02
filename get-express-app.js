@@ -55,7 +55,7 @@ const getExpressApp = (environmentConfig) => {
 			const employeePermissions = ['employees:read', 'employees:create', 'employees:delete', 'employees:update'];
 			const skillPermissions = ['skills:read', 'skills:create', 'skills:delete', 'skills:update'];
 
-			app.use('/', graphqlHttp((request, response) => {
+			app.use(/\//, graphqlHttp((request, response) => {
 				// Bypassing authorization for demo purposes
 				return getGraphQLContext({
 					id: 'admin',
