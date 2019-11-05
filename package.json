@@ -21,6 +21,12 @@
         "alasql": "^0.5.1",
         "chai": "^4.2.0",
         "cucumber": "^6.0.2",
+        "husky": "^3.0.9",
         "nodemon": "^1.19.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-push": "npm test"
+        }
     }
 }
