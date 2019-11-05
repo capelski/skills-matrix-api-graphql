@@ -4,7 +4,8 @@ const skillsService = require('./skills-service');
 const ensurePermission = (user, permission) => { 
     const hasPermission = user && user.permissions && user.permissions.indexOf(permission) > -1;
     if (!hasPermission) {
-        throw new Error('Unauthorized')
+        // For security reasons, the actual error message would not reveal the required permission
+        throw new Error(`Unauthorized! You must be granted ${permission}`)
     }
 };
 
