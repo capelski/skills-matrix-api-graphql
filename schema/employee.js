@@ -28,7 +28,7 @@ const employeeType = new GraphQLObjectType({
                     orderBy: { type: employeeSkillOrderByType }
                 },
                 resolve: (object, args, context) => {
-                    context.ensurePermission(context.user, 'employee:read');
+                    context.ensurePermission(context.user, 'employees:read');
                     return context.employees.getEmployeeSkills(object.id, args.filter, args.skip, args.first, args.orderBy);
                 }
             }
@@ -80,7 +80,7 @@ const employeeSkillOrderByType = new GraphQLInputObjectType({
 
 const employeeQueryField = {
     type: definePagedListType(employeeType),
-    description: 'Employees',
+    description: 'Returns the available employees',
     args: {
         filter: { type: employeeFilterType },
         first: { type: GraphQLInt },
@@ -89,7 +89,7 @@ const employeeQueryField = {
     },
     resolve: (object, args, context) => {
         if (args.filter && args.filter.id) {
-            context.ensurePermission(context.user, 'employee:read');
+            context.ensurePermission(context.user, 'employees:read');
             return context.employees.getById(args.filter.id).then(employee => ({
                 items: [employee],
                 totalCount: 1
@@ -111,6 +111,7 @@ const addEmployeeInputType = new GraphQLInputObjectType({
 
 const addEmployee = {
     type: employeeType,
+    description: 'Creates a new employee with the given name and skills',
     args: {
         input: { type: addEmployeeInputType }
     },
@@ -122,6 +123,7 @@ const addEmployee = {
 
 const removeEmployee = {
     type: employeeType,
+    description: 'Removes the employee identified by the input id',
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
@@ -142,6 +144,7 @@ const updateEmployeeInputType = new GraphQLInputObjectType({
 
 const updateEmployee = {
     type: employeeType,
+    description: 'Updates the name and skills of the employee identified by id',
     args: {
         input: { type: updateEmployeeInputType }
     },

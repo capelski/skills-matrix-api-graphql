@@ -81,7 +81,7 @@ const skillEmployeeOrderByType = new GraphQLInputObjectType({
 
 const skillQueryField = {
     type: definePagedListType(skillType),
-    description: 'Skills',
+    description: 'Returns the available skills',
     args: {
         filter: { type: skillFilterType },
         first: { type: GraphQLInt },
@@ -112,6 +112,7 @@ const addSkillInputType = new GraphQLInputObjectType({
 
 const addSkill = {
     type: skillType,
+    description: 'Creates a new skill with the given name and employees',
     args: {
         input: { type: addSkillInputType }
     },
@@ -123,6 +124,7 @@ const addSkill = {
 
 const removeSkill = {
     type: skillType,
+    description: 'Removes the skill identified by the input id',
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
@@ -143,6 +145,7 @@ const updateSkillInputType = new GraphQLInputObjectType({
 
 const updateSkill = {
     type: skillType,
+    description: 'Updates the name and employees of the skill identified by id',
     args: {
         input: { type: updateSkillInputType }
     },
