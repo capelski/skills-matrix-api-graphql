@@ -3,18 +3,19 @@ const { expect } = require('chai');
 const { Given, When, Then } = require('cucumber');
 const { graphql } = require('graphql');
 const permissions = require('../../permissions');
-const contextFactory = require('../../context');
-const inMemoryRepositories = require('../../repositories/in-memory');
-const postgreRepositories = require('../../repositories/postgre');
-const schema = require('../../schema');
+const contextFactory = require('../../src/context');
+const inMemoryRepositories = require('../../src/repositories/in-memory');
+const postgreRepositories = require('../../src/repositories/postgre');
+const schema = require('../../src/schema');
 const shared = require('./shared');
 
-const employees = require('../../repositories/postgre/alasql/employees.json');
-const skills = require('../../repositories/postgre/alasql/skills.json');
-const employees_skills = require('../../repositories/postgre/alasql/employees-skills.json');
+const employees = require('../../src/repositories/postgre/alasql/employees.json');
+const skills = require('../../src/repositories/postgre/alasql/skills.json');
+const employees_skills = require('../../src/repositories/postgre/alasql/employees-skills.json');
 
 // TODO alasql raises exceptions when using UNIQUE, PRIMARY KEY and REFERENCES
-const createTables = () => alasql.promise(`
+const createTables = () =>
+    alasql.promise(`
 CREATE TABLE IF NOT EXISTS employee (
     id INT NOT NULL, -- UNIQUE PRIMARY KEY,
     name VARCHAR(50) NOT NULL
@@ -29,19 +30,24 @@ CREATE TABLE IF NOT EXISTS employee_skill (
 );`);
 
 const populateTables = () => {
-    alasql.tables.employee.data = employees.map(e => ({...e}));
-    alasql.tables.skill.data = skills.map(e => ({...e}));
-    alasql.tables.employee_skill.data = employees_skills.map(e_s => ({...e_s}));
+    alasql.tables.employee.data = employees.map(e => ({ ...e }));
+    alasql.tables.skill.data = skills.map(e => ({ ...e }));
+    alasql.tables.employee_skill.data = employees_skills.map(e_s => ({ ...e_s }));
 };
 
 const replaceQueryParameters = (sql, parameters) => {
     // alasql doesn't support parametrized queries. We need to replace the values
-    return parameters ? parameters.reduce((reduced, next, index) => {
-        return reduced.replace(`$${index + 1}`, typeof next === 'string' ? `'${next}'` : next);
-    }, sql) : sql;
+    return parameters
+        ? parameters.reduce((reduced, next, index) => {
+              return reduced.replace(
+                  `$${index + 1}`,
+                  typeof next === 'string' ? `'${next}'` : next
+              );
+          }, sql)
+        : sql;
 };
 
-const fixOrderByCount = (sql) => {
+const fixOrderByCount = sql => {
     // alasql returns an incorrect data set when ordering by a COUNT() if
     // the COUNT() is not present in the SELECT
     const hasOrderByCount = sql.match(/ORDER BY COUNT\((.*)\)/);
@@ -49,9 +55,9 @@ const fixOrderByCount = (sql) => {
         return sql.replace(/SELECT (.*) FROM/, `SELECT $1, COUNT(${hasOrderByCount[1]}) FROM`);
     }
     return sql;
-}
+};
 
-const replaceSequencesOperators = (sql) => {
+const replaceSequencesOperators = sql => {
     // alasql doesn't support postgreSql nextval and currval
     const nextId = 98;
     return sql.replace(/nextval\([^\)]*\)/, nextId).replace(/currval\([^\)]*\)/, nextId);
@@ -75,24 +81,27 @@ Given('the postgre repositories', () => {
                     sql = fixOrderByCount(sql);
                     sql = replaceSequencesOperators(sql);
 
-                    return alasql.promise(sql)
+                    return alasql
+                        .promise(sql)
                         .then(rows => {
                             // console.log(sql);
                             // console.log(rows);
-                        
+
                             if (rows[0] && rows[0]['COUNT(*)']) {
                                 return {
-                                    rows: [{
-                                        count: rows[0]['COUNT(*)']
-                                    }]
+                                    rows: [
+                                        {
+                                            count: rows[0]['COUNT(*)']
+                                        }
+                                    ]
                                 };
                             }
-                        
+
                             return {
                                 rows
                             };
                         })
-                        .catch((error) => {
+                        .catch(error => {
                             console.log(sql);
                             console.error(error);
                             throw error;
@@ -104,21 +113,21 @@ Given('the postgre repositories', () => {
         });
 });
 
-Given('a user having {string} permissions', (permissionSet) => {
+Given('a user having {string} permissions', permissionSet => {
     shared.user = {
         id: 'user',
-        permissions: permissions[permissionSet],
+        permissions: permissions[permissionSet]
     };
 });
 
 Given('a user without permissions', () => {
     shared.user = {
         id: 'user',
-        permissions: [],
+        permissions: []
     };
 });
 
-When(/I perform the query$/, async (query) => {
+When(/I perform the query$/, async query => {
     shared.context = contextFactory(shared.repositories, shared.user);
     shared.queryResult = await graphql(shared.schema, query, undefined, shared.context);
 });
@@ -127,7 +136,7 @@ Then('an error is returned', () => {
     expect(shared.queryResult.errors).to.length(1);
 });
 
-Then('the error message contains {string}', (errorContent) => {
+Then('the error message contains {string}', errorContent => {
     const error = shared.queryResult.errors[0];
     expect(error.message).to.contain(errorContent);
 });
