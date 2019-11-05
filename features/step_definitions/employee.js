@@ -33,7 +33,7 @@ Then('the skill {int} of the employee {int} in the response is {string}', (skill
 });
 
 Then('the total number of employees in the system is {int}', (result) => {
-    shared.context.employees.getAll().then(employees => {
+    shared.resolvers.employees.getAll().then(employees => {
         expect(employees.totalCount).to.equal(result);
     });
 });

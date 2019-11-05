@@ -4,6 +4,7 @@ Feature: Skill employees
     Scenario: Skill employees retrieval and count
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -26,6 +27,7 @@ Feature: Skill employees
     Scenario: Skill employees filtering by name
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -48,6 +50,7 @@ Feature: Skill employees
     Scenario: Skill employees ordering by name ascending
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -68,6 +71,7 @@ Feature: Skill employees
     Scenario: Skill employees ordering by name descending
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -88,6 +92,7 @@ Feature: Skill employees
     Scenario: Skill employees support skip argument
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -110,6 +115,7 @@ Feature: Skill employees
     Scenario: Skill employees support first argument
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {
@@ -132,6 +138,7 @@ Feature: Skill employees
     Scenario: Skill employees support pagination
         Given the defined GraphQL schema
         And the postgre repositories
+        And a user having "skills" permissions
         When I perform the query
             """
             {

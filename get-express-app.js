@@ -4,6 +4,7 @@ const jsonwebtoken = require('jsonwebtoken');
 const { Client } = require('pg');
 const getConfiguration = require('./configuration');
 const schema = require('./schema');
+const permissions = require('./permissions');
 
 const inMemoryRepositories = require('./repositories/in-memory');
 const postgreRepositories = require('./repositories/postgre');
@@ -52,21 +53,19 @@ const getExpressApp = (environmentConfig) => {
 				graphiql: true,
 				schema,
 			});
-			const employeePermissions = ['employees:read', 'employees:create', 'employees:delete', 'employees:update'];
-			const skillPermissions = ['skills:read', 'skills:create', 'skills:delete', 'skills:update'];
 
 			app.use(/\//, graphqlHttp((request, response) => {
 				// Bypassing authorization for demo purposes
 				return getGraphQLContext({
 					id: 'admin',
-					permissions: employeePermissions.concat(skillPermissions),
+					permissions: permissions.all,
 				});	
 			}));
 
-			const credentialsMiddleware = (userId, permissionsSets) => (request, response, next) => {
+			const credentialsMiddleware = (userId, permissionsSet) => (request, response, next) => {
 				const user = {
 					id: userId,
-					permissions: permissionsSets
+					permissions: permissionsSet
 				};
 				const token = jsonwebtoken.sign(user, config.JWT_SECRET, { expiresIn: '3h' });
 				return response.json({
@@ -77,9 +76,9 @@ const getExpressApp = (environmentConfig) => {
 
 			// Instead of this endpoint, we would have a single /login endpoint performing real authentication
 			app.use('/nobody-token', credentialsMiddleware('nobody', []));
-			app.use('/employees-token', credentialsMiddleware('employee', employeePermissions));
-			app.use('/skills-token', credentialsMiddleware('skill', skillPermissions));
-			app.use('/admin-token', credentialsMiddleware('admin', employeePermissions.concat(skillPermissions)));
+			app.use('/employees-token', credentialsMiddleware('employee', permissions.employees));
+			app.use('/skills-token', credentialsMiddleware('skill', permissions.skills));
+			app.use('/admin-token', credentialsMiddleware('admin', permissions.all));
 
 			app.use('/auth', graphqlHttp((request, response) => {
 				// Allow access to graphiql
@@ -105,7 +104,7 @@ const getExpressApp = (environmentConfig) => {
 		});
 };
 
-// TODO Fix tests after user permissions
+// TODO Test user with no permissions
 // TODO Typescript
 // TODO prettier + lint
 // TODO Multiple orderBy is not supported
