@@ -1,4 +1,4 @@
-const employeesService = (repositories) => {
+const employeesResolver = (repositories) => {
 	const create = employeeData => {
 		return repositories.employees.add(employeeData.name)
 		.then(employee => {
@@ -77,4 +77,4 @@ const employeesService = (repositories) => {
 	};
 };
 
-module.exports = employeesService;
+module.exports = employeesResolver;

@@ -1,5 +1,5 @@
-const employeesService = require('./employees-service');
-const skillsService = require('./skills-service');
+const employeesResolver = require('./employees-resolver');
+const skillsResolver = require('./skills-resolver');
 
 const ensurePermission = (user, permission) => { 
     const hasPermission = user && user.permissions && user.permissions.indexOf(permission) > -1;
@@ -10,9 +10,9 @@ const ensurePermission = (user, permission) => {
 };
 
 const contextFactory = (repositories) => ({
-    employees: employeesService(repositories),
+    employees: employeesResolver(repositories),
     ensurePermission,
-    skills: skillsService(repositories)
+    skills: skillsResolver(repositories)
 });
 
 module.exports = contextFactory;

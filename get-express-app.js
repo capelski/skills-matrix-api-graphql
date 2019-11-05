@@ -105,7 +105,6 @@ const getExpressApp = (environmentConfig) => {
 		});
 };
 
-// TODO Rename services to resolvers
 // TODO Typescript
 // TODO prettier + lint
 // TODO Multiple orderBy is not supported

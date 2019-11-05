@@ -1,4 +1,4 @@
-const skillsService = (repositories) => {
+const skillsResolver = (repositories) => {
 	const create = skillData => {
 		return repositories.skills.add(skillData.name)
 		.then(skill => {
@@ -77,4 +77,4 @@ const skillsService = (repositories) => {
 	};
 };
 
-module.exports = skillsService;
+module.exports = skillsResolver;
