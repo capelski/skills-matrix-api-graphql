@@ -1,5 +1,6 @@
 const alasql = require('alasql');
-const { Given, When } = require('cucumber');
+const { expect } = require('chai');
+const { Given, When, Then } = require('cucumber');
 const { graphql } = require('graphql');
 const permissions = require('../../permissions');
 const contextFactory = require('../../context');
@@ -110,7 +111,23 @@ Given('a user having {string} permissions', (permissionSet) => {
     };
 });
 
+Given('a user without permissions', () => {
+    shared.user = {
+        id: 'user',
+        permissions: [],
+    };
+});
+
 When(/I perform the query$/, async (query) => {
     shared.context = contextFactory(shared.repositories, shared.user);
     shared.queryResult = await graphql(shared.schema, query, undefined, shared.context);
+});
+
+Then('an error is returned', () => {
+    expect(shared.queryResult.errors).to.length(1);
+});
+
+Then('the error message contains {string}', (errorContent) => {
+    const error = shared.queryResult.errors[0];
+    expect(error.message).to.contain(errorContent);
 });

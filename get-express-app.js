@@ -100,7 +100,6 @@ const getExpressApp = (environmentConfig) => {
 		});
 };
 
-// TODO Test user with no permissions
 // TODO Typescript
 // TODO prettier + lint
 // TODO Multiple orderBy is not supported
