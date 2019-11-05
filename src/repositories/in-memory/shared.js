@@ -1,4 +1,4 @@
-const filterItemsByName = (name) => (items) => {
+const filterItemsByName = name => items => {
     if (name) {
         name = name.toLowerCase();
         items = items.filter(x => x.name.toLowerCase().indexOf(name) > -1);

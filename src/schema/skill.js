@@ -23,14 +23,20 @@ const skillType = new GraphQLObjectType({
                 },
                 resolve: (object, args, context) => {
                     context.ensurePermission(context.user, 'skills:read');
-                    return context.skills.getSkillEmployees(object.id, args.filter, args.skip, args.first, args.orderBy);
+                    return context.skills.getSkillEmployees(
+                        object.id,
+                        args.filter,
+                        args.skip,
+                        args.first,
+                        args.orderBy
+                    );
                 }
             },
             id: {
-                type: GraphQLInt,
+                type: GraphQLInt
             },
             name: {
-                type: new GraphQLNonNull(GraphQLString),
+                type: new GraphQLNonNull(GraphQLString)
             }
         };
     }
@@ -69,7 +75,6 @@ const skillOrderByType = new GraphQLInputObjectType({
     }
 });
 
-
 const skillEmployeeOrderByType = new GraphQLInputObjectType({
     name: 'SkillEmployeeOrderBy',
     fields: {
@@ -93,7 +98,7 @@ const skillQueryField = {
             context.ensurePermission(context.user, 'skills:read');
             return context.skills.getById(args.filter.id).then(skill => ({
                 items: [skill],
-                totalCount: 1,
+                totalCount: 1
             }));
         } else {
             context.ensurePermission(context.user, 'skills:read');
@@ -116,7 +121,7 @@ const addSkill = {
     args: {
         input: { type: addSkillInputType }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'skills:create');
         return context.skills.create(args.input);
     }
@@ -128,7 +133,7 @@ const removeSkill = {
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'skills:delete');
         return context.skills.remove(args.input);
     }
@@ -149,7 +154,7 @@ const updateSkill = {
     args: {
         input: { type: updateSkillInputType }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'skills:update');
         return context.skills.update(args.input);
     }

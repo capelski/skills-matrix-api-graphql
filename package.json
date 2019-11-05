@@ -4,6 +4,8 @@
     "description": "Skills matrix application GraphQL web api",
     "main": "index.js",
     "scripts": {
+        "prettier:check": "prettier --list-different \"src/**/*.js\"",
+        "prettier:write": "prettier --write \"src/**/*.js\"",
         "start": "node index.js",
         "start:dev": "nodemon --exec node index.js",
         "test": "cucumber-js"
@@ -22,10 +24,12 @@
         "chai": "^4.2.0",
         "cucumber": "^6.0.2",
         "husky": "^3.0.9",
-        "nodemon": "^1.19.2"
+        "nodemon": "^1.19.2",
+        "prettier": "^1.18.2"
     },
     "husky": {
         "hooks": {
+            "pre-commit": "npm run prettier:check",
             "pre-push": "npm test"
         }
     }

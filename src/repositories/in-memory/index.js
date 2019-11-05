@@ -13,6 +13,6 @@ const getRepositories = () => {
     repositories.skills = skillsRepositoryFactory(repositories);
 
     return repositories;
-}
+};
 
 module.exports = getRepositories;

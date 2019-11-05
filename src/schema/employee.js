@@ -14,10 +14,10 @@ const employeeType = new GraphQLObjectType({
         const { skillType } = require('./skill');
         return {
             id: {
-                type: GraphQLInt,
+                type: GraphQLInt
             },
             name: {
-                type: new GraphQLNonNull(GraphQLString),
+                type: new GraphQLNonNull(GraphQLString)
             },
             skills: {
                 type: definePagedListType(skillType, 'EmployeeSkillsPagedList'),
@@ -29,7 +29,13 @@ const employeeType = new GraphQLObjectType({
                 },
                 resolve: (object, args, context) => {
                     context.ensurePermission(context.user, 'employees:read');
-                    return context.employees.getEmployeeSkills(object.id, args.filter, args.skip, args.first, args.orderBy);
+                    return context.employees.getEmployeeSkills(
+                        object.id,
+                        args.filter,
+                        args.skip,
+                        args.first,
+                        args.orderBy
+                    );
                 }
             }
         };
@@ -115,7 +121,7 @@ const addEmployee = {
     args: {
         input: { type: addEmployeeInputType }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'employees:create');
         return context.employees.create(args.input);
     }
@@ -127,7 +133,7 @@ const removeEmployee = {
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'employees:delete');
         return context.employees.remove(args.input);
     }
@@ -148,7 +154,7 @@ const updateEmployee = {
     args: {
         input: { type: updateEmployeeInputType }
     },
-    resolve: function (object, args, context) {
+    resolve: function(object, args, context) {
         context.ensurePermission(context.user, 'employees:update');
         return context.employees.update(args.input);
     }

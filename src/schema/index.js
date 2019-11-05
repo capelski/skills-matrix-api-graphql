@@ -1,7 +1,4 @@
-const {
-    GraphQLObjectType,
-    GraphQLSchema
-} = require('graphql');
+const { GraphQLObjectType, GraphQLSchema } = require('graphql');
 const { employeeQueryField, employeeMutations } = require('./employee');
 const { skillQueryField, skillMutations } = require('./skill');
 
@@ -23,13 +20,13 @@ const rootMutationType = new GraphQLObjectType({
         removeEmployee: employeeMutations.remove,
         removeSkill: skillMutations.remove,
         updateEmployee: employeeMutations.update,
-        updateSkill: skillMutations.update,
+        updateSkill: skillMutations.update
     }
 });
 
 const schema = new GraphQLSchema({
     query: rootQueryType,
-    mutation: rootMutationType,
+    mutation: rootMutationType
 });
 
 module.exports = schema;
