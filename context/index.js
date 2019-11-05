@@ -9,10 +9,11 @@ const ensurePermission = (user, permission) => {
     }
 };
 
-const contextFactory = (repositories) => ({
+const contextFactory = (repositories, user) => ({
     employees: employeesResolver(repositories),
     ensurePermission,
-    skills: skillsResolver(repositories)
+    skills: skillsResolver(repositories),
+    user
 });
 
 module.exports = contextFactory;

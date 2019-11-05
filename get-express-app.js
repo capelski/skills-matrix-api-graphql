@@ -8,7 +8,7 @@ const permissions = require('./permissions');
 
 const inMemoryRepositories = require('./repositories/in-memory');
 const postgreRepositories = require('./repositories/postgre');
-const context = require('./context');
+const contextFactory = require('./context');
 
 const decodeJsonWebToken = (encodedToken, secret, options) => {
 	return new Promise((resolve, reject) => {
@@ -44,12 +44,8 @@ const getExpressApp = (environmentConfig) => {
 		})
 		.then(repositories => {
 			const app = express();
-			const contextInstance = context(repositories);
 			const getGraphQLContext = (user) => ({
-				context: {
-					...contextInstance,
-					user
-				},
+				context: contextFactory(repositories, user),
 				graphiql: true,
 				schema,
 			});

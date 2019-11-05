@@ -1,8 +1,12 @@
+const alasql = require('alasql');
 const { Given, When } = require('cucumber');
 const { graphql } = require('graphql');
-const shared = require('./shared');
-const alasql = require('alasql');
 const permissions = require('../../permissions');
+const contextFactory = require('../../context');
+const inMemoryRepositories = require('../../repositories/in-memory');
+const postgreRepositories = require('../../repositories/postgre');
+const schema = require('../../schema');
+const shared = require('./shared');
 
 const employees = require('../../repositories/postgre/alasql/employees.json');
 const skills = require('../../repositories/postgre/alasql/skills.json');
@@ -53,12 +57,11 @@ const replaceSequencesOperators = (sql) => {
 };
 
 Given('the defined GraphQL schema', () => {
-    shared.schema = require('../../schema');
+    shared.schema = schema;
 });
 
 Given('the in-memory repositories', () => {
-    const repositories = require('../../repositories/in-memory')();
-    shared.resolvers = require('../../context')(repositories);
+    shared.repositories = inMemoryRepositories();
 });
 
 Given('the postgre repositories', () => {
@@ -96,8 +99,7 @@ Given('the postgre repositories', () => {
                 }
             };
 
-            const repositories = require('../../repositories/postgre')(alasqlClient);
-            shared.resolvers = require('../../context')(repositories);
+            shared.repositories = postgreRepositories(alasqlClient);
         });
 });
 
@@ -109,8 +111,6 @@ Given('a user having {string} permissions', (permissionSet) => {
 });
 
 When(/I perform the query$/, async (query) => {
-    shared.queryResult = await graphql(shared.schema, query, undefined, {
-        ...shared.resolvers,
-        user: shared.user
-    });
+    shared.context = contextFactory(shared.repositories, shared.user);
+    shared.queryResult = await graphql(shared.schema, query, undefined, shared.context);
 });

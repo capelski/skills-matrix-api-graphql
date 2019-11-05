@@ -1,6 +1,7 @@
 const shared = {
+    context: undefined,
     queryResult: undefined,
-    resolvers: undefined,
+    repositories: undefined,
     schema: undefined,
     user: undefined,
 };
