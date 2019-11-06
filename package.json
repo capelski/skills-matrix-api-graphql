@@ -2,12 +2,13 @@
     "name": "skills-matrix-api-graphql",
     "version": "1.0.0",
     "description": "Skills matrix application GraphQL web api",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
+        "build": "tsc",
         "prettier:check": "prettier --list-different \"src/**/*.js\"",
         "prettier:write": "prettier --write \"src/**/*.js\"",
-        "start": "node index.js",
-        "start:dev": "nodemon --exec node index.js",
+        "start": "node dist/index.js",
+        "start:dev": "nodemon --exec ts-node src/index.ts",
         "test": "cucumber-js"
     },
     "author": "Carles Capellas <capellas.carles@gmail.com>",
@@ -20,12 +21,17 @@
         "pg": "^7.12.1"
     },
     "devDependencies": {
+        "@types/express": "^4.17.2",
+        "@types/jsonwebtoken": "^8.3.5",
+        "@types/pg": "^7.11.2",
         "alasql": "^0.5.1",
         "chai": "^4.2.0",
         "cucumber": "^6.0.2",
         "husky": "^3.0.9",
         "nodemon": "^1.19.2",
-        "prettier": "^1.18.2"
+        "prettier": "^1.18.2",
+        "ts-node": "^8.4.1",
+        "typescript": "^3.7.2"
     },
     "husky": {
         "hooks": {

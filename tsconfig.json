@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "declaration": true,
+        "esModuleInterop": true,
+        "lib": ["dom", "es2017", "esnext.asynciterable"],
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "outDir": "dist",
+        "strictNullChecks": true,
+        "target": "es2015"
+    },
+    "include": ["src"]
+}

@@ -1,28 +1,27 @@
-const express = require('express');
-const graphqlHttp = require('express-graphql');
-const jsonwebtoken = require('jsonwebtoken');
-const { Client } = require('pg');
-const getConfiguration = require('./configuration');
-const permissions = require('./permissions');
-const schema = require('./src/schema');
+import express from 'express';
+import graphqlHttp from 'express-graphql';
+import jsonwebtoken from 'jsonwebtoken';
+import { Client } from 'pg';
+import { Configuration, getConfiguration } from './configuration';
+import contextFactory from './context';
+import permissions, { User } from './permissions';
+import inMemoryRepositories from './repositories/in-memory';
+import postgreRepositories from './repositories/postgre';
+import schema from './schema';
 
-const inMemoryRepositories = require('./src/repositories/in-memory');
-const postgreRepositories = require('./src/repositories/postgre');
-const contextFactory = require('./src/context');
-
-const decodeJsonWebToken = (encodedToken, secret, options) => {
+const decodeJsonWebToken = (encodedToken: string, secret: string): Promise<User> => {
     return new Promise((resolve, reject) => {
-        jsonwebtoken.verify(encodedToken, secret, options, (error, decodedToken) => {
+        jsonwebtoken.verify(encodedToken, secret, undefined, (error, decodedToken) => {
             if (error) {
                 reject(error);
             } else {
-                resolve(decodedToken);
+                resolve(decodedToken as User);
             }
         });
     });
 };
 
-const getExpressApp = environmentConfig => {
+export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) => {
     const config = getConfiguration(environmentConfig);
     const postgreClient = new Client({
         database: config.DB_NAME,
@@ -45,7 +44,11 @@ const getExpressApp = environmentConfig => {
         })
         .then(repositories => {
             const app = express();
-            const getGraphQLContext = user => ({
+            const adminUser: User = {
+                id: 'admin',
+                permissions: permissions.all
+            };
+            const getGraphQLContext = (user: User) => ({
                 context: contextFactory(repositories, user),
                 graphiql: true,
                 schema
@@ -55,14 +58,15 @@ const getExpressApp = environmentConfig => {
                 /\//,
                 graphqlHttp((request, response) => {
                     // Bypassing authorization for demo purposes
-                    return getGraphQLContext({
-                        id: 'admin',
-                        permissions: permissions.all
-                    });
+                    return getGraphQLContext(adminUser);
                 })
             );
 
-            const credentialsMiddleware = (userId, permissionsSet) => (request, response, next) => {
+            const credentialsMiddleware = (userId: string, permissionsSet: string[]) => (
+                request: express.Request,
+                response: express.Response,
+                next: express.NextFunction
+            ) => {
                 const user = {
                     id: userId,
                     permissions: permissionsSet
@@ -85,11 +89,12 @@ const getExpressApp = environmentConfig => {
                 graphqlHttp((request, response) => {
                     // Allow access to graphiql
                     if (request.method === 'GET') {
-                        return getGraphQLContext();
+                        return getGraphQLContext(adminUser);
                     } else {
                         const authorizationToken = request.headers['authorization'];
                         if (!authorizationToken) {
-                            return response
+                            // TODO Remove any cast
+                            return (response as any)
                                 .status(401)
                                 .json({ errorMessage: 'Authorization token required' });
                         }
@@ -102,7 +107,8 @@ const getExpressApp = environmentConfig => {
                                 })
                             )
                             .catch(() =>
-                                response
+                                // TODO Remove any cast
+                                (response as any)
                                     .status(401)
                                     .send({ errorMessage: 'Invalid authorization token' })
                             );
@@ -114,8 +120,6 @@ const getExpressApp = environmentConfig => {
         });
 };
 
-// TODO Typescript
-// TODO prettier + lint
+// TODO Typescript migration
+// TODO tslint
 // TODO Multiple orderBy is not supported
-
-module.exports = getExpressApp;
