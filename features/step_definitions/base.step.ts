@@ -1,14 +1,15 @@
-const alasql = require('alasql');
-const { expect } = require('chai');
-const { Given, When, Then } = require('cucumber');
-const { graphql } = require('graphql');
-const permissions = require('../../permissions');
-const contextFactory = require('../../src/context');
-const inMemoryRepositories = require('../../src/repositories/in-memory');
-const postgreRepositories = require('../../src/repositories/postgre');
-const schema = require('../../src/schema');
-const shared = require('./shared');
+import alasql from 'alasql';
+import { expect } from 'chai';
+import { Given, When, Then } from 'cucumber';
+import { graphql } from 'graphql';
+import permissions from '../../src/permissions';
+import contextFactory from '../../src/context';
+import inMemoryRepositories from '../../src/repositories/in-memory';
+import postgreRepositories from '../../src/repositories/postgre';
+import schema from '../../src/schema';
+import { cucumberContext } from './cucumber-context';
 
+// TODO Allow importing JSON
 const employees = require('../../src/repositories/postgre/alasql/employees.json');
 const skills = require('../../src/repositories/postgre/alasql/skills.json');
 const employees_skills = require('../../src/repositories/postgre/alasql/employees-skills.json');
@@ -30,12 +31,13 @@ CREATE TABLE IF NOT EXISTS employee_skill (
 );`);
 
 const populateTables = () => {
-    alasql.tables.employee.data = employees.map(e => ({ ...e }));
-    alasql.tables.skill.data = skills.map(e => ({ ...e }));
-    alasql.tables.employee_skill.data = employees_skills.map(e_s => ({ ...e_s }));
+    // TODO Remove any cast
+    (alasql as any).tables.employee.data = employees.map((e: any) => ({ ...e }));
+    (alasql as any).tables.skill.data = skills.map((e: any) => ({ ...e }));
+    (alasql as any).tables.employee_skill.data = employees_skills.map((e_s: any) => ({ ...e_s }));
 };
 
-const replaceQueryParameters = (sql, parameters) => {
+const replaceQueryParameters = (sql: string, parameters: string[]) => {
     // alasql doesn't support parametrized queries. We need to replace the values
     return parameters
         ? parameters.reduce((reduced, next, index) => {
@@ -47,7 +49,7 @@ const replaceQueryParameters = (sql, parameters) => {
         : sql;
 };
 
-const fixOrderByCount = sql => {
+const fixOrderByCount = (sql: string) => {
     // alasql returns an incorrect data set when ordering by a COUNT() if
     // the COUNT() is not present in the SELECT
     const hasOrderByCount = sql.match(/ORDER BY COUNT\((.*)\)/);
@@ -57,18 +59,18 @@ const fixOrderByCount = sql => {
     return sql;
 };
 
-const replaceSequencesOperators = sql => {
+const replaceSequencesOperators = (sql: string) => {
     // alasql doesn't support postgreSql nextval and currval
-    const nextId = 98;
+    const nextId = String(98);
     return sql.replace(/nextval\([^\)]*\)/, nextId).replace(/currval\([^\)]*\)/, nextId);
 };
 
 Given('the defined GraphQL schema', () => {
-    shared.schema = schema;
+    cucumberContext.schema = schema;
 });
 
 Given('the in-memory repositories', () => {
-    shared.repositories = inMemoryRepositories();
+    cucumberContext.repositories = inMemoryRepositories();
 });
 
 Given('the postgre repositories', () => {
@@ -76,7 +78,7 @@ Given('the postgre repositories', () => {
         .then(populateTables)
         .then(() => {
             const alasqlClient = {
-                query: (sql, parameters) => {
+                query: (sql: string, parameters: string[]) => {
                     sql = replaceQueryParameters(sql, parameters);
                     sql = fixOrderByCount(sql);
                     sql = replaceSequencesOperators(sql);
@@ -109,34 +111,41 @@ Given('the postgre repositories', () => {
                 }
             };
 
-            shared.repositories = postgreRepositories(alasqlClient);
+            cucumberContext.repositories = postgreRepositories(alasqlClient);
         });
 });
 
-Given('a user having {string} permissions', permissionSet => {
-    shared.user = {
+Given('a user having {string} permissions', (permissionSet: string) => {
+    cucumberContext.user = {
         id: 'user',
-        permissions: permissions[permissionSet]
+        // TODO Improve the solution
+        permissions: (permissions as any)[permissionSet]
     };
 });
 
 Given('a user without permissions', () => {
-    shared.user = {
+    cucumberContext.user = {
         id: 'user',
         permissions: []
     };
 });
 
+// TODO Add types to Cucumber parameters
 When(/I perform the query$/, async query => {
-    shared.context = contextFactory(shared.repositories, shared.user);
-    shared.queryResult = await graphql(shared.schema, query, undefined, shared.context);
+    cucumberContext.context = contextFactory(cucumberContext.repositories, cucumberContext.user);
+    cucumberContext.queryResult = await graphql(
+        cucumberContext.schema,
+        query,
+        undefined,
+        cucumberContext.context
+    );
 });
 
 Then('an error is returned', () => {
-    expect(shared.queryResult.errors).to.length(1);
+    expect(cucumberContext.queryResult.errors).to.length(1);
 });
 
 Then('the error message contains {string}', errorContent => {
-    const error = shared.queryResult.errors[0];
+    const error = cucumberContext.queryResult.errors[0];
     expect(error.message).to.contain(errorContent);
 });

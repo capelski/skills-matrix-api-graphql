@@ -13,5 +13,5 @@
         "strictNullChecks": true,
         "target": "es2015"
     },
-    "include": ["src"]
+    "include": ["src", "features"]
 }
