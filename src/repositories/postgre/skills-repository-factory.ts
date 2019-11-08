@@ -1,5 +1,8 @@
-const skillsRepositoryFactory = postgreClient => {
-    const add = name => {
+import { Client } from 'pg';
+import { SkillFilter, SkillOrderBy } from '..';
+
+export default (postgreClient: Client) => {
+    const add = (name: string) => {
         const insertQuery = `INSERT INTO skill(id, name) VALUES (nextval('skill_id_sequence'), $1)`;
         const insertParameters = [name];
 
@@ -12,7 +15,7 @@ const skillsRepositoryFactory = postgreClient => {
             .then(result => result.rows[0]);
     };
 
-    const countAll = filter => {
+    const countAll = (filter?: SkillFilter) => {
         let query = 'SELECT COUNT(*) FROM skill';
         const parameters = [];
         if (filter && filter.name) {
@@ -22,7 +25,7 @@ const skillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows[0].count);
     };
 
-    const getAll = (skip = 0, first = 10, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: SkillFilter, orderBy?: SkillOrderBy) => {
         let query = 'SELECT skill.id, skill.name FROM skill';
         const parameters = [];
         if (orderBy && orderBy.employees) {
@@ -52,12 +55,12 @@ const skillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows);
     };
 
-    const getById = id => {
+    const getById = (id: number) => {
         let query = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
         return postgreClient.query(query, [id]).then(result => result.rows[0]);
     };
 
-    const remove = id => {
+    const remove = (id: number) => {
         const selectQuery = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
         const parameters = [id];
 
@@ -70,7 +73,7 @@ const skillsRepositoryFactory = postgreClient => {
         });
     };
 
-    const update = (id, name) => {
+    const update = (id: number, name: string) => {
         const updateQuery = 'UPDATE skill SET name = $1 WHERE id = $2';
         const updateParameters = [name, id];
 
@@ -93,5 +96,3 @@ const skillsRepositoryFactory = postgreClient => {
         update
     };
 };
-
-module.exports = skillsRepositoryFactory;

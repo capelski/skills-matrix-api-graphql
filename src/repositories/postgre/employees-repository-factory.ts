@@ -1,5 +1,8 @@
-const employeesRepositoryFactory = postgreClient => {
-    const add = name => {
+import { Client } from 'pg';
+import { EmployeesRepository, EmployeeFilter, EmployeeOrderBy } from '..';
+
+export default (postgreClient: Client): EmployeesRepository => {
+    const add = (name: string) => {
         const insertQuery = `INSERT INTO employee(id, name) VALUES (nextval('employee_id_sequence'), $1)`;
         const insertParameters = [name];
 
@@ -12,7 +15,7 @@ const employeesRepositoryFactory = postgreClient => {
             .then(result => result.rows[0]);
     };
 
-    const countAll = filter => {
+    const countAll = (filter?: EmployeeFilter) => {
         let query = 'SELECT COUNT(*) FROM employee';
         const parameters = [];
         if (filter && filter.name) {
@@ -22,7 +25,7 @@ const employeesRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows[0].count);
     };
 
-    const getAll = (skip = 0, first = 10, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: EmployeeFilter, orderBy?: EmployeeOrderBy) => {
         let query = 'SELECT employee.id, employee.name FROM employee';
         const parameters = [];
         if (orderBy && orderBy.skills) {
@@ -52,12 +55,12 @@ const employeesRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows);
     };
 
-    const getById = id => {
+    const getById = (id: number) => {
         let query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
         return postgreClient.query(query, [id]).then(result => result.rows[0]);
     };
 
-    const remove = id => {
+    const remove = (id: number) => {
         const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
         const parameters = [id];
 
@@ -70,7 +73,7 @@ const employeesRepositoryFactory = postgreClient => {
         });
     };
 
-    const update = (id, name) => {
+    const update = (id: number, name: string) => {
         const updateQuery = 'UPDATE employee SET name = $1 WHERE id = $2';
         const updateParameters = [name, id];
 
@@ -94,5 +97,3 @@ const employeesRepositoryFactory = postgreClient => {
         update
     };
 };
-
-module.exports = employeesRepositoryFactory;

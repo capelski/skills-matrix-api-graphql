@@ -1,5 +1,15 @@
-const employeesSkillsRepositoryFactory = postgreClient => {
-    const add = ({ employeeId, skillId }) => {
+import { Client } from 'pg';
+import {
+    EmployeeFilter,
+    SkillFilter,
+    EmployeeOrderBy,
+    EmployeeSkill,
+    SkillOrderBy,
+    EmployeesSkillsRepositories
+} from '..';
+
+export default (postgreClient: Client): EmployeesSkillsRepositories => {
+    const add = ({ employeeId, skillId }: EmployeeSkill) => {
         const insertQuery = 'INSERT INTO employee_skill(employee_id, skill_id) VALUES ($1, $2)';
         const parameters = [employeeId, skillId];
 
@@ -13,11 +23,11 @@ const employeesSkillsRepositoryFactory = postgreClient => {
             .then(result => result.rows[0]);
     };
 
-    const countByEmployeeId = (employeeId, filter) => {
+    const countByEmployeeId = (employeeId: number, filter?: EmployeeFilter) => {
         let query = `SELECT COUNT(*) FROM skill
 		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
 		WHERE employee_skill.employee_id = $1`;
-        const parameters = [employeeId];
+        const parameters: (string | number)[] = [employeeId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(skill.name) LIKE $2`;
@@ -26,11 +36,11 @@ const employeesSkillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows[0].count);
     };
 
-    const countBySkillId = (skillId, filter) => {
+    const countBySkillId = (skillId: number, filter?: SkillFilter) => {
         let query = `SELECT COUNT(*) FROM employee
 		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
 		WHERE employee_skill.skill_id = $1`;
-        const parameters = [skillId];
+        const parameters: (string | number)[] = [skillId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(employee.name) LIKE $2`;
@@ -39,11 +49,17 @@ const employeesSkillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows[0].count);
     };
 
-    const getByEmployeeId = (employeeId, skip = 0, first = 10, filter, orderBy) => {
+    const getByEmployeeId = (
+        employeeId: number,
+        skip = 0,
+        first = 10,
+        filter?: SkillFilter,
+        orderBy?: SkillOrderBy
+    ) => {
         let query = `SELECT skill.id, skill.name FROM skill
 		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
 		WHERE employee_skill.employee_id = $1`;
-        const parameters = [employeeId];
+        const parameters: (string | number)[] = [employeeId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(skill.name) LIKE $${parameters.length}`;
@@ -59,11 +75,17 @@ const employeesSkillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows);
     };
 
-    const getBySkillId = (skillId, skip = 0, first = 10, filter, orderBy) => {
+    const getBySkillId = (
+        skillId: number,
+        skip = 0,
+        first = 10,
+        filter?: EmployeeFilter,
+        orderBy?: EmployeeOrderBy
+    ) => {
         let query = `SELECT employee.id, employee.name FROM employee
 		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
 		WHERE employee_skill.skill_id = $1`;
-        const parameters = [skillId];
+        const parameters: (string | number)[] = [skillId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(employee.name) LIKE $${parameters.length}`;
@@ -79,7 +101,7 @@ const employeesSkillsRepositoryFactory = postgreClient => {
         return postgreClient.query(query, parameters).then(result => result.rows);
     };
 
-    const removeByEmployeeId = employeeId => {
+    const removeByEmployeeId = (employeeId: number) => {
         const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.employee_id = $1`;
         const parameters = [employeeId];
 
@@ -89,10 +111,11 @@ const employeesSkillsRepositoryFactory = postgreClient => {
                 const deleteQuery = `DELETE FROM employee_skill WHERE employee_id = $1`;
                 return postgreClient.query(deleteQuery, parameters).then(() => rows);
             }
+            return rows;
         });
     };
 
-    const removeBySkillId = skillId => {
+    const removeBySkillId = (skillId: number) => {
         const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.skill_id = $1`;
         const parameters = [skillId];
 
@@ -102,6 +125,7 @@ const employeesSkillsRepositoryFactory = postgreClient => {
                 const deleteQuery = `DELETE FROM employee_skill WHERE skill_id = $1`;
                 return postgreClient.query(deleteQuery, parameters).then(() => rows);
             }
+            return rows;
         });
     };
 
@@ -115,5 +139,3 @@ const employeesSkillsRepositoryFactory = postgreClient => {
         removeBySkillId
     };
 };
-
-module.exports = employeesSkillsRepositoryFactory;

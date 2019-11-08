@@ -3,11 +3,12 @@ import { expect } from 'chai';
 import { Given, When, Then } from 'cucumber';
 import { graphql } from 'graphql';
 import permissions from '../../src/permissions';
-import contextFactory from '../../src/context';
+import { contextFactory } from '../../src/context';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
 import schema from '../../src/schema';
 import { cucumberContext } from './cucumber-context';
+import { Client } from 'pg';
 
 // TODO Allow importing JSON
 const employees = require('../../src/repositories/postgre/alasql/employees.json');
@@ -111,7 +112,7 @@ Given('the postgre repositories', () => {
                 }
             };
 
-            cucumberContext.repositories = postgreRepositories(alasqlClient);
+            cucumberContext.repositories = postgreRepositories(alasqlClient as Client);
         });
 });
 
@@ -132,7 +133,7 @@ Given('a user without permissions', () => {
 
 // TODO Add types to Cucumber parameters
 When(/I perform the query$/, async query => {
-    cucumberContext.context = contextFactory(cucumberContext.repositories, cucumberContext.user);
+    cucumberContext.context = contextFactory(cucumberContext.repositories, cucumberContext.user!);
     cucumberContext.queryResult = await graphql(
         cucumberContext.schema,
         query,
