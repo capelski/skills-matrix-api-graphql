@@ -1,10 +1,11 @@
-const { filterItemsByName, sortByProperty } = require('./shared');
+import { Repositories, Employee, EmployeeFilter, EmployeeOrderBy, EmployeesRepository } from '..';
+import { filterItemsByName, sortByProperty } from './shared';
 
-const employeesRepositoryFactory = repositories => {
-    const source = require('./data/employees.json').map(e => ({ ...e }));
+export default (repositories: Repositories): EmployeesRepository => {
+    const source: Employee[] = require('./data/employees.json').map((e: any) => ({ ...e }));
     let nextEmployeeId = source.length + 1;
 
-    const add = name => {
+    const add = (name: string) => {
         return Promise.resolve(source).then(employees => {
             const employee = { id: nextEmployeeId++, name };
             employees.push(employee);
@@ -12,13 +13,13 @@ const employeesRepositoryFactory = repositories => {
         });
     };
 
-    const countAll = filter => {
+    const countAll = (filter?: EmployeeFilter) => {
         return Promise.resolve(source)
             .then(filterItemsByName(filter && filter.name))
             .then(filteredEmployees => filteredEmployees.length);
     };
 
-    const getAll = (skip = 0, first = 10, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: EmployeeFilter, orderBy?: EmployeeOrderBy) => {
         return Promise.resolve(source)
             .then(filterItemsByName(filter && filter.name))
             .then(filteredEmployees => {
@@ -31,7 +32,7 @@ const employeesRepositoryFactory = repositories => {
                                 filteredEmployees.sort(
                                     sortByProperty(
                                         'skillsCount',
-                                        orderBy.skills,
+                                        orderBy.skills!,
                                         sortByProperty('name', 1)
                                     )
                                 )
@@ -44,7 +45,7 @@ const employeesRepositoryFactory = repositories => {
             .then(selectedEmployees => selectedEmployees.map(e => ({ ...e })));
     };
 
-    const getById = id =>
+    const getById = (id: number) =>
         Promise.resolve(source)
             .then(employees => employees.find(e => e.id === id))
             .then(employee => {
@@ -53,13 +54,17 @@ const employeesRepositoryFactory = repositories => {
                 }
             });
 
-    const loadEmployeeSkillsCount = employee =>
+    const loadEmployeeSkillsCount = (
+        employee: Employee
+    ): Promise<Employee & { skillsCount: number }> =>
         repositories.employeesSkills.countByEmployeeId(employee.id).then(employeeSkillsCount => {
-            employee.skillsCount = employeeSkillsCount;
-            return employee;
+            return {
+                ...employee,
+                skillsCount: employeeSkillsCount
+            };
         });
 
-    const remove = id => {
+    const remove = (id: number) => {
         return Promise.resolve(source).then(employees => {
             const employeeIndex = employees.findIndex(e => e.id === id);
             if (employeeIndex > -1) {
@@ -68,7 +73,7 @@ const employeesRepositoryFactory = repositories => {
         });
     };
 
-    const update = (id, name) => {
+    const update = (id: number, name: string) => {
         return Promise.resolve(source)
             .then(employees => employees.find(e => e.id === id))
             .then(employee => {
@@ -88,5 +93,3 @@ const employeesRepositoryFactory = repositories => {
         update
     };
 };
-
-module.exports = employeesRepositoryFactory;

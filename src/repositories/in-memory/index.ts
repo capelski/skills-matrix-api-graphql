@@ -1,9 +1,10 @@
-const employeesRepositoryFactory = require('./employees-repository-factory');
-const employeesSkillsRepositoryFactory = require('./employees-skills-repository-factory');
-const skillsRepositoryFactory = require('./skills-repository-factory');
+import { Repositories } from '..';
+import employeesRepositoryFactory from './employees-repository-factory';
+import employeesSkillsRepositoryFactory from './employees-skills-repository-factory';
+import skillsRepositoryFactory from './skills-repository-factory';
 
-const getRepositories = () => {
-    const repositories = {};
+export default (): Repositories => {
+    const repositories = {} as Repositories;
 
     // Instantiating repositories from the index to resolve cyclic dependencies.
     // This approach is possible because employeesRepositoryFactory doesn't access
@@ -14,5 +15,3 @@ const getRepositories = () => {
 
     return repositories;
 };
-
-module.exports = getRepositories;

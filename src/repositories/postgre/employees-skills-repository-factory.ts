@@ -5,10 +5,10 @@ import {
     EmployeeOrderBy,
     EmployeeSkill,
     SkillOrderBy,
-    EmployeesSkillsRepositories
+    EmployeesSkillsRepository
 } from '..';
 
-export default (postgreClient: Client): EmployeesSkillsRepositories => {
+export default (postgreClient: Client): EmployeesSkillsRepository => {
     const add = ({ employeeId, skillId }: EmployeeSkill) => {
         const insertQuery = 'INSERT INTO employee_skill(employee_id, skill_id) VALUES ($1, $2)';
         const parameters = [employeeId, skillId];

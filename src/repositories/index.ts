@@ -22,9 +22,9 @@ export interface EmployeesRepository {
         filter?: EmployeeFilter,
         orderBy?: EmployeeOrderBy
     ) => Promise<Employee[]>;
-    getById: (id: number) => Promise<Employee>;
-    remove: (id: number) => Promise<Employee>;
-    update: (id: number, name: string) => Promise<Employee>;
+    getById: (id: number) => Promise<Employee | undefined>;
+    remove: (id: number) => Promise<Employee | undefined>;
+    update: (id: number, name: string) => Promise<Employee | undefined>;
 }
 
 export interface Skill {
@@ -51,9 +51,9 @@ export interface SkillsRepository {
         filter?: SkillFilter,
         orderBy?: SkillOrderBy
     ) => Promise<Skill[]>;
-    getById: (id: number) => Promise<Skill>;
-    remove: (id: number) => Promise<Skill>;
-    update: (id: number, name: string) => Promise<Skill>;
+    getById: (id: number) => Promise<Skill | undefined>;
+    remove: (id: number) => Promise<Skill | undefined>;
+    update: (id: number, name: string) => Promise<Skill | undefined>;
 }
 
 export interface EmployeeSkill {
@@ -61,11 +61,10 @@ export interface EmployeeSkill {
     skillId: number;
 }
 
-export interface EmployeesSkillsRepositories {
+export interface EmployeesSkillsRepository {
     add: (employeeSkill: EmployeeSkill) => Promise<EmployeeSkill>;
     countByEmployeeId: (employeeId: number, filter?: EmployeeFilter) => Promise<number>;
     countBySkillId: (skillId: number, filter?: SkillFilter) => Promise<number>;
-    // TODO Rename to getSkillsByEmployeeId
     getByEmployeeId: (
         employeeId: number,
         skip: number,
@@ -73,7 +72,6 @@ export interface EmployeesSkillsRepositories {
         filter?: SkillFilter,
         orderBy?: SkillOrderBy
     ) => Promise<Skill[]>;
-    // TODO Rename to getEmployeesBySkillId. Should be the service actually...
     getBySkillId: (
         skillId: number,
         skip: number,
@@ -87,6 +85,6 @@ export interface EmployeesSkillsRepositories {
 
 export interface Repositories {
     employees: EmployeesRepository;
-    employeesSkills: EmployeesSkillsRepositories;
+    employeesSkills: EmployeesSkillsRepository;
     skills: SkillsRepository;
 }

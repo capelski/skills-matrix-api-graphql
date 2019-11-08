@@ -1,10 +1,11 @@
-const { filterItemsByName, sortByProperty } = require('./shared');
+import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '..';
+import { filterItemsByName, sortByProperty } from './shared';
 
-const skillsRepositoryFactory = repositories => {
-    const source = require('./data/skills.json').map(s => ({ ...s }));
+export default (repositories: Repositories): SkillsRepository => {
+    const source: Skill[] = require('./data/skills.json').map((s: any) => ({ ...s }));
     let nextSkillId = source.length + 1;
 
-    const add = name => {
+    const add = (name: string) => {
         return Promise.resolve(source).then(skills => {
             const skill = { id: nextSkillId++, name };
             skills.push(skill);
@@ -12,13 +13,13 @@ const skillsRepositoryFactory = repositories => {
         });
     };
 
-    const countAll = filter => {
+    const countAll = (filter?: SkillFilter) => {
         return Promise.resolve(source)
             .then(filterItemsByName(filter && filter.name))
             .then(filteredSkills => filteredSkills.length);
     };
 
-    const getAll = (skip = 0, first = 10, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: SkillFilter, orderBy?: SkillOrderBy) => {
         return Promise.resolve(source)
             .then(filterItemsByName(filter && filter.name))
             .then(filteredSkills => {
@@ -31,8 +32,8 @@ const skillsRepositoryFactory = repositories => {
                                 filteredSkills.sort(
                                     sortByProperty(
                                         'employeesCount',
-                                        orderBy.employees,
-                                        sortByProperty('name', orderBy.name)
+                                        orderBy.employees!,
+                                        sortByProperty('name', 1)
                                     )
                                 )
                         );
@@ -44,7 +45,7 @@ const skillsRepositoryFactory = repositories => {
             .then(selectedSkills => selectedSkills.map(s => ({ ...s })));
     };
 
-    const getById = id =>
+    const getById = (id: number) =>
         Promise.resolve(source)
             .then(skills => skills.find(s => s.id === id))
             .then(skill => {
@@ -53,13 +54,15 @@ const skillsRepositoryFactory = repositories => {
                 }
             });
 
-    const loadSkillEmployeesCount = skill =>
+    const loadSkillEmployeesCount = (skill: Skill): Promise<Skill & { employeesCount: number }> =>
         repositories.employeesSkills.countBySkillId(skill.id).then(skillEmployeesCount => {
-            skill.employeesCount = skillEmployeesCount;
-            return skill;
+            return {
+                ...skill,
+                employeesCount: skillEmployeesCount
+            };
         });
 
-    const remove = id => {
+    const remove = (id: number) => {
         return Promise.resolve(source).then(skills => {
             const skillIndex = skills.findIndex(e => e.id === id);
             if (skillIndex > -1) {
@@ -68,7 +71,7 @@ const skillsRepositoryFactory = repositories => {
         });
     };
 
-    const update = (id, name) => {
+    const update = (id: number, name: string) => {
         return Promise.resolve(source)
             .then(skills => skills.find(s => s.id === id))
             .then(skill => {
@@ -88,5 +91,3 @@ const skillsRepositoryFactory = repositories => {
         update
     };
 };
-
-module.exports = skillsRepositoryFactory;
