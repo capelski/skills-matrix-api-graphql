@@ -2,18 +2,16 @@ import alasql from 'alasql';
 import { expect } from 'chai';
 import { Given, When, Then } from 'cucumber';
 import { graphql } from 'graphql';
-import permissions from '../../src/permissions';
+import { Client } from 'pg';
 import { contextFactory } from '../../src/context';
+import permissions from '../../src/permissions';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
+import employees from '../../src/repositories/postgre/alasql/employees.json';
+import skills from '../../src/repositories/postgre/alasql/skills.json';
+import employees_skills from '../../src/repositories/postgre/alasql/employees-skills.json';
 import schema from '../../src/schema';
 import { cucumberContext } from './cucumber-context';
-import { Client } from 'pg';
-
-// TODO Allow importing JSON
-const employees = require('../../src/repositories/postgre/alasql/employees.json');
-const skills = require('../../src/repositories/postgre/alasql/skills.json');
-const employees_skills = require('../../src/repositories/postgre/alasql/employees-skills.json');
 
 // TODO alasql raises exceptions when using UNIQUE, PRIMARY KEY and REFERENCES
 const createTables = () =>

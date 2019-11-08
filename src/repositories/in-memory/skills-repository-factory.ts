@@ -1,8 +1,9 @@
 import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '..';
+import skillsData from './data/skills.json';
 import { filterItemsByName, sortByProperty } from './shared';
 
 export default (repositories: Repositories): SkillsRepository => {
-    const source: Skill[] = require('./data/skills.json').map((s: any) => ({ ...s }));
+    const source: Skill[] = skillsData.map((s: any) => ({ ...s }));
     let nextSkillId = source.length + 1;
 
     const add = (name: string) => {

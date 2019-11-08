@@ -1,4 +1,3 @@
-import { sortByProperty } from './shared';
 import {
     EmployeeSkill,
     EmployeeFilter,
@@ -10,12 +9,14 @@ import {
     Skill,
     Employee
 } from '..';
+import employeesSkillsData from './data/employees-skills.json';
+import { sortByProperty } from './shared';
 
 const matchingEmployeeSkill = (employeeId: number, skillId: number) => (e_s: EmployeeSkill) =>
     e_s.skillId === skillId && e_s.employeeId === employeeId;
 
 export default (repositories: Repositories): EmployeesSkillsRepository => {
-    const source = [...require('./data/employees-skills.json')];
+    const source: EmployeeSkill[] = [...employeesSkillsData];
 
     const add = ({ employeeId, skillId }: EmployeeSkill) => {
         return Promise.resolve(source).then(employees_skills => {
@@ -121,7 +122,7 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
             .then(filteredEmployees => filteredEmployees.slice(skip, skip + first));
     };
 
-    const remove = ({ employeeId, skillId }: EmployeeSkill) => {
+    const remove = ({ employeeId, skillId }: EmployeeSkill): Promise<EmployeeSkill | undefined> => {
         return Promise.resolve(source).then(employees_skills => {
             const employeeSkillIndex = employees_skills.findIndex(
                 matchingEmployeeSkill(employeeId, skillId)
@@ -132,17 +133,21 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
         });
     };
 
-    const removeByEmployeeId = (employeeId: number) => {
+    const removeByEmployeeId = (employeeId: number): Promise<EmployeeSkill[]> => {
         return Promise.resolve(source).then(employees_skills => {
             const relations = employees_skills.filter(e_s => e_s.employeeId === employeeId);
-            return Promise.all(relations.map(remove));
+            return Promise.all(relations.map(remove)).then(
+                employeesSkills => employeesSkills.filter(Boolean) as EmployeeSkill[]
+            );
         });
     };
 
-    const removeBySkillId = (skillId: number) => {
+    const removeBySkillId = (skillId: number): Promise<EmployeeSkill[]> => {
         return Promise.resolve(source).then(employees_skills => {
             const relations = employees_skills.filter(e_s => e_s.skillId === skillId);
-            return Promise.all(relations.map(remove));
+            return Promise.all(relations.map(remove)).then(
+                employeesSkills => employeesSkills.filter(Boolean) as EmployeeSkill[]
+            );
         });
     };
 

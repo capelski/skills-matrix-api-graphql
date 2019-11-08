@@ -1,8 +1,9 @@
 import { Repositories, Employee, EmployeeFilter, EmployeeOrderBy, EmployeesRepository } from '..';
+import employeesData from './data/employees.json';
 import { filterItemsByName, sortByProperty } from './shared';
 
 export default (repositories: Repositories): EmployeesRepository => {
-    const source: Employee[] = require('./data/employees.json').map((e: any) => ({ ...e }));
+    const source: Employee[] = employeesData.map((e: any) => ({ ...e }));
     let nextEmployeeId = source.length + 1;
 
     const add = (name: string) => {
