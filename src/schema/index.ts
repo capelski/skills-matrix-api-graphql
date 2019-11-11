@@ -1,6 +1,6 @@
-const { GraphQLObjectType, GraphQLSchema } = require('graphql');
-const { employeeQueryField, employeeMutations } = require('./employee');
-const { skillQueryField, skillMutations } = require('./skill');
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { employeeQueryField, employeeMutations } from './employee';
+import { skillQueryField, skillMutations } from './skill';
 
 const rootQueryType = new GraphQLObjectType({
     name: 'RootQuery',
@@ -24,9 +24,7 @@ const rootMutationType = new GraphQLObjectType({
     }
 });
 
-const schema = new GraphQLSchema({
+export default new GraphQLSchema({
     query: rootQueryType,
     mutation: rootMutationType
 });
-
-module.exports = schema;

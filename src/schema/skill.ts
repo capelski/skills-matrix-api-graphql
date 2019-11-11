@@ -1,14 +1,16 @@
-const {
+import {
     GraphQLInputObjectType,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLString
-} = require('graphql');
-const definePagedListType = require('./paged-list');
+    GraphQLString,
+    GraphQLFieldConfig
+} from 'graphql';
+import { AppContext } from '../context/types';
+import { definePagedListType } from './paged-list';
 
-const skillType = new GraphQLObjectType({
+export const skillType = new GraphQLObjectType<any, AppContext>({
     name: 'Skill',
     fields: () => {
         const { employeeType } = require('./employee');
@@ -84,7 +86,7 @@ const skillEmployeeOrderByType = new GraphQLInputObjectType({
     }
 });
 
-const skillQueryField = {
+export const skillQueryField: GraphQLFieldConfig<any, AppContext> = {
     type: definePagedListType(skillType),
     description: 'Returns the available skills',
     args: {
@@ -115,7 +117,7 @@ const addSkillInputType = new GraphQLInputObjectType({
     }
 });
 
-const addSkill = {
+const addSkill: GraphQLFieldConfig<any, AppContext> = {
     type: skillType,
     description: 'Creates a new skill with the given name and employees',
     args: {
@@ -127,7 +129,7 @@ const addSkill = {
     }
 };
 
-const removeSkill = {
+const removeSkill: GraphQLFieldConfig<any, AppContext> = {
     type: skillType,
     description: 'Removes the skill identified by the input id',
     args: {
@@ -148,7 +150,7 @@ const updateSkillInputType = new GraphQLInputObjectType({
     }
 });
 
-const updateSkill = {
+const updateSkill: GraphQLFieldConfig<any, AppContext> = {
     type: skillType,
     description: 'Updates the name and employees of the skill identified by id',
     args: {
@@ -160,12 +162,8 @@ const updateSkill = {
     }
 };
 
-module.exports = {
-    skillMutations: {
-        add: addSkill,
-        remove: removeSkill,
-        update: updateSkill
-    },
-    skillQueryField,
-    skillType
+export const skillMutations = {
+    add: addSkill,
+    remove: removeSkill,
+    update: updateSkill
 };

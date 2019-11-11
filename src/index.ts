@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { getExpressApp } from './get-express-app';
+import getExpressApp from './get-express-app';
 
 const appPromise = getExpressApp();
 appPromise.then((app: Express) => {

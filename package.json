@@ -5,8 +5,8 @@
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc -p tsconfig-build.json",
-        "prettier:check": "prettier --list-different \"src/**/*.js\"",
-        "prettier:write": "prettier --write \"src/**/*.js\"",
+        "prettier:check": "prettier --list-different \"src/**/*.ts\"",
+        "prettier:write": "prettier --write \"src/**/*.ts\"",
         "start": "node dist/index.js",
         "start:dev": "nodemon --exec ts-node src/index.ts",
         "test": "cucumber-js --require-module ts-node/register --require features/step_definitions/*.step.ts features/*.feature"

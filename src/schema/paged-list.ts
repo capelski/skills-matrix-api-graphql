@@ -1,6 +1,6 @@
-const { GraphQLInt, GraphQLList, GraphQLObjectType } = require('graphql');
+import { GraphQLInt, GraphQLList, GraphQLObjectType } from 'graphql';
 
-const definePagedListType = (itemType, typeName) =>
+export const definePagedListType = (itemType: GraphQLObjectType, typeName?: string) =>
     new GraphQLObjectType({
         name: typeName || `${itemType}PagedList`,
         fields: () => {
@@ -14,5 +14,3 @@ const definePagedListType = (itemType, typeName) =>
             };
         }
     });
-
-module.exports = definePagedListType;

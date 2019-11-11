@@ -1,14 +1,16 @@
-const {
+import {
     GraphQLInputObjectType,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLString
-} = require('graphql');
-const definePagedListType = require('./paged-list');
+    GraphQLString,
+    GraphQLFieldConfig
+} from 'graphql';
+import { AppContext } from '../context/types';
+import { definePagedListType } from './paged-list';
 
-const employeeType = new GraphQLObjectType({
+export const employeeType = new GraphQLObjectType<any, AppContext>({
     name: 'Employee',
     fields: () => {
         const { skillType } = require('./skill');
@@ -84,7 +86,7 @@ const employeeSkillOrderByType = new GraphQLInputObjectType({
     }
 });
 
-const employeeQueryField = {
+export const employeeQueryField: GraphQLFieldConfig<any, AppContext> = {
     type: definePagedListType(employeeType),
     description: 'Returns the available employees',
     args: {
@@ -115,7 +117,7 @@ const addEmployeeInputType = new GraphQLInputObjectType({
     }
 });
 
-const addEmployee = {
+const addEmployee: GraphQLFieldConfig<any, AppContext> = {
     type: employeeType,
     description: 'Creates a new employee with the given name and skills',
     args: {
@@ -127,7 +129,7 @@ const addEmployee = {
     }
 };
 
-const removeEmployee = {
+const removeEmployee: GraphQLFieldConfig<any, AppContext> = {
     type: employeeType,
     description: 'Removes the employee identified by the input id',
     args: {
@@ -148,7 +150,7 @@ const updateEmployeeInputType = new GraphQLInputObjectType({
     }
 });
 
-const updateEmployee = {
+const updateEmployee: GraphQLFieldConfig<any, AppContext> = {
     type: employeeType,
     description: 'Updates the name and skills of the employee identified by id',
     args: {
@@ -160,12 +162,8 @@ const updateEmployee = {
     }
 };
 
-module.exports = {
-    employeeMutations: {
-        add: addEmployee,
-        remove: removeEmployee,
-        update: updateEmployee
-    },
-    employeeQueryField,
-    employeeType
+export const employeeMutations = {
+    add: addEmployee,
+    remove: removeEmployee,
+    update: updateEmployee
 };
