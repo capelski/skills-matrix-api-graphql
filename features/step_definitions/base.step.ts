@@ -131,7 +131,7 @@ Given('a user without permissions', () => {
 
 // TODO Add types to Cucumber parameters
 When(/I perform the query$/, async query => {
-    cucumberContext.context = contextFactory(cucumberContext.repositories, cucumberContext.user!);
+    cucumberContext.context = contextFactory(cucumberContext.repositories!, cucumberContext.user!);
     cucumberContext.queryResult = await graphql(
         cucumberContext.schema,
         query,

@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { EmployeesRepository, EmployeeFilter, EmployeeOrderBy } from '..';
+import { EmployeesRepository, EmployeeFilter, EmployeeOrderBy } from '../types';
 
 export default (postgreClient: Client): EmployeesRepository => {
     const add = (name: string) => {

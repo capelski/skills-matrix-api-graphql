@@ -127,9 +127,9 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 module.exports = getExpressApp;
 // TODO export default getExpressApp;
 
+// DOING Typescript migration
 // TODO Allow running the tests with inMemory repositories
 // TODO The employeeSkill Repo should not retrieve Skills neither Employees. Move that to the service
 // TODO Extract mock data in repositories
-// TODO Typescript migration
 // TODO tslint
 // TODO Multiple orderBy is not supported

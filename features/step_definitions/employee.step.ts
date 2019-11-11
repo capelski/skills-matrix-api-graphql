@@ -40,7 +40,7 @@ Then(
 
 Then('the total number of employees in the system is {int}', result => {
     // TODO Remove any cast
-    cucumberContext.context.employees.getAll().then((employees: any) => {
+    cucumberContext.context!.employees.getAll().then((employees: any) => {
         expect(employees.totalCount).to.equal(result);
     });
 });

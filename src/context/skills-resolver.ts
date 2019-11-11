@@ -1,5 +1,8 @@
-const skillsResolver = repositories => {
-    const create = skillData => {
+import { Repositories, SkillFilter, SkillOrderBy } from '../repositories/types';
+import { SkillsResolver, SkillCreateData, SkillUpdateData } from './types';
+
+export default (repositories: Repositories): SkillsResolver => {
+    const create = (skillData: SkillCreateData) => {
         return repositories.skills.add(skillData.name).then(skill => {
             return Promise.all(
                 skillData.employeesId.map(employeeId =>
@@ -9,7 +12,7 @@ const skillsResolver = repositories => {
         });
     };
 
-    const getAll = (skip, first, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: SkillFilter, orderBy?: SkillOrderBy) => {
         return repositories.skills.getAll(skip, first, filter, orderBy).then(skills => {
             return repositories.skills.countAll(filter).then(totalCount => ({
                 items: skills,
@@ -18,9 +21,15 @@ const skillsResolver = repositories => {
         });
     };
 
-    const getById = id => repositories.skills.getById(id);
+    const getById = (id: number) => repositories.skills.getById(id);
 
-    const getSkillEmployees = (skillId, filter, skip, first, orderBy) => {
+    const getSkillEmployees = (
+        skillId: number,
+        skip = 0,
+        first = 10,
+        filter?: SkillFilter,
+        orderBy?: SkillOrderBy
+    ) => {
         return repositories.employeesSkills
             .getBySkillId(skillId, skip, first, filter, orderBy)
             .then(employees => {
@@ -33,7 +42,7 @@ const skillsResolver = repositories => {
             });
     };
 
-    const remove = id => {
+    const remove = (id: number) => {
         return getById(id).then(skill => {
             if (skill) {
                 return repositories.employeesSkills
@@ -45,7 +54,7 @@ const skillsResolver = repositories => {
         });
     };
 
-    const update = skillData => {
+    const update = (skillData: SkillUpdateData) => {
         return getById(skillData.id)
             .then(skill => {
                 if (skill && skillData.name) {
@@ -75,5 +84,3 @@ const skillsResolver = repositories => {
         update
     };
 };
-
-module.exports = skillsResolver;

@@ -1,4 +1,4 @@
-import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '..';
+import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '../types';
 import skillsData from './data/skills.json';
 import { filterItemsByName, sortByProperty } from './shared';
 

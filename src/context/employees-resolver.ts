@@ -1,5 +1,8 @@
-const employeesResolver = repositories => {
-    const create = employeeData => {
+import { Repositories, EmployeeFilter, EmployeeOrderBy } from '../repositories/types';
+import { EmployeesResolver, EmployeeCreateData, EmployeeUpdateData } from './types';
+
+export default (repositories: Repositories): EmployeesResolver => {
+    const create = (employeeData: EmployeeCreateData) => {
         return repositories.employees.add(employeeData.name).then(employee => {
             return Promise.all(
                 employeeData.skillsId.map(skillId =>
@@ -9,7 +12,7 @@ const employeesResolver = repositories => {
         });
     };
 
-    const getAll = (skip, first, filter, orderBy) => {
+    const getAll = (skip = 0, first = 10, filter?: EmployeeFilter, orderBy?: EmployeeOrderBy) => {
         return repositories.employees.getAll(skip, first, filter, orderBy).then(employees => {
             return repositories.employees.countAll(filter).then(totalCount => ({
                 items: employees,
@@ -18,9 +21,15 @@ const employeesResolver = repositories => {
         });
     };
 
-    const getById = id => repositories.employees.getById(id);
+    const getById = (id: number) => repositories.employees.getById(id);
 
-    const getEmployeeSkills = (employeeId, filter, skip, first, orderBy) => {
+    const getEmployeeSkills = (
+        employeeId: number,
+        skip = 0,
+        first = 10,
+        filter?: EmployeeFilter,
+        orderBy?: EmployeeOrderBy
+    ) => {
         return repositories.employeesSkills
             .getByEmployeeId(employeeId, skip, first, filter, orderBy)
             .then(skills => {
@@ -33,7 +42,7 @@ const employeesResolver = repositories => {
             });
     };
 
-    const remove = id => {
+    const remove = (id: number) => {
         return getById(id).then(employee => {
             if (employee) {
                 return repositories.employeesSkills
@@ -45,7 +54,7 @@ const employeesResolver = repositories => {
         });
     };
 
-    const update = employeeData => {
+    const update = (employeeData: EmployeeUpdateData) => {
         return getById(employeeData.id)
             .then(employee => {
                 if (employee && employeeData.name) {
@@ -75,5 +84,3 @@ const employeesResolver = repositories => {
         update
     };
 };
-
-module.exports = employeesResolver;

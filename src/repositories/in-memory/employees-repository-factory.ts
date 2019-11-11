@@ -1,4 +1,10 @@
-import { Repositories, Employee, EmployeeFilter, EmployeeOrderBy, EmployeesRepository } from '..';
+import {
+    Repositories,
+    Employee,
+    EmployeeFilter,
+    EmployeeOrderBy,
+    EmployeesRepository
+} from '../types';
 import employeesData from './data/employees.json';
 import { filterItemsByName, sortByProperty } from './shared';
 

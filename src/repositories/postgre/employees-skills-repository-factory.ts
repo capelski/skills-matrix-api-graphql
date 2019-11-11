@@ -6,7 +6,7 @@ import {
     EmployeeSkill,
     SkillOrderBy,
     EmployeesSkillsRepository
-} from '..';
+} from '../types';
 
 export default (postgreClient: Client): EmployeesSkillsRepository => {
     const add = ({ employeeId, skillId }: EmployeeSkill) => {

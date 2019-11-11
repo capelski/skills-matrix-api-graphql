@@ -1,10 +1,12 @@
+import { AppContext } from '../../src/context/types';
 import { User } from '../../src/permissions';
+import { Repositories } from '../../src/repositories/types';
 
 // TODO Add proper typing
 export interface CucumberContext {
-    context: any;
+    context?: AppContext;
     queryResult: any;
-    repositories: any;
+    repositories?: Repositories;
     schema: any;
     user?: User;
 }

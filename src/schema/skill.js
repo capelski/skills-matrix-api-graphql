@@ -25,9 +25,9 @@ const skillType = new GraphQLObjectType({
                     context.ensurePermission(context.user, 'skills:read');
                     return context.skills.getSkillEmployees(
                         object.id,
-                        args.filter,
                         args.skip,
                         args.first,
+                        args.filter,
                         args.orderBy
                     );
                 }

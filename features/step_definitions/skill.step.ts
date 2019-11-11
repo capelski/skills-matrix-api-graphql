@@ -40,7 +40,7 @@ Then(
 
 Then('the total number of skills in the system is {int}', result => {
     // TODO Remove any cast
-    cucumberContext.context.skills.getAll().then((skills: any) => {
+    cucumberContext.context!.skills.getAll().then((skills: any) => {
         expect(skills.totalCount).to.equal(result);
     });
 });

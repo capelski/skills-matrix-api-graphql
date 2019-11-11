@@ -15,10 +15,9 @@ export interface EmployeeOrderBy {
 export interface EmployeesRepository {
     add: (name: string) => Promise<Employee>;
     countAll: (filter?: EmployeeFilter) => Promise<number>;
-    // TODO Make all functions take the parameters in the same order
     getAll: (
-        skip: number,
-        first: number,
+        skip?: number,
+        first?: number,
         filter?: EmployeeFilter,
         orderBy?: EmployeeOrderBy
     ) => Promise<Employee[]>;
@@ -44,10 +43,9 @@ export interface SkillOrderBy {
 export interface SkillsRepository {
     add: (name: string) => Promise<Skill>;
     countAll: (filter?: SkillFilter) => Promise<number>;
-    // TODO Make all functions take the parameters in the same order
     getAll: (
-        skip: number,
-        first: number,
+        skip?: number,
+        first?: number,
         filter?: SkillFilter,
         orderBy?: SkillOrderBy
     ) => Promise<Skill[]>;

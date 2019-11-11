@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { SkillFilter, SkillOrderBy } from '..';
+import { SkillFilter, SkillOrderBy } from '../types';
 
 export default (postgreClient: Client) => {
     const add = (name: string) => {

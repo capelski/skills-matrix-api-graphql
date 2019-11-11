@@ -8,7 +8,7 @@ import {
     EmployeesSkillsRepository,
     Skill,
     Employee
-} from '..';
+} from '../types';
 import employeesSkillsData from './data/employees-skills.json';
 import { sortByProperty } from './shared';
 
