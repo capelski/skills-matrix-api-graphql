@@ -124,7 +124,8 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
     });
 };
 
-export default getExpressApp;
+module.exports = getExpressApp;
+// TODO export default getExpressApp;
 
 // TODO Allow running the tests with inMemory repositories
 // TODO The employeeSkill Repo should not retrieve Skills neither Employees. Move that to the service
