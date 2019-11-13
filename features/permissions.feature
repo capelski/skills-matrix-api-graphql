@@ -3,7 +3,6 @@ Feature: User permissions
 
     Scenario: Employees retrieval error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -21,7 +20,6 @@ Feature: User permissions
 
     Scenario: Skills retrieval error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -39,7 +37,6 @@ Feature: User permissions
 
     Scenario: Employees creation error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -56,7 +53,6 @@ Feature: User permissions
 
     Scenario: Skills creation error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -73,7 +69,6 @@ Feature: User permissions
 
     Scenario: Employees deletion error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -89,7 +84,6 @@ Feature: User permissions
 
     Scenario: Skills deletion error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -105,7 +99,6 @@ Feature: User permissions
 
     Scenario: Employees update error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """
@@ -121,7 +114,6 @@ Feature: User permissions
 
     Scenario: Skills update error
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user without permissions
         When I perform the query
             """

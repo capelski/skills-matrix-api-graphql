@@ -3,7 +3,6 @@ Feature: Employees mutations
 
     Scenario: Employees creation
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "employees" permissions
         When I perform the query
             """
@@ -26,7 +25,6 @@ Feature: Employees mutations
 
     Scenario: Employees deletion
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "employees" permissions
         When I perform the query
             """
@@ -41,7 +39,6 @@ Feature: Employees mutations
 
     Scenario: Employees update
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "employees" permissions
         When I perform the query
             """

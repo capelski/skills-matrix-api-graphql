@@ -4,7 +4,7 @@ import { Given, When, Then } from 'cucumber';
 import { graphql } from 'graphql';
 import { Client } from 'pg';
 import { contextFactory } from '../../src/context';
-import permissions from '../../src/permissions';
+import permissions, { Permissions } from '../../src/permissions';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
 import employees from '../../src/repositories/postgre/alasql/employees.json';
@@ -64,16 +64,9 @@ const replaceSequencesOperators = (sql: string) => {
     return sql.replace(/nextval\([^\)]*\)/, nextId).replace(/currval\([^\)]*\)/, nextId);
 };
 
-Given('the defined GraphQL schema', () => {
+Given('the defined GraphQL schema', async () => {
     cucumberContext.schema = schema;
-});
-
-Given('the in-memory repositories', () => {
-    cucumberContext.repositories = inMemoryRepositories();
-});
-
-Given('the postgre repositories', () => {
-    return createTables()
+    await createTables()
         .then(populateTables)
         .then(() => {
             const alasqlClient = {
@@ -109,16 +102,21 @@ Given('the postgre repositories', () => {
                         });
                 }
             };
-
-            cucumberContext.repositories = postgreRepositories(alasqlClient as Client);
+            cucumberContext.implementations = [
+                {
+                    repositories: inMemoryRepositories()
+                },
+                {
+                    repositories: postgreRepositories(alasqlClient as Client)
+                }
+            ];
         });
 });
 
-Given('a user having {string} permissions', (permissionSet: string) => {
+Given('a user having {string} permissions', (permissionSet: keyof Permissions) => {
     cucumberContext.user = {
         id: 'user',
-        // TODO Improve the solution
-        permissions: (permissions as any)[permissionSet]
+        permissions: permissions[permissionSet]
     };
 });
 
@@ -129,22 +127,27 @@ Given('a user without permissions', () => {
     };
 });
 
-// TODO Add types to Cucumber parameters
-When(/I perform the query$/, async query => {
-    cucumberContext.context = contextFactory(cucumberContext.repositories!, cucumberContext.user!);
-    cucumberContext.queryResult = await graphql(
-        cucumberContext.schema,
-        query,
-        undefined,
-        cucumberContext.context
-    );
+When(/I perform the query$/, async (query: string) => {
+    cucumberContext.implementations.forEach(async implementation => {
+        implementation.context = contextFactory(implementation.repositories, cucumberContext.user!);
+        implementation.queryResult = await graphql(
+            cucumberContext.schema!,
+            query,
+            undefined,
+            implementation.context
+        );
+    });
 });
 
 Then('an error is returned', () => {
-    expect(cucumberContext.queryResult.errors).to.length(1);
+    cucumberContext.implementations.forEach(implementation => {
+        expect(implementation.queryResult.errors).to.length(1);
+    });
 });
 
 Then('the error message contains {string}', errorContent => {
-    const error = cucumberContext.queryResult.errors[0];
-    expect(error.message).to.contain(errorContent);
+    cucumberContext.implementations.forEach(implementation => {
+        const error = implementation.queryResult.errors[0];
+        expect(error.message).to.contain(errorContent);
+    });
 });

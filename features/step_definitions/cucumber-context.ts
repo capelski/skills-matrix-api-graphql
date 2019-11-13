@@ -1,20 +1,22 @@
+import { GraphQLSchema } from 'graphql';
 import { AppContext } from '../../src/context/types';
 import { User } from '../../src/permissions';
 import { Repositories } from '../../src/repositories/types';
 
-// TODO Add proper typing
-export interface CucumberContext {
+export interface RepositoriesImplementation {
     context?: AppContext;
-    queryResult: any;
-    repositories?: Repositories;
-    schema: any;
+    queryResult?: any;
+    repositories: Repositories;
+}
+
+export interface CucumberContext {
+    implementations: RepositoriesImplementation[];
+    schema?: GraphQLSchema;
     user?: User;
 }
 
 export const cucumberContext: CucumberContext = {
-    context: undefined,
-    queryResult: undefined,
-    repositories: undefined,
+    implementations: [],
     schema: undefined,
     user: undefined
 };

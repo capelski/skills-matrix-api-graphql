@@ -3,7 +3,6 @@ Feature: Skills mutations
 
     Scenario: Skills creation
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "skills" permissions
         When I perform the query
             """
@@ -26,7 +25,6 @@ Feature: Skills mutations
 
     Scenario: Skills deletion
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "skills" permissions
         When I perform the query
             """
@@ -41,7 +39,6 @@ Feature: Skills mutations
 
     Scenario: Skills update
         Given the defined GraphQL schema
-        And the postgre repositories
         And a user having "skills" permissions
         When I perform the query
             """

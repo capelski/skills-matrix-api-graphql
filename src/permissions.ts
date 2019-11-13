@@ -12,8 +12,16 @@ export const employeePermissions = [
 export const skillPermissions = ['skills:read', 'skills:create', 'skills:delete', 'skills:update'];
 export const allPermissions = employeePermissions.concat(skillPermissions);
 
-export default {
+export interface Permissions {
+    employees: string[];
+    all: string[];
+    skills: string[];
+}
+
+const permissions: Permissions = {
     employees: employeePermissions,
     all: allPermissions,
     skills: skillPermissions
 };
+
+export default permissions;
