@@ -126,6 +126,5 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 
 export default getExpressApp;
 
-// TODO The employeeSkill Repo should not retrieve Skills neither Employees. Move that to the service
 // TODO tslint
 // TODO Multiple orderBy is not supported
