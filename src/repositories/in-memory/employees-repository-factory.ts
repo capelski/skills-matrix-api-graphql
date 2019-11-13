@@ -1,3 +1,4 @@
+import employeesData from '../../../features/data/employees.json';
 import {
     Repositories,
     Employee,
@@ -5,7 +6,6 @@ import {
     EmployeeOrderBy,
     EmployeesRepository
 } from '../types';
-import employeesData from './data/employees.json';
 import { filterItemsByName, sortByProperty } from './shared';
 
 export default (repositories: Repositories): EmployeesRepository => {

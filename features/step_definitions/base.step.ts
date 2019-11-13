@@ -7,9 +7,9 @@ import { contextFactory } from '../../src/context';
 import permissions, { Permissions } from '../../src/permissions';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
-import employees from '../../src/repositories/postgre/alasql/employees.json';
-import skills from '../../src/repositories/postgre/alasql/skills.json';
-import employees_skills from '../../src/repositories/postgre/alasql/employees-skills.json';
+import employees from '../data/employees.json';
+import skills from '../data/skills.json';
+import employees_skills from '../data/employees-skills.json';
 import schema from '../../src/schema';
 import { cucumberContext } from './cucumber-context';
 

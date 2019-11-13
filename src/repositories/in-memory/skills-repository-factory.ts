@@ -1,5 +1,5 @@
+import skillsData from '../../../features/data/skills.json';
 import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '../types';
-import skillsData from './data/skills.json';
 import { filterItemsByName, sortByProperty } from './shared';
 
 export default (repositories: Repositories): SkillsRepository => {

@@ -1,3 +1,4 @@
+import employeesSkillsData from '../../../features/data/employees-skills.json';
 import {
     EmployeeSkill,
     EmployeeFilter,
@@ -9,14 +10,16 @@ import {
     Skill,
     Employee
 } from '../types';
-import employeesSkillsData from './data/employees-skills.json';
 import { sortByProperty } from './shared';
 
 const matchingEmployeeSkill = (employeeId: number, skillId: number) => (e_s: EmployeeSkill) =>
     e_s.skillId === skillId && e_s.employeeId === employeeId;
 
 export default (repositories: Repositories): EmployeesSkillsRepository => {
-    const source: EmployeeSkill[] = [...employeesSkillsData];
+    const source: EmployeeSkill[] = employeesSkillsData.map(e_s => ({
+        employeeId: e_s.employee_id,
+        skillId: e_s.skill_id
+    }));
 
     const add = ({ employeeId, skillId }: EmployeeSkill) => {
         return Promise.resolve(source).then(employees_skills => {
