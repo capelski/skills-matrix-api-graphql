@@ -5,6 +5,7 @@ export interface Configuration {
     DB_PORT: number;
     DB_USER: string;
     JWT_SECRET: string;
+    LOG_SQL_QUERIES: boolean;
     USE_DATABASE: boolean;
 }
 
@@ -16,6 +17,7 @@ const defaultConfig: Configuration = {
     DB_USER: 'postgres',
     JWT_SECRET:
         'In 1889 at age 44, he suffered a collapse and afterward a complete loss of his mental faculties',
+    LOG_SQL_QUERIES: false,
     USE_DATABASE: true
 };
 
@@ -38,6 +40,10 @@ export const getConfiguration = (
         environmentConfig.JWT_SECRET !== undefined
             ? environmentConfig.JWT_SECRET
             : defaultConfig.JWT_SECRET,
+    LOG_SQL_QUERIES:
+        environmentConfig.LOG_SQL_QUERIES !== undefined
+            ? environmentConfig.LOG_SQL_QUERIES
+            : defaultConfig.LOG_SQL_QUERIES,
     USE_DATABASE:
         environmentConfig.USE_DATABASE !== undefined
             ? environmentConfig.USE_DATABASE

@@ -36,6 +36,20 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
               .connect()
               .then(() => {
                   console.log('Successfully connected to database');
+
+                  if (config.LOG_SQL_QUERIES) {
+                      const loggingPostgreClient = postgreClient as any;
+                      loggingPostgreClient._query = postgreClient.query;
+                      loggingPostgreClient.query = (
+                          sql: string,
+                          parameters: Array<string | number>
+                      ) => {
+                          console.log('SQL query:', sql);
+                          parameters.length && console.log('Parameters:', parameters, '\n');
+                          return loggingPostgreClient._query(sql, parameters);
+                      };
+                  }
+
                   return postgreRepositories(postgreClient);
               })
               .catch(error => {
@@ -126,4 +140,5 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 
 export default getExpressApp;
 
+// TODO Add dataloaders in a separate branch
 // TODO Multiple orderBy is not supported
