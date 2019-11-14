@@ -1,18 +1,17 @@
 import {
+    GraphQLFieldConfig,
     GraphQLInputObjectType,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLString,
-    GraphQLFieldConfig
+    GraphQLString
 } from 'graphql';
 import { AppContext } from '../context/types';
 import { definePagedListType } from './paged-list';
 
 export const employeeType = new GraphQLObjectType<any, AppContext>({
-    name: 'Employee',
-    fields: () => {
+    fields() {
         const { skillType } = require('./skill');
         return {
             id: {
@@ -22,12 +21,11 @@ export const employeeType = new GraphQLObjectType<any, AppContext>({
                 type: new GraphQLNonNull(GraphQLString)
             },
             skills: {
-                type: definePagedListType(skillType, 'EmployeeSkillsPagedList'),
                 args: {
                     filter: { type: employeeSkillFilterType },
                     first: { type: GraphQLInt },
-                    skip: { type: GraphQLInt },
-                    orderBy: { type: employeeSkillOrderByType }
+                    orderBy: { type: employeeSkillOrderByType },
+                    skip: { type: GraphQLInt }
                 },
                 resolve: (object, args, context) => {
                     context.ensurePermission(context.user, 'employees:read');
@@ -38,14 +36,15 @@ export const employeeType = new GraphQLObjectType<any, AppContext>({
                         args.filter,
                         args.orderBy
                     );
-                }
+                },
+                type: definePagedListType(skillType, 'EmployeeSkillsPagedList')
             }
         };
-    }
+    },
+    name: 'Employee'
 });
 
 const employeeFilterType = new GraphQLInputObjectType({
-    name: 'EmployeeFilter',
     fields: {
         id: {
             type: GraphQLInt
@@ -53,20 +52,20 @@ const employeeFilterType = new GraphQLInputObjectType({
         name: {
             type: GraphQLString
         }
-    }
+    },
+    name: 'EmployeeFilter'
 });
 
 const employeeSkillFilterType = new GraphQLInputObjectType({
-    name: 'EmployeeSkillFilter',
     fields: {
         name: {
             type: GraphQLString
         }
-    }
+    },
+    name: 'EmployeeSkillFilter'
 });
 
 const employeeOrderByType = new GraphQLInputObjectType({
-    name: 'EmployeeOrderBy',
     fields: {
         name: {
             type: GraphQLInt
@@ -74,28 +73,28 @@ const employeeOrderByType = new GraphQLInputObjectType({
         skills: {
             type: GraphQLInt
         }
-    }
+    },
+    name: 'EmployeeOrderBy'
 });
 
 const employeeSkillOrderByType = new GraphQLInputObjectType({
-    name: 'EmployeeSkillOrderBy',
     fields: {
         name: {
             type: GraphQLInt
         }
-    }
+    },
+    name: 'EmployeeSkillOrderBy'
 });
 
 export const employeeQueryField: GraphQLFieldConfig<any, AppContext> = {
-    type: definePagedListType(employeeType),
-    description: 'Returns the available employees',
     args: {
         filter: { type: employeeFilterType },
         first: { type: GraphQLInt },
-        skip: { type: GraphQLInt },
-        orderBy: { type: employeeOrderByType }
+        orderBy: { type: employeeOrderByType },
+        skip: { type: GraphQLInt }
     },
-    resolve: (object, args, context) => {
+    description: 'Returns the available employees',
+    resolve(object, args, context) {
         if (args.filter && args.filter.id) {
             context.ensurePermission(context.user, 'employees:read');
             return context.employees.getById(args.filter.id).then(employee => ({
@@ -106,60 +105,61 @@ export const employeeQueryField: GraphQLFieldConfig<any, AppContext> = {
             context.ensurePermission(context.user, 'employees:read');
             return context.employees.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
-    }
+    },
+    type: definePagedListType(employeeType)
 };
 
 const addEmployeeInputType = new GraphQLInputObjectType({
-    name: 'AddEmployeeInput',
     fields: {
         name: { type: new GraphQLNonNull(GraphQLString) },
         skillsId: { type: new GraphQLList(GraphQLInt) }
-    }
+    },
+    name: 'AddEmployeeInput'
 });
 
 const addEmployee: GraphQLFieldConfig<any, AppContext> = {
-    type: employeeType,
-    description: 'Creates a new employee with the given name and skills',
     args: {
         input: { type: addEmployeeInputType }
     },
-    resolve: function(object, args, context) {
+    description: 'Creates a new employee with the given name and skills',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'employees:create');
         return context.employees.create(args.input);
-    }
+    },
+    type: employeeType
 };
 
 const removeEmployee: GraphQLFieldConfig<any, AppContext> = {
-    type: employeeType,
-    description: 'Removes the employee identified by the input id',
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
-    resolve: function(object, args, context) {
+    description: 'Removes the employee identified by the input id',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'employees:delete');
         return context.employees.remove(args.input);
-    }
+    },
+    type: employeeType
 };
 
 const updateEmployeeInputType = new GraphQLInputObjectType({
-    name: 'UpdateEmployeeInput',
     fields: {
         id: { type: new GraphQLNonNull(GraphQLInt) },
         name: { type: GraphQLString },
         skillsId: { type: new GraphQLList(GraphQLInt) }
-    }
+    },
+    name: 'UpdateEmployeeInput'
 });
 
 const updateEmployee: GraphQLFieldConfig<any, AppContext> = {
-    type: employeeType,
-    description: 'Updates the name and skills of the employee identified by id',
     args: {
         input: { type: updateEmployeeInputType }
     },
-    resolve: function(object, args, context) {
+    description: 'Updates the name and skills of the employee identified by id',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'employees:update');
         return context.employees.update(args.input);
-    }
+    },
+    type: employeeType
 };
 
 export const employeeMutations = {

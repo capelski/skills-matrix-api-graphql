@@ -56,9 +56,14 @@ Then(
 
 Then('the total number of skills in the system is {int}', (result: number) => {
     cucumberContext.implementations.forEach(implementation => {
-        implementation.context!.skills.getAll().then((skills: PagedList<any>) => {
-            expect(skills.totalCount).to.equal(result);
-        });
+        implementation
+            .context!.skills.getAll()
+            .then((skills: PagedList<any>) => {
+                expect(skills.totalCount).to.equal(result);
+            })
+            .catch(error => {
+                throw error;
+            });
     });
 });
 

@@ -4,14 +4,14 @@ import employeesSkillsRepositoryFactory from './employees-skills-repository-fact
 import skillsRepositoryFactory from './skills-repository-factory';
 
 export default (): Repositories => {
-    const repositories = {} as Repositories;
+    const repositories: Partial<Repositories> = {};
 
     // Instantiating repositories from the index to resolve cyclic dependencies.
     // This approach is possible because employeesRepositoryFactory doesn't access
     // repositories.skills before repositories.skills is defined and vice versa
-    repositories.employees = employeesRepositoryFactory(repositories);
-    repositories.employeesSkills = employeesSkillsRepositoryFactory(repositories);
-    repositories.skills = skillsRepositoryFactory(repositories);
+    repositories.employees = employeesRepositoryFactory(repositories as Repositories);
+    repositories.employeesSkills = employeesSkillsRepositoryFactory(repositories as Repositories);
+    repositories.skills = skillsRepositoryFactory(repositories as Repositories);
 
-    return repositories;
+    return repositories as Repositories;
 };

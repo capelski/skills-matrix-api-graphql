@@ -1,5 +1,5 @@
 import skillsData from '../../../features/data/skills.json';
-import { Repositories, SkillsRepository, Skill, SkillFilter, SkillOrderBy } from '../types';
+import { Repositories, Skill, SkillFilter, SkillOrderBy, SkillsRepository } from '../types';
 import { filterItemsByName, sortByProperty } from './shared';
 
 export default (repositories: Repositories): SkillsRepository => {
@@ -29,8 +29,8 @@ export default (repositories: Repositories): SkillsRepository => {
                         return filteredSkills.sort(sortByProperty('name', orderBy.name));
                     } else if (orderBy.employees) {
                         return Promise.all(filteredSkills.map(loadSkillEmployeesCount)).then(
-                            filteredSkills =>
-                                filteredSkills.sort(
+                            extendedSkills =>
+                                extendedSkills.sort(
                                     sortByProperty(
                                         'employeesCount',
                                         orderBy.employees!,

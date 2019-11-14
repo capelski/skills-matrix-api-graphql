@@ -56,7 +56,7 @@ export default (postgreClient: Client) => {
     };
 
     const getById = (id: number) => {
-        let query = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
+        const query = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
         return postgreClient.query(query, [id]).then(result => result.rows[0]);
     };
 

@@ -1,43 +1,43 @@
 import employeesSkillsData from '../../../features/data/employees-skills.json';
 import {
-    EmployeeSkill,
+    Employee,
     EmployeeFilter,
-    Repositories,
-    SkillFilter,
     EmployeeOrderBy,
-    SkillOrderBy,
+    EmployeeSkill,
     EmployeesSkillsRepository,
+    Repositories,
     Skill,
-    Employee
+    SkillFilter,
+    SkillOrderBy
 } from '../types';
 import { sortByProperty } from './shared';
 
-const matchingEmployeeSkill = (employeeId: number, skillId: number) => (e_s: EmployeeSkill) =>
-    e_s.skillId === skillId && e_s.employeeId === employeeId;
+const matchingEmployeeSkill = (employeeId: number, skillId: number) => (eS: EmployeeSkill) =>
+    eS.skillId === skillId && eS.employeeId === employeeId;
 
 export default (repositories: Repositories): EmployeesSkillsRepository => {
-    const source: EmployeeSkill[] = employeesSkillsData.map(e_s => ({
-        employeeId: e_s.employee_id,
-        skillId: e_s.skill_id
+    const source: EmployeeSkill[] = employeesSkillsData.map(eS => ({
+        employeeId: eS.employee_id,
+        skillId: eS.skill_id
     }));
 
     const add = ({ employeeId, skillId }: EmployeeSkill) => {
-        return Promise.resolve(source).then(employees_skills => {
-            let employee_skill = employees_skills.find(matchingEmployeeSkill(employeeId, skillId));
-            if (!employee_skill) {
-                employee_skill = {
+        return Promise.resolve(source).then(employeesSkills => {
+            let employeeSkill = employeesSkills.find(matchingEmployeeSkill(employeeId, skillId));
+            if (!employeeSkill) {
+                employeeSkill = {
                     employeeId,
                     skillId
                 };
-                employees_skills.push(employee_skill);
+                employeesSkills.push(employeeSkill);
             }
-            return employee_skill;
+            return employeeSkill;
         });
     };
 
     const countByEmployeeId = (employeeId: number, filter?: EmployeeFilter) => {
         return Promise.resolve(source)
-            .then(employees_skills => employees_skills.filter(e_s => e_s.employeeId === employeeId))
+            .then(employeesSkills => employeesSkills.filter(eS => eS.employeeId === employeeId))
             .then(employeeSkills =>
                 Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId)))
             )
@@ -52,7 +52,7 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
 
     const countBySkillId = (skillId: number, filter?: SkillFilter) => {
         return Promise.resolve(source)
-            .then(employees_skills => employees_skills.filter(e_s => e_s.skillId === skillId))
+            .then(employeesSkills => employeesSkills.filter(eS => eS.skillId === skillId))
             .then(skillEmployees =>
                 Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId)))
             )
@@ -75,7 +75,7 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
         orderBy?: EmployeeOrderBy
     ) => {
         return Promise.resolve(source)
-            .then(employees_skills => employees_skills.filter(e_s => e_s.employeeId === employeeId))
+            .then(employeesSkills => employeesSkills.filter(eS => eS.employeeId === employeeId))
             .then(employeeSkills =>
                 Promise.all(employeeSkills.map(se => repositories.skills.getById(se.skillId)))
             )
@@ -103,7 +103,7 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
         orderBy?: SkillOrderBy
     ) => {
         return Promise.resolve(source)
-            .then(employees_skills => employees_skills.filter(e_s => e_s.skillId === skillId))
+            .then(employeesSkills => employeesSkills.filter(eS => eS.skillId === skillId))
             .then(skillEmployees =>
                 Promise.all(skillEmployees.map(se => repositories.employees.getById(se.employeeId)))
             )
@@ -126,30 +126,30 @@ export default (repositories: Repositories): EmployeesSkillsRepository => {
     };
 
     const remove = ({ employeeId, skillId }: EmployeeSkill): Promise<EmployeeSkill | undefined> => {
-        return Promise.resolve(source).then(employees_skills => {
-            const employeeSkillIndex = employees_skills.findIndex(
+        return Promise.resolve(source).then(employeesSkills => {
+            const employeeSkillIndex = employeesSkills.findIndex(
                 matchingEmployeeSkill(employeeId, skillId)
             );
             if (employeeSkillIndex > -1) {
-                return employees_skills.splice(employeeSkillIndex, 1)[0];
+                return employeesSkills.splice(employeeSkillIndex, 1)[0];
             }
         });
     };
 
     const removeByEmployeeId = (employeeId: number): Promise<EmployeeSkill[]> => {
-        return Promise.resolve(source).then(employees_skills => {
-            const relations = employees_skills.filter(e_s => e_s.employeeId === employeeId);
+        return Promise.resolve(source).then(employeesSkills => {
+            const relations = employeesSkills.filter(eS => eS.employeeId === employeeId);
             return Promise.all(relations.map(remove)).then(
-                employeesSkills => employeesSkills.filter(Boolean) as EmployeeSkill[]
+                removedEmployeesSkills => removedEmployeesSkills.filter(Boolean) as EmployeeSkill[]
             );
         });
     };
 
     const removeBySkillId = (skillId: number): Promise<EmployeeSkill[]> => {
-        return Promise.resolve(source).then(employees_skills => {
-            const relations = employees_skills.filter(e_s => e_s.skillId === skillId);
+        return Promise.resolve(source).then(employeesSkills => {
+            const relations = employeesSkills.filter(eS => eS.skillId === skillId);
             return Promise.all(relations.map(remove)).then(
-                employeesSkills => employeesSkills.filter(Boolean) as EmployeeSkill[]
+                removedEmployeesSkills => removedEmployeesSkills.filter(Boolean) as EmployeeSkill[]
             );
         });
     };

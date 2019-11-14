@@ -1,16 +1,16 @@
 import alasql from 'alasql';
 import { expect } from 'chai';
-import { Given, When, Then } from 'cucumber';
+import { Given, Then, When } from 'cucumber';
 import { graphql } from 'graphql';
 import { Client } from 'pg';
 import { contextFactory } from '../../src/context';
 import permissions, { Permissions } from '../../src/permissions';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
+import schema from '../../src/schema';
+import employees_skills from '../data/employees-skills.json';
 import employees from '../data/employees.json';
 import skills from '../data/skills.json';
-import employees_skills from '../data/employees-skills.json';
-import schema from '../../src/schema';
 import { cucumberContext } from './cucumber-context';
 
 // TODO alasql raises exceptions when using UNIQUE, PRIMARY KEY and REFERENCES
@@ -33,7 +33,7 @@ const populateTables = () => {
     // TODO Remove any cast
     (alasql as any).tables.employee.data = employees.map((e: any) => ({ ...e }));
     (alasql as any).tables.skill.data = skills.map((e: any) => ({ ...e }));
-    (alasql as any).tables.employee_skill.data = employees_skills.map((e_s: any) => ({ ...e_s }));
+    (alasql as any).tables.employee_skill.data = employees_skills.map((eS: any) => ({ ...eS }));
 };
 
 const replaceQueryParameters = (sql: string, parameters: string[]) => {
@@ -64,9 +64,9 @@ const replaceSequencesOperators = (sql: string) => {
     return sql.replace(/nextval\([^\)]*\)/, nextId).replace(/currval\([^\)]*\)/, nextId);
 };
 
-Given('the defined GraphQL schema', async () => {
+Given('the defined GraphQL schema', () => {
     cucumberContext.schema = schema;
-    await createTables()
+    return createTables()
         .then(populateTables)
         .then(() => {
             const alasqlClient = {

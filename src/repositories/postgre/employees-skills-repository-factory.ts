@@ -1,11 +1,11 @@
 import { Client } from 'pg';
 import {
     EmployeeFilter,
-    SkillFilter,
     EmployeeOrderBy,
     EmployeeSkill,
-    SkillOrderBy,
-    EmployeesSkillsRepository
+    EmployeesSkillsRepository,
+    SkillFilter,
+    SkillOrderBy
 } from '../types';
 
 export default (postgreClient: Client): EmployeesSkillsRepository => {
@@ -27,7 +27,7 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         let query = `SELECT COUNT(*) FROM skill
 		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
 		WHERE employee_skill.employee_id = $1`;
-        const parameters: (string | number)[] = [employeeId];
+        const parameters: Array<string | number> = [employeeId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(skill.name) LIKE $2`;
@@ -40,7 +40,7 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         let query = `SELECT COUNT(*) FROM employee
 		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
 		WHERE employee_skill.skill_id = $1`;
-        const parameters: (string | number)[] = [skillId];
+        const parameters: Array<string | number> = [skillId];
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(employee.name) LIKE $2`;
@@ -59,16 +59,18 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         let query = `SELECT skill.id, skill.name FROM skill
 		INNER JOIN employee_skill ON skill.id = employee_skill.skill_id
 		WHERE employee_skill.employee_id = $1`;
-        const parameters: (string | number)[] = [employeeId];
+        const parameters: Array<string | number> = [employeeId];
+
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(skill.name) LIKE $${parameters.length}`;
         }
-        if (orderBy && orderBy.name) {
-            query = query + ` ORDER BY skill.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
-        } else {
-            query = query + ` ORDER BY skill.id ASC`;
-        }
+
+        query +=
+            orderBy && orderBy.name
+                ? ` ORDER BY skill.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`
+                : ` ORDER BY skill.id ASC`;
+
         parameters.push(first, skip);
         query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
 
@@ -85,16 +87,18 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         let query = `SELECT employee.id, employee.name FROM employee
 		INNER JOIN employee_skill ON employee.id = employee_skill.employee_id
 		WHERE employee_skill.skill_id = $1`;
-        const parameters: (string | number)[] = [skillId];
+        const parameters: Array<string | number> = [skillId];
+
         if (filter && filter.name) {
             parameters.push(`%${filter.name.toLowerCase()}%`);
             query = query + ` AND lower(employee.name) LIKE $${parameters.length}`;
         }
-        if (orderBy && orderBy.name) {
-            query = query + ` ORDER BY employee.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`;
-        } else {
-            query = query + ` ORDER BY employee.id ASC`;
-        }
+
+        query +=
+            orderBy && orderBy.name
+                ? ` ORDER BY employee.name ${orderBy.name > 0 ? 'ASC' : 'DESC'}`
+                : ` ORDER BY employee.id ASC`;
+
         parameters.push(first, skip);
         query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
 

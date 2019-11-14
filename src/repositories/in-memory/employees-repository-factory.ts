@@ -1,10 +1,10 @@
 import employeesData from '../../../features/data/employees.json';
 import {
-    Repositories,
     Employee,
     EmployeeFilter,
     EmployeeOrderBy,
-    EmployeesRepository
+    EmployeesRepository,
+    Repositories
 } from '../types';
 import { filterItemsByName, sortByProperty } from './shared';
 
@@ -35,8 +35,8 @@ export default (repositories: Repositories): EmployeesRepository => {
                         return filteredEmployees.sort(sortByProperty('name', orderBy.name));
                     } else if (orderBy.skills) {
                         return Promise.all(filteredEmployees.map(loadEmployeeSkillsCount)).then(
-                            filteredEmployees =>
-                                filteredEmployees.sort(
+                            extendedEmployees =>
+                                extendedEmployees.sort(
                                     sortByProperty(
                                         'skillsCount',
                                         orderBy.skills!,

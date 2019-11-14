@@ -59,9 +59,14 @@ Then(
 
 Then('the total number of employees in the system is {int}', (result: number) => {
     cucumberContext.implementations.forEach(implementation => {
-        implementation.context!.employees.getAll().then((employees: PagedList<any>) => {
-            expect(employees.totalCount).to.equal(result);
-        });
+        implementation
+            .context!.employees.getAll()
+            .then((employees: PagedList<any>) => {
+                expect(employees.totalCount).to.equal(result);
+            })
+            .catch(error => {
+                throw error;
+            });
     });
 });
 

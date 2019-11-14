@@ -95,7 +95,7 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
                 if (request.method === 'GET') {
                     return getGraphQLContext(adminUser);
                 } else {
-                    const authorizationToken = request.headers['authorization'];
+                    const authorizationToken = request.headers.authorization;
                     if (!authorizationToken) {
                         // TODO Remove any cast
                         return (response as any)
@@ -126,5 +126,4 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 
 export default getExpressApp;
 
-// TODO tslint
 // TODO Multiple orderBy is not supported

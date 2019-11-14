@@ -1,19 +1,18 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { employeeQueryField, employeeMutations } from './employee';
-import { skillQueryField, skillMutations } from './skill';
+import { employeeMutations, employeeQueryField } from './employee';
+import { skillMutations, skillQueryField } from './skill';
 
 const rootQueryType = new GraphQLObjectType({
-    name: 'RootQuery',
     fields: () => {
         return {
             employee: employeeQueryField,
             skill: skillQueryField
         };
-    }
+    },
+    name: 'RootQuery'
 });
 
 const rootMutationType = new GraphQLObjectType({
-    name: 'RootMutation',
     fields: {
         addEmployee: employeeMutations.add,
         addSkill: skillMutations.add,
@@ -21,10 +20,11 @@ const rootMutationType = new GraphQLObjectType({
         removeSkill: skillMutations.remove,
         updateEmployee: employeeMutations.update,
         updateSkill: skillMutations.update
-    }
+    },
+    name: 'RootMutation'
 });
 
 export default new GraphQLSchema({
-    query: rootQueryType,
-    mutation: rootMutationType
+    mutation: rootMutationType,
+    query: rootQueryType
 });

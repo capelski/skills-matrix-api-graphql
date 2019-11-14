@@ -19,8 +19,8 @@ export interface Permissions {
 }
 
 const permissions: Permissions = {
-    employees: employeePermissions,
     all: allPermissions,
+    employees: employeePermissions,
     skills: skillPermissions
 };
 

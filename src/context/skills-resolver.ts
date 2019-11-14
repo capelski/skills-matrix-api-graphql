@@ -1,12 +1,12 @@
 import { Repositories, SkillFilter, SkillOrderBy } from '../repositories/types';
-import { SkillsResolver, SkillCreateData, SkillUpdateData } from './types';
+import { SkillCreateData, SkillsResolver, SkillUpdateData } from './types';
 
 export default (repositories: Repositories): SkillsResolver => {
     const create = (skillData: SkillCreateData) => {
         return repositories.skills.add(skillData.name).then(skill => {
             return Promise.all(
                 skillData.employeesId.map(employeeId =>
-                    repositories.employeesSkills.add({ skillId: skill.id, employeeId: employeeId })
+                    repositories.employeesSkills.add({ skillId: skill.id, employeeId })
                 )
             ).then(() => skill);
         });

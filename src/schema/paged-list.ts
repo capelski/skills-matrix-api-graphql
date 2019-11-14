@@ -2,8 +2,7 @@ import { GraphQLInt, GraphQLList, GraphQLObjectType } from 'graphql';
 
 export const definePagedListType = (itemType: GraphQLObjectType, typeName?: string) =>
     new GraphQLObjectType({
-        name: typeName || `${itemType}PagedList`,
-        fields: () => {
+        fields() {
             return {
                 items: {
                     type: new GraphQLList(itemType)
@@ -12,5 +11,6 @@ export const definePagedListType = (itemType: GraphQLObjectType, typeName?: stri
                     type: GraphQLInt
                 }
             };
-        }
+        },
+        name: typeName || `${itemType}PagedList`
     });

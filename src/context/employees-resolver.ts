@@ -1,12 +1,12 @@
-import { Repositories, EmployeeFilter, EmployeeOrderBy } from '../repositories/types';
-import { EmployeesResolver, EmployeeCreateData, EmployeeUpdateData } from './types';
+import { EmployeeFilter, EmployeeOrderBy, Repositories } from '../repositories/types';
+import { EmployeeCreateData, EmployeesResolver, EmployeeUpdateData } from './types';
 
 export default (repositories: Repositories): EmployeesResolver => {
     const create = (employeeData: EmployeeCreateData) => {
         return repositories.employees.add(employeeData.name).then(employee => {
             return Promise.all(
                 employeeData.skillsId.map(skillId =>
-                    repositories.employeesSkills.add({ skillId: skillId, employeeId: employee.id })
+                    repositories.employeesSkills.add({ skillId, employeeId: employee.id })
                 )
             ).then(() => employee);
         });

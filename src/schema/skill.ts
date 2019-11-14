@@ -1,27 +1,25 @@
 import {
+    GraphQLFieldConfig,
     GraphQLInputObjectType,
     GraphQLInt,
     GraphQLList,
     GraphQLNonNull,
     GraphQLObjectType,
-    GraphQLString,
-    GraphQLFieldConfig
+    GraphQLString
 } from 'graphql';
 import { AppContext } from '../context/types';
 import { definePagedListType } from './paged-list';
 
 export const skillType = new GraphQLObjectType<any, AppContext>({
-    name: 'Skill',
-    fields: () => {
+    fields() {
         const { employeeType } = require('./employee');
         return {
             employees: {
-                type: definePagedListType(employeeType, 'SkillEmployeesPagedList'),
                 args: {
                     filter: { type: skillEmployeeFilterType },
                     first: { type: GraphQLInt },
-                    skip: { type: GraphQLInt },
-                    orderBy: { type: skillEmployeeOrderByType }
+                    orderBy: { type: skillEmployeeOrderByType },
+                    skip: { type: GraphQLInt }
                 },
                 resolve: (object, args, context) => {
                     context.ensurePermission(context.user, 'skills:read');
@@ -32,7 +30,8 @@ export const skillType = new GraphQLObjectType<any, AppContext>({
                         args.filter,
                         args.orderBy
                     );
-                }
+                },
+                type: definePagedListType(employeeType, 'SkillEmployeesPagedList')
             },
             id: {
                 type: GraphQLInt
@@ -41,11 +40,11 @@ export const skillType = new GraphQLObjectType<any, AppContext>({
                 type: new GraphQLNonNull(GraphQLString)
             }
         };
-    }
+    },
+    name: 'Skill'
 });
 
 const skillFilterType = new GraphQLInputObjectType({
-    name: 'SkillFilter',
     fields: {
         id: {
             type: GraphQLInt
@@ -53,20 +52,20 @@ const skillFilterType = new GraphQLInputObjectType({
         name: {
             type: GraphQLString
         }
-    }
+    },
+    name: 'SkillFilter'
 });
 
 const skillEmployeeFilterType = new GraphQLInputObjectType({
-    name: 'SkillEmployeeFilter',
     fields: {
         name: {
             type: GraphQLString
         }
-    }
+    },
+    name: 'SkillEmployeeFilter'
 });
 
 const skillOrderByType = new GraphQLInputObjectType({
-    name: 'SkillOrderBy',
     fields: {
         employees: {
             type: GraphQLInt
@@ -74,28 +73,28 @@ const skillOrderByType = new GraphQLInputObjectType({
         name: {
             type: GraphQLInt
         }
-    }
+    },
+    name: 'SkillOrderBy'
 });
 
 const skillEmployeeOrderByType = new GraphQLInputObjectType({
-    name: 'SkillEmployeeOrderBy',
     fields: {
         name: {
             type: GraphQLInt
         }
-    }
+    },
+    name: 'SkillEmployeeOrderBy'
 });
 
 export const skillQueryField: GraphQLFieldConfig<any, AppContext> = {
-    type: definePagedListType(skillType),
-    description: 'Returns the available skills',
     args: {
         filter: { type: skillFilterType },
         first: { type: GraphQLInt },
-        skip: { type: GraphQLInt },
-        orderBy: { type: skillOrderByType }
+        orderBy: { type: skillOrderByType },
+        skip: { type: GraphQLInt }
     },
-    resolve: (object, args, context) => {
+    description: 'Returns the available skills',
+    resolve(object, args, context) {
         if (args.filter && args.filter.id) {
             context.ensurePermission(context.user, 'skills:read');
             return context.skills.getById(args.filter.id).then(skill => ({
@@ -106,60 +105,61 @@ export const skillQueryField: GraphQLFieldConfig<any, AppContext> = {
             context.ensurePermission(context.user, 'skills:read');
             return context.skills.getAll(args.skip, args.first, args.filter, args.orderBy);
         }
-    }
+    },
+    type: definePagedListType(skillType)
 };
 
 const addSkillInputType = new GraphQLInputObjectType({
-    name: 'AddSkillInput',
     fields: {
-        name: { type: new GraphQLNonNull(GraphQLString) },
-        employeesId: { type: new GraphQLList(GraphQLInt) }
-    }
+        employeesId: { type: new GraphQLList(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    name: 'AddSkillInput'
 });
 
 const addSkill: GraphQLFieldConfig<any, AppContext> = {
-    type: skillType,
-    description: 'Creates a new skill with the given name and employees',
     args: {
         input: { type: addSkillInputType }
     },
-    resolve: function(object, args, context) {
+    description: 'Creates a new skill with the given name and employees',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'skills:create');
         return context.skills.create(args.input);
-    }
+    },
+    type: skillType
 };
 
 const removeSkill: GraphQLFieldConfig<any, AppContext> = {
-    type: skillType,
-    description: 'Removes the skill identified by the input id',
     args: {
         input: { type: new GraphQLNonNull(GraphQLInt) }
     },
-    resolve: function(object, args, context) {
+    description: 'Removes the skill identified by the input id',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'skills:delete');
         return context.skills.remove(args.input);
-    }
+    },
+    type: skillType
 };
 
 const updateSkillInputType = new GraphQLInputObjectType({
-    name: 'updateSkillInput',
     fields: {
+        employeesId: { type: new GraphQLList(GraphQLInt) },
         id: { type: new GraphQLNonNull(GraphQLInt) },
-        name: { type: GraphQLString },
-        employeesId: { type: new GraphQLList(GraphQLInt) }
-    }
+        name: { type: GraphQLString }
+    },
+    name: 'updateSkillInput'
 });
 
 const updateSkill: GraphQLFieldConfig<any, AppContext> = {
-    type: skillType,
-    description: 'Updates the name and employees of the skill identified by id',
     args: {
         input: { type: updateSkillInputType }
     },
-    resolve: function(object, args, context) {
+    description: 'Updates the name and employees of the skill identified by id',
+    resolve(object, args, context) {
         context.ensurePermission(context.user, 'skills:update');
         return context.skills.update(args.input);
-    }
+    },
+    type: skillType
 };
 
 export const skillMutations = {

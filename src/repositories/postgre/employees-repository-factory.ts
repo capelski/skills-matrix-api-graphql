@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { EmployeesRepository, EmployeeFilter, EmployeeOrderBy } from '../types';
+import { EmployeeFilter, EmployeeOrderBy, EmployeesRepository } from '../types';
 
 export default (postgreClient: Client): EmployeesRepository => {
     const add = (name: string) => {
@@ -56,7 +56,7 @@ export default (postgreClient: Client): EmployeesRepository => {
     };
 
     const getById = (id: number) => {
-        let query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
+        const query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
         return postgreClient.query(query, [id]).then(result => result.rows[0]);
     };
 

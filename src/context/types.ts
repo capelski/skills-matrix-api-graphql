@@ -1,11 +1,11 @@
 import { User } from '../permissions';
 import {
-    Skill,
-    SkillFilter,
-    SkillOrderBy,
     Employee,
     EmployeeFilter,
-    EmployeeOrderBy
+    EmployeeOrderBy,
+    Skill,
+    SkillFilter,
+    SkillOrderBy
 } from '../repositories/types';
 
 export interface AppContext {
