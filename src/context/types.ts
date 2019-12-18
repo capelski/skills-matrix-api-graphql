@@ -12,6 +12,7 @@ export interface AppContext {
     employees: EmployeesResolver;
     ensurePermission: (user: User, permission: string) => void;
     skills: SkillsResolver;
+    sqlQueries?: SqlQueriesResolver;
     user: User;
 }
 
@@ -76,4 +77,9 @@ export interface SkillsResolver {
 
 export interface SkillUpdateData extends SkillCreateData {
     id: number;
+}
+
+export interface SqlQueriesResolver {
+    add: (sqlQuery: string) => () => void;
+    getAll: () => Promise<string[]>;
 }

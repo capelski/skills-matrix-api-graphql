@@ -1,24 +1,23 @@
-import { Client } from 'pg';
 import {
     EmployeeFilter,
     EmployeeOrderBy,
     EmployeeSkill,
     EmployeesSkillsRepository,
     SkillFilter,
-    SkillOrderBy
+    SkillOrderBy,
+    SqlQueryResolver
 } from '../types';
 
-export default (postgreClient: Client): EmployeesSkillsRepository => {
+export default (sqlQueryResolver: SqlQueryResolver): EmployeesSkillsRepository => {
     const add = ({ employeeId, skillId }: EmployeeSkill) => {
         const insertQuery = 'INSERT INTO employee_skill(employee_id, skill_id) VALUES ($1, $2)';
         const parameters = [employeeId, skillId];
 
-        return postgreClient
-            .query(insertQuery, parameters)
+        return sqlQueryResolver(insertQuery, parameters)
             .then(() => {
                 const selectQuery =
                     'SELECT employee_id, skill_id FROM employee_skill WHERE employee_id = $1 AND skill_id = $2';
-                return postgreClient.query(selectQuery, parameters);
+                return sqlQueryResolver(selectQuery, parameters);
             })
             .then(result => result.rows[0]);
     };
@@ -33,7 +32,7 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
             query = query + ` AND lower(skill.name) LIKE $2`;
         }
 
-        return postgreClient.query(query, parameters).then(result => result.rows[0].count);
+        return sqlQueryResolver(query, parameters).then(result => result.rows[0].count);
     };
 
     const countBySkillId = (skillId: number, filter?: SkillFilter) => {
@@ -46,7 +45,7 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
             query = query + ` AND lower(employee.name) LIKE $2`;
         }
 
-        return postgreClient.query(query, parameters).then(result => result.rows[0].count);
+        return sqlQueryResolver(query, parameters).then(result => result.rows[0].count);
     };
 
     const getByEmployeeId = (
@@ -74,7 +73,7 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         parameters.push(first, skip);
         query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
 
-        return postgreClient.query(query, parameters).then(result => result.rows);
+        return sqlQueryResolver(query, parameters).then(result => result.rows);
     };
 
     const getBySkillId = (
@@ -102,18 +101,18 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         parameters.push(first, skip);
         query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
 
-        return postgreClient.query(query, parameters).then(result => result.rows);
+        return sqlQueryResolver(query, parameters).then(result => result.rows);
     };
 
     const removeByEmployeeId = (employeeId: number) => {
         const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.employee_id = $1`;
         const parameters = [employeeId];
 
-        return postgreClient.query(selectQuery, parameters).then(result => {
+        return sqlQueryResolver(selectQuery, parameters).then(result => {
             const { rows } = result;
             if (rows.length > 0) {
                 const deleteQuery = `DELETE FROM employee_skill WHERE employee_id = $1`;
-                return postgreClient.query(deleteQuery, parameters).then(() => rows);
+                return sqlQueryResolver(deleteQuery, parameters).then(() => rows);
             }
             return rows;
         });
@@ -123,11 +122,11 @@ export default (postgreClient: Client): EmployeesSkillsRepository => {
         const selectQuery = `SELECT employee_skill.employee_id, employee_skill.skill_id FROM employee_skill WHERE employee_skill.skill_id = $1`;
         const parameters = [skillId];
 
-        return postgreClient.query(selectQuery, parameters).then(result => {
+        return sqlQueryResolver(selectQuery, parameters).then(result => {
             const { rows } = result;
             if (rows.length > 0) {
                 const deleteQuery = `DELETE FROM employee_skill WHERE skill_id = $1`;
-                return postgreClient.query(deleteQuery, parameters).then(() => rows);
+                return sqlQueryResolver(deleteQuery, parameters).then(() => rows);
             }
             return rows;
         });

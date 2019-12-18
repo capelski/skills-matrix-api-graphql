@@ -2,11 +2,11 @@ import alasql from 'alasql';
 import { expect } from 'chai';
 import { Given, Then, When } from 'cucumber';
 import { graphql } from 'graphql';
-import { Client } from 'pg';
 import { contextFactory } from '../../src/context';
 import permissions, { Permissions } from '../../src/permissions';
 import inMemoryRepositories from '../../src/repositories/in-memory';
 import postgreRepositories from '../../src/repositories/postgre';
+import { Repositories, SqlRepositoriesBuilders } from '../../src/repositories/types';
 import schema from '../../src/schema';
 import employees_skills from '../data/employees-skills.json';
 import employees from '../data/employees.json';
@@ -36,15 +36,15 @@ const populateTables = () => {
     (alasql as any).tables.employee_skill.data = employees_skills.map((eS: any) => ({ ...eS }));
 };
 
-const replaceQueryParameters = (sql: string, parameters: string[]) => {
+const replaceQueryParameters = (sql: string, parameters: Array<string | number>) => {
     // alasql doesn't support parametrized queries. We need to replace the values
     return parameters
-        ? parameters.reduce((reduced, next, index) => {
+        ? (parameters.reduce((reduced: string, next, index) => {
               return reduced.replace(
                   `$${index + 1}`,
-                  typeof next === 'string' ? `'${next}'` : next
+                  typeof next === 'string' ? `'${next}'` : String(next)
               );
-          }, sql)
+          }, sql) as string)
         : sql;
 };
 
@@ -69,45 +69,54 @@ Given('the defined GraphQL schema', () => {
     return createTables()
         .then(populateTables)
         .then(() => {
-            const alasqlClient = {
-                query: (sql: string, parameters: string[]) => {
-                    sql = replaceQueryParameters(sql, parameters);
-                    sql = fixOrderByCount(sql);
-                    sql = replaceSequencesOperators(sql);
+            const sqlQueryResolver = (
+                sql: string,
+                parameters: Array<string | number>
+            ): Promise<any> => {
+                sql = replaceQueryParameters(sql, parameters);
+                sql = fixOrderByCount(sql);
+                sql = replaceSequencesOperators(sql);
 
-                    return alasql
+                return new Promise((resolve, reject) => {
+                    alasql
                         .promise(sql)
                         .then(rows => {
                             // console.log(sql);
                             // console.log(rows);
 
                             if (rows[0] && rows[0]['COUNT(*)']) {
-                                return {
+                                resolve({
                                     rows: [
                                         {
                                             count: rows[0]['COUNT(*)']
                                         }
                                     ]
-                                };
+                                });
                             }
 
-                            return {
-                                rows
-                            };
+                            resolve({ rows });
                         })
                         .catch(error => {
                             console.log(sql);
                             console.error(error);
-                            throw error;
+                            reject(error);
                         });
-                }
+                });
             };
+
+            const postgreRepositoriesBuilders: SqlRepositoriesBuilders = postgreRepositories();
+            const postgreRepositoriesInstance: Repositories = {
+                employees: postgreRepositoriesBuilders.employees(sqlQueryResolver),
+                employeesSkills: postgreRepositoriesBuilders.employeesSkills(sqlQueryResolver),
+                skills: postgreRepositoriesBuilders.skills(sqlQueryResolver)
+            };
+
             cucumberContext.implementations = [
                 {
                     repositories: inMemoryRepositories()
                 },
                 {
-                    repositories: postgreRepositories(alasqlClient as Client)
+                    repositories: postgreRepositoriesInstance
                 }
             ];
         });

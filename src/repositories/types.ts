@@ -1,3 +1,5 @@
+import { Client, QueryResult } from 'pg';
+
 export interface Employee {
     id: number;
     name: string;
@@ -85,4 +87,19 @@ export interface Repositories {
     employees: EmployeesRepository;
     employeesSkills: EmployeesSkillsRepository;
     skills: SkillsRepository;
+}
+
+export type RepositoriesSet =
+    | { type: 'built'; set: Repositories }
+    | { type: 'non-built'; set: SqlRepositoriesBuilders; client: Client };
+
+export type SqlQueryResolver = (
+    sql: string,
+    parameters?: Array<number | string>
+) => Promise<QueryResult<any>>;
+
+export interface SqlRepositoriesBuilders {
+    employees: (sqlQueryResolver: SqlQueryResolver) => EmployeesRepository;
+    employeesSkills: (sqlQueryResolver: SqlQueryResolver) => EmployeesSkillsRepository;
+    skills: (sqlQueryResolver: SqlQueryResolver) => SkillsRepository;
 }

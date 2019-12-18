@@ -1,16 +1,14 @@
-import { Client } from 'pg';
-import { EmployeeFilter, EmployeeOrderBy, EmployeesRepository } from '../types';
+import { EmployeeFilter, EmployeeOrderBy, EmployeesRepository, SqlQueryResolver } from '../types';
 
-export default (postgreClient: Client): EmployeesRepository => {
+export default (sqlQueryResolver: SqlQueryResolver): EmployeesRepository => {
     const add = (name: string) => {
         const insertQuery = `INSERT INTO employee(id, name) VALUES (nextval('employee_id_sequence'), $1)`;
         const insertParameters = [name];
 
-        return postgreClient
-            .query(insertQuery, insertParameters)
+        return sqlQueryResolver(insertQuery, insertParameters)
             .then(() => {
                 const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = currval('employee_id_sequence')`;
-                return postgreClient.query(selectQuery);
+                return sqlQueryResolver(selectQuery);
             })
             .then(result => result.rows[0]);
     };
@@ -22,7 +20,7 @@ export default (postgreClient: Client): EmployeesRepository => {
             query = query + ` WHERE lower(employee.name) LIKE $1`;
             parameters.push(`%${filter.name.toLowerCase()}%`);
         }
-        return postgreClient.query(query, parameters).then(result => result.rows[0].count);
+        return sqlQueryResolver(query, parameters).then(result => result.rows[0].count);
     };
 
     const getAll = (skip = 0, first = 10, filter?: EmployeeFilter, orderBy?: EmployeeOrderBy) => {
@@ -52,23 +50,23 @@ export default (postgreClient: Client): EmployeesRepository => {
         parameters.push(first, skip);
         query = query + ` LIMIT $${parameters.length - 1} OFFSET $${parameters.length}`;
 
-        return postgreClient.query(query, parameters).then(result => result.rows);
+        return sqlQueryResolver(query, parameters).then(result => result.rows);
     };
 
     const getById = (id: number) => {
         const query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
-        return postgreClient.query(query, [id]).then(result => result.rows[0]);
+        return sqlQueryResolver(query, [id]).then(result => result.rows[0]);
     };
 
     const remove = (id: number) => {
         const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
         const parameters = [id];
 
-        return postgreClient.query(selectQuery, parameters).then(result => {
+        return sqlQueryResolver(selectQuery, parameters).then(result => {
             const employee = result.rows[0];
             if (employee) {
                 const deleteQuery = `DELETE FROM employee WHERE id = $1`;
-                return postgreClient.query(deleteQuery, parameters).then(() => employee);
+                return sqlQueryResolver(deleteQuery, parameters).then(() => employee);
             }
         });
     };
@@ -77,13 +75,12 @@ export default (postgreClient: Client): EmployeesRepository => {
         const updateQuery = 'UPDATE employee SET name = $1 WHERE id = $2';
         const updateParameters = [name, id];
 
-        return postgreClient
-            .query(updateQuery, updateParameters)
+        return sqlQueryResolver(updateQuery, updateParameters)
             .then(() => {
                 const selectQuery =
                     'SELECT employee.id, employee.name FROM employee WHERE employee.id = $1';
                 const selectParameters = [id];
-                return postgreClient.query(selectQuery, selectParameters);
+                return sqlQueryResolver(selectQuery, selectParameters);
             })
             .then(result => result.rows[0]);
     };

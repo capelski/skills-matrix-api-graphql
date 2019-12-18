@@ -4,9 +4,11 @@ import jsonwebtoken from 'jsonwebtoken';
 import { Client } from 'pg';
 import { Configuration, getConfiguration } from './configuration';
 import { contextFactory } from './context';
+import sqlQueriesResolver from './context/sql-queries-resolver';
 import permissions, { User } from './permissions';
 import inMemoryRepositories from './repositories/in-memory';
 import postgreRepositories from './repositories/postgre';
+import { Repositories, RepositoriesSet } from './repositories/types';
 import schema from './schema';
 
 const decodeJsonWebToken = (encodedToken: string, secret: string): Promise<User> => {
@@ -21,8 +23,7 @@ const decodeJsonWebToken = (encodedToken: string, secret: string): Promise<User>
     });
 };
 
-export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) => {
-    const config = getConfiguration(environmentConfig);
+const getRepositories = (config: Configuration) => {
     const postgreClient = new Client({
         database: config.DB_NAME,
         host: config.DB_HOST,
@@ -31,83 +32,129 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
         user: config.DB_USER
     });
 
-    const repositoriesPromise = config.USE_DATABASE
+    return config.USE_DATABASE
         ? postgreClient
               .connect()
-              .then(() => {
-                  console.log('Successfully connected to database');
+              .then(
+                  (): RepositoriesSet => {
+                      console.log('Successfully connected to database');
 
-                  if (config.LOG_SQL_QUERIES) {
-                      const loggingPostgreClient = postgreClient as any;
-                      loggingPostgreClient._query = postgreClient.query;
-                      loggingPostgreClient.query = (
-                          sql: string,
-                          parameters: Array<string | number>
-                      ) => {
-                          console.log('SQL query:', sql);
-                          parameters.length && console.log('Parameters:', parameters, '\n');
-                          return loggingPostgreClient._query(sql, parameters);
+                      return {
+                          client: postgreClient,
+                          set: postgreRepositories(),
+                          type: 'non-built'
                       };
                   }
-
-                  return postgreRepositories(postgreClient);
-              })
-              .catch(error => {
-                  console.error(error);
+              )
+              .catch(
+                  (error): RepositoriesSet => {
+                      console.error(error);
+                      console.log('Using in-memory repositories');
+                      return {
+                          set: inMemoryRepositories(),
+                          type: 'built'
+                      };
+                  }
+              )
+        : Promise.resolve(inMemoryRepositories()).then(
+              (repositories): RepositoriesSet => {
                   console.log('Using in-memory repositories');
-                  return inMemoryRepositories();
-              })
-        : Promise.resolve(inMemoryRepositories()).then(repositories => {
-              console.log('Using in-memory repositories');
-              return repositories;
-          });
+                  return {
+                      set: repositories,
+                      type: 'built'
+                  };
+              }
+          );
+};
 
-    return repositoriesPromise.then(repositories => {
-        const app = express();
-        const adminUser: User = {
-            id: 'admin',
-            permissions: permissions.all
+const getRequestGraphQLContext = (repositoriesSet: RepositoriesSet, user: User) => {
+    let actualRepositories: Repositories;
+    const sqlQueries = sqlQueriesResolver();
+
+    if (repositoriesSet.type === 'non-built') {
+        const sqlQuery = (sql: string, parameters: Array<string | number>) => {
+            const actualSql = parameters
+                ? (parameters.reduce((reduced: string, next, index) => {
+                      return reduced.replace(
+                          `$${index + 1}`,
+                          typeof next === 'string' ? `'${next}'` : String(next)
+                      );
+                  }, sql) as string)
+                : sql;
+            const jobFinishedCallback = sqlQueries.add(actualSql);
+            return repositoriesSet.client.query(sql, parameters).then(result => {
+                jobFinishedCallback();
+                return result;
+            });
         };
-        const getGraphQLContext = (user: User) => ({
-            context: contextFactory(repositories, user),
-            graphiql: true,
-            schema
+
+        const parsedRepositories = repositoriesSet.set;
+        actualRepositories = {
+            employees: parsedRepositories.employees(sqlQuery),
+            employeesSkills: parsedRepositories.employeesSkills(sqlQuery),
+            skills: parsedRepositories.skills(sqlQuery)
+        };
+    } else {
+        actualRepositories = repositoriesSet.set;
+    }
+
+    return {
+        context: {
+            ...contextFactory(actualRepositories, user),
+            sqlQueries
+        },
+        graphiql: true,
+        schema
+    };
+};
+
+export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) => {
+    const config = getConfiguration(environmentConfig);
+    const adminUser: User = {
+        id: 'admin',
+        permissions: permissions.all
+    };
+
+    const credentialsGeneratorMiddleware = (userId: string, permissionsSet: string[]) => (
+        request: express.Request,
+        response: express.Response,
+        next: express.NextFunction
+    ) => {
+        const user = {
+            id: userId,
+            permissions: permissionsSet
+        };
+        const token = jsonwebtoken.sign(user, config.JWT_SECRET, { expiresIn: '3h' });
+        return response.json({
+            message: 'Authentication successful!',
+            token
         });
+    };
+
+    return getRepositories(config).then(repositoriesSet => {
+        const app = express();
 
         app.use(
             /\//,
             // Bypassing authorization for demo purposes
-            graphqlHttp(() => getGraphQLContext(adminUser))
+            graphqlHttp(() => getRequestGraphQLContext(repositoriesSet, adminUser))
         );
 
-        const credentialsMiddleware = (userId: string, permissionsSet: string[]) => (
-            request: express.Request,
-            response: express.Response,
-            next: express.NextFunction
-        ) => {
-            const user = {
-                id: userId,
-                permissions: permissionsSet
-            };
-            const token = jsonwebtoken.sign(user, config.JWT_SECRET, { expiresIn: '3h' });
-            return response.json({
-                message: 'Authentication successful!',
-                token
-            });
-        };
-
         // Instead of this endpoint, we would have a single /login endpoint performing real authentication
-        app.use('/nobody-token', credentialsMiddleware('nobody', []));
-        app.use('/employees-token', credentialsMiddleware('employee', permissions.employees));
-        app.use('/skills-token', credentialsMiddleware('skill', permissions.skills));
-        app.use('/admin-token', credentialsMiddleware('admin', permissions.all));
+        app.use('/nobody-token', credentialsGeneratorMiddleware('nobody', []));
+        app.use(
+            '/employees-token',
+            credentialsGeneratorMiddleware('employee', permissions.employees)
+        );
+        app.use('/skills-token', credentialsGeneratorMiddleware('skill', permissions.skills));
+        app.use('/admin-token', credentialsGeneratorMiddleware('admin', permissions.all));
 
         app.use(
             '/auth',
             graphqlHttp((request, response) => {
                 // Allow access to graphiql
                 if (request.method === 'GET') {
-                    return getGraphQLContext(adminUser);
+                    return getRequestGraphQLContext(repositoriesSet, adminUser);
                 } else {
                     const authorizationToken = request.headers.authorization;
                     if (!authorizationToken) {
@@ -119,7 +166,7 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 
                     return decodeJsonWebToken(authorizationToken, config.JWT_SECRET)
                         .then(token =>
-                            getGraphQLContext({
+                            getRequestGraphQLContext(repositoriesSet, {
                                 id: token.id,
                                 permissions: token.permissions
                             })
