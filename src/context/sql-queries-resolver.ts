@@ -1,6 +1,6 @@
 import { SqlQueriesResolver } from './types';
 
-export default (): SqlQueriesResolver => {
+export default (isDatabaseRequest = true): SqlQueriesResolver => {
     const source: string[] = [];
     let pendingJobs = 0;
 
@@ -19,14 +19,18 @@ export default (): SqlQueriesResolver => {
     };
 
     const getAll = () => {
-        return new Promise<string[]>(resolve => {
-            const interval = setInterval(() => {
-                if (pendingJobs === 0) {
-                    clearInterval(interval);
-                    resolve(source);
-                }
-            }, 100);
-        });
+        return isDatabaseRequest
+            ? new Promise<string[]>(resolve => {
+                  const interval = setInterval(() => {
+                      if (pendingJobs === 0) {
+                          clearInterval(interval);
+                          resolve(source);
+                      }
+                  }, 100);
+              })
+            : Promise.resolve([
+                  'The application is using in-memory repositories; no sql queries were used'
+              ]);
     };
 
     return {

@@ -56,11 +56,11 @@ const getRepositories = (config: Configuration) => {
                       };
                   }
               )
-        : Promise.resolve(inMemoryRepositories()).then(
-              (repositories): RepositoriesSet => {
+        : Promise.resolve().then(
+              (): RepositoriesSet => {
                   console.log('Using in-memory repositories');
                   return {
-                      set: repositories,
+                      set: inMemoryRepositories(),
                       type: 'built'
                   };
               }
@@ -69,7 +69,7 @@ const getRepositories = (config: Configuration) => {
 
 const getRequestGraphQLContext = (repositoriesSet: RepositoriesSet, user: User) => {
     let actualRepositories: Repositories;
-    const sqlQueries = sqlQueriesResolver();
+    const sqlQueries = sqlQueriesResolver(repositoriesSet.type === 'non-built');
 
     if (repositoriesSet.type === 'non-built') {
         const sqlQuery = (sql: string, parameters: Array<string | number>) => {
