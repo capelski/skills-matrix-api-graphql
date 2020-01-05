@@ -1,6 +1,6 @@
-import { SkillFilter, SkillOrderBy, SqlQueryResolver } from '../types';
+import { SkillFilter, SkillOrderBy, SkillsRepository, SqlQueryResolver } from '../types';
 
-export default (sqlQueryResolver: SqlQueryResolver) => {
+export default (sqlQueryResolver: SqlQueryResolver): SkillsRepository => {
     const add = (name: string) => {
         const insertQuery = `INSERT INTO skill(id, name) VALUES (nextval('skill_id_sequence'), $1)`;
         const insertParameters = [name];
@@ -58,6 +58,11 @@ export default (sqlQueryResolver: SqlQueryResolver) => {
         return sqlQueryResolver(query, [id]).then(result => result.rows[0]);
     };
 
+    const getByIds = (ids: number[]) => {
+        const query = `SELECT skill.id, skill.name FROM skill WHERE skill.id = ANY($1)`;
+        return sqlQueryResolver(query, [ids]).then(result => result.rows);
+    };
+
     const remove = (id: number) => {
         const selectQuery = `SELECT skill.id, skill.name FROM skill WHERE skill.id = $1`;
         const parameters = [id];
@@ -89,6 +94,7 @@ export default (sqlQueryResolver: SqlQueryResolver) => {
         countAll,
         getAll,
         getById,
+        getByIds,
         remove,
         update
     };

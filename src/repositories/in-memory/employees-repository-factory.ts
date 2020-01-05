@@ -61,6 +61,11 @@ export default (repositories: Repositories): EmployeesRepository => {
                 }
             });
 
+    const getByIds = (ids: number[]) =>
+        Promise.resolve(source).then(employees =>
+            employees.filter(e => ids.indexOf(e.id) > -1).map(e => ({ ...e }))
+        );
+
     const loadEmployeeSkillsCount = (
         employee: Employee
     ): Promise<Employee & { skillsCount: number }> =>
@@ -96,6 +101,7 @@ export default (repositories: Repositories): EmployeesRepository => {
         countAll,
         getAll,
         getById,
+        getByIds,
         remove,
         update
     };

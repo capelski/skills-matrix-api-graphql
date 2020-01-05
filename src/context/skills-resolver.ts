@@ -1,5 +1,6 @@
 import DataLoader from 'dataloader';
-import { Repositories, Skill, SkillFilter, SkillOrderBy } from '../repositories/types';
+import { Repositories, SkillFilter, SkillOrderBy } from '../repositories/types';
+import { dataLoaderMatcher } from './shared';
 import { SkillCreateData, SkillsResolver, SkillUpdateData } from './types';
 
 const create = (repositories: Repositories) => (skillData: SkillCreateData) => {
@@ -90,13 +91,16 @@ export const skillsResolver = (repositories: Repositories): SkillsResolver => ({
 });
 
 const getByIds = (repositories: Repositories) => (ids: number[]) =>
-    Promise.resolve(ids.map(i => ({ id: 0, name: 'Smoke-selling' })));
+    repositories.skills.getByIds(ids).then(dataLoaderMatcher(ids));
 
-export const skillsDataLoaderResolver = (repositories: Repositories): SkillsResolver => ({
-    create: create(repositories),
-    getAll: getAll(repositories),
-    getById: (id: number) => new DataLoader(getByIds(repositories)).load(id),
-    getSkillEmployees: getSkillEmployees(repositories),
-    remove: remove(repositories),
-    update: update(repositories)
-});
+export const skillsDataLoaderResolver = (repositories: Repositories): SkillsResolver => {
+    const dataLoader = new DataLoader(getByIds(repositories));
+    return {
+        create: create(repositories),
+        getAll: getAll(repositories),
+        getById: (id: number) => dataLoader.load(id),
+        getSkillEmployees: getSkillEmployees(repositories),
+        remove: remove(repositories),
+        update: update(repositories)
+    };
+};

@@ -58,6 +58,11 @@ export default (sqlQueryResolver: SqlQueryResolver): EmployeesRepository => {
         return sqlQueryResolver(query, [id]).then(result => result.rows[0]);
     };
 
+    const getByIds = (ids: number[]) => {
+        const query = `SELECT employee.id, employee.name FROM employee WHERE employee.id = ANY($1)`;
+        return sqlQueryResolver(query, [ids]).then(result => result.rows);
+    };
+
     const remove = (id: number) => {
         const selectQuery = `SELECT employee.id, employee.name FROM employee WHERE employee.id = $1`;
         const parameters = [id];
@@ -90,6 +95,7 @@ export default (sqlQueryResolver: SqlQueryResolver): EmployeesRepository => {
         countAll,
         getAll,
         getById,
+        getByIds,
         remove,
         update
     };

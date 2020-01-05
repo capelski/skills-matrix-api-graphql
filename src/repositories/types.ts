@@ -24,6 +24,7 @@ export interface EmployeesRepository {
         orderBy?: EmployeeOrderBy
     ) => Promise<Employee[]>;
     getById: (id: number) => Promise<Employee | undefined>;
+    getByIds: (ids: number[]) => Promise<Array<Employee | undefined>>;
     remove: (id: number) => Promise<Employee | undefined>;
     update: (id: number, name: string) => Promise<Employee | undefined>;
 }
@@ -52,6 +53,7 @@ export interface SkillsRepository {
         orderBy?: SkillOrderBy
     ) => Promise<Skill[]>;
     getById: (id: number) => Promise<Skill | undefined>;
+    getByIds: (ids: number[]) => Promise<Array<Skill | undefined>>;
     remove: (id: number) => Promise<Skill | undefined>;
     update: (id: number, name: string) => Promise<Skill | undefined>;
 }
@@ -95,7 +97,7 @@ export type RepositoriesSet =
 
 export type SqlQueryResolver = (
     sql: string,
-    parameters?: Array<number | string>
+    parameters?: Array<number | string | number[] | string[]>
 ) => Promise<QueryResult<any>>;
 
 export interface SqlRepositoriesBuilders {

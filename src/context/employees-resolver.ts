@@ -1,5 +1,6 @@
 import DataLoader from 'dataloader';
-import { Employee, EmployeeFilter, EmployeeOrderBy, Repositories } from '../repositories/types';
+import { EmployeeFilter, EmployeeOrderBy, Repositories } from '../repositories/types';
+import { dataLoaderMatcher } from './shared';
 import { EmployeeCreateData, EmployeesResolver, EmployeeUpdateData } from './types';
 
 const create = (repositories: Repositories) => (employeeData: EmployeeCreateData) => {
@@ -90,13 +91,16 @@ export const employeesResolver = (repositories: Repositories): EmployeesResolver
 });
 
 const getByIds = (repositories: Repositories) => (ids: number[]) =>
-    Promise.resolve(ids.map(i => ({ id: 0, name: 'Juanita' })));
+    repositories.employees.getByIds(ids).then(dataLoaderMatcher(ids));
 
-export const employeesDataLoaderResolver = (repositories: Repositories): EmployeesResolver => ({
-    create: create(repositories),
-    getAll: getAll(repositories),
-    getById: (id: number) => new DataLoader(getByIds(repositories)).load(id),
-    getEmployeeSkills: getEmployeeSkills(repositories),
-    remove: remove(repositories),
-    update: update(repositories)
-});
+export const employeesDataLoaderResolver = (repositories: Repositories): EmployeesResolver => {
+    const dataLoader = new DataLoader(getByIds(repositories));
+    return {
+        create: create(repositories),
+        getAll: getAll(repositories),
+        getById: (id: number) => dataLoader.load(id),
+        getEmployeeSkills: getEmployeeSkills(repositories),
+        remove: remove(repositories),
+        update: update(repositories)
+    };
+};
