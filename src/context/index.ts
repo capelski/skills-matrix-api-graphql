@@ -1,7 +1,7 @@
 import { User } from '../permissions';
 import { Repositories } from '../repositories/types';
-import employeesResolver from './employees-resolver';
-import skillsResolver from './skills-resolver';
+import { employeesDataLoaderResolver, employeesResolver } from './employees-resolver';
+import { skillsDataLoaderResolver, skillsResolver } from './skills-resolver';
 import { AppContext } from './types';
 
 const ensurePermission = (user: User, permission: string) => {
@@ -12,9 +12,14 @@ const ensurePermission = (user: User, permission: string) => {
     }
 };
 
-export const contextFactory = (repositories: Repositories, user: User): AppContext => ({
-    employees: employeesResolver(repositories),
+export const contextFactory = (useDataLoader = false) => (
+    repositories: Repositories,
+    user: User
+): AppContext => ({
+    employees: useDataLoader
+        ? employeesDataLoaderResolver(repositories)
+        : employeesResolver(repositories),
     ensurePermission,
-    skills: skillsResolver(repositories),
+    skills: useDataLoader ? skillsDataLoaderResolver(repositories) : skillsResolver(repositories),
     user
 });

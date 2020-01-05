@@ -5,6 +5,7 @@ import { Client } from 'pg';
 import { Configuration, getConfiguration } from './configuration';
 import { contextFactory } from './context';
 import sqlQueriesResolver from './context/sql-queries-resolver';
+import { SqlQueriesResolver } from './context/types';
 import permissions, { User } from './permissions';
 import inMemoryRepositories from './repositories/in-memory';
 import postgreRepositories from './repositories/postgre';
@@ -21,6 +22,14 @@ const decodeJsonWebToken = (encodedToken: string, secret: string): Promise<User>
             }
         });
     });
+};
+
+const useInMemoryRepositories = (): RepositoriesSet => {
+    console.log('Using in-memory repositories');
+    return {
+        set: inMemoryRepositories(),
+        type: 'built'
+    };
 };
 
 const getRepositories = (config: Configuration) => {
@@ -49,27 +58,17 @@ const getRepositories = (config: Configuration) => {
               .catch(
                   (error): RepositoriesSet => {
                       console.error(error);
-                      console.log('Using in-memory repositories');
-                      return {
-                          set: inMemoryRepositories(),
-                          type: 'built'
-                      };
+                      return useInMemoryRepositories();
                   }
               )
-        : Promise.resolve().then(
-              (): RepositoriesSet => {
-                  console.log('Using in-memory repositories');
-                  return {
-                      set: inMemoryRepositories(),
-                      type: 'built'
-                  };
-              }
-          );
+        : Promise.resolve().then(useInMemoryRepositories);
 };
 
-const getRequestGraphQLContext = (repositoriesSet: RepositoriesSet, user: User) => {
+const getRequestRepositories = (
+    repositoriesSet: RepositoriesSet,
+    sqlQueries: SqlQueriesResolver
+) => {
     let actualRepositories: Repositories;
-    const sqlQueries = sqlQueriesResolver(repositoriesSet.type === 'non-built');
 
     if (repositoriesSet.type === 'non-built') {
         const sqlQuery = (sql: string, parameters: Array<string | number>) => {
@@ -98,9 +97,20 @@ const getRequestGraphQLContext = (repositoriesSet: RepositoriesSet, user: User) 
         actualRepositories = repositoriesSet.set;
     }
 
+    return actualRepositories;
+};
+
+const getRequestGraphQLContext = (
+    repositoriesSet: RepositoriesSet,
+    user: User,
+    useDataLoader = false
+) => {
+    const sqlQueries = sqlQueriesResolver(repositoriesSet.type === 'non-built');
+    const repositories = getRequestRepositories(repositoriesSet, sqlQueries);
+
     return {
         context: {
-            ...contextFactory(actualRepositories, user),
+            ...contextFactory(useDataLoader)(repositories, user),
             sqlQueries
         },
         graphiql: true,
@@ -138,6 +148,12 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
             /\//,
             // Bypassing authorization for demo purposes
             graphqlHttp(() => getRequestGraphQLContext(repositoriesSet, adminUser))
+        );
+
+        app.use(
+            '/data-loader',
+            // Bypassing authorization for demo purposes
+            graphqlHttp(() => getRequestGraphQLContext(repositoriesSet, adminUser, true))
         );
 
         // Instead of this endpoint, we would have a single /login endpoint performing real authentication
@@ -187,5 +203,4 @@ export const getExpressApp = (environmentConfig: Partial<Configuration> = {}) =>
 
 export default getExpressApp;
 
-// TODO Add dataloaders in a separate branch
 // TODO Multiple orderBy is not supported

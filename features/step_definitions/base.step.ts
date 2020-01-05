@@ -138,7 +138,10 @@ Given('a user without permissions', () => {
 
 When(/I perform the query$/, async (query: string) => {
     cucumberContext.implementations.forEach(async implementation => {
-        implementation.context = contextFactory(implementation.repositories, cucumberContext.user!);
+        implementation.context = contextFactory()(
+            implementation.repositories,
+            cucumberContext.user!
+        );
         implementation.queryResult = await graphql(
             cucumberContext.schema!,
             query,
