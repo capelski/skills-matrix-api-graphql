@@ -1,6 +1,6 @@
 # Skills matrix
 
-![Skills matrix logo](https://github.com/L3bowski/skills-matrix-mvc/blob/master/wwwroot/images/skills.png)
+![Skills matrix logo](https://github.com/capelski/skills-matrix-mvc/blob/master/wwwroot/images/skills.png)
 
 Node.js GraphQL web Api exposing CRUD operations to query and modify the employees and skills of a company. The data model consists in three entities:
 
